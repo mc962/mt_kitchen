@@ -27,6 +27,7 @@ defmodule MTKitchenWeb.Router do
   scope "/", MTKitchenWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    resources "/recipes", RecipeController
   end
 
   # Other scopes may use custom stacks.

@@ -1,0 +1,27 @@
+<section id="recipe_information">
+    <h2>Information</h2>
+
+    <.form let={f} for={@changeset} action={@action}>
+      <%= if @changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
+
+      <%= label f, :name %>
+      <%= text_input f, :name %>
+      <%= error_tag f, :name %>
+
+      <%= label f, :description %>
+      <%= textarea f, :description %>
+      <%= error_tag f, :description %>
+
+      <%= label f, :publicly_accessible %>
+      <%= checkbox f, :publicly_accessible %>
+      <%= error_tag f, :publicly_accessible %>
+
+      <div>
+        <%= submit "Save" %>
+      </div>
+    </.form>
+</section>
