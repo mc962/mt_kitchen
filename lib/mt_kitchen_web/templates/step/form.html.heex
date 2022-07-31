@@ -1,0 +1,37 @@
+<section id="recipe_steps">
+    <h2>Steps</h2>
+
+    <.form let={f} for={@changeset} action={Routes.recipe_steps_path(@conn, :update, @recipe)}>
+      <%= if @changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
+
+      <h3><%= @recipe.name %></h3>
+
+      <ol id="recipe_steps" class="resource-list draggable">
+        <%= inputs_for f, :steps, [append: [%MTKitchen.Management.Step{order: (MTKitchen.Management.Recipe.stubbed_order()), instruction: ""}]], fn sf -> %>
+            <li class="resource-item recipe-step">
+                <%= hidden_input sf, :order, class: "recipe-step-order ordered-item" %>
+
+                <div class="form-ctrl-container">
+                    <%= textarea sf, :instruction, aria_labelledby: "instruction" %>
+                    <%= error_tag sf, :instruction %>
+                </div>
+
+                <%= if Ecto.get_meta(sf.data, :state) == :loaded do %>
+                    <div class="nested-form-actions">
+                      <span><%= link "Delete", to: Routes.recipe_step_path(@conn, :delete, sf.data.recipe_id, sf.data.id), method: :delete, data: [confirm: "Are you sure?"] %></span>
+                    </div>
+                <% end %>
+            </li>
+        <% end %>
+      </ol>
+
+
+      <div>
+        <%= submit "Save" %>
+      </div>
+    </.form>
+</section>

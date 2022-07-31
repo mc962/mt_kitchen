@@ -7,6 +7,6 @@
     </ul>
 </nav>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.recipe_path(@conn, :update, @recipe)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.recipe_steps_path(@conn, :update, @recipe)) %>
 
 <span><%= link "Back", to: Routes.recipe_path(@conn, :index) %></span>

@@ -32,13 +32,13 @@ defmodule MTKitchenWeb.RecipeController do
   end
 
   def edit(conn, %{"id" => id}) do
-    recipe = Management.get_recipe!(id)
+    recipe = Management.get_full_recipe!(id)
     changeset = Management.change_recipe(recipe)
     render(conn, "edit.html", recipe: recipe, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "recipe" => recipe_params}) do
-    recipe = Management.get_recipe!(id)
+    recipe = Management.get_full_recipe!(id)
 
     case Management.update_recipe(recipe, recipe_params) do
       {:ok, recipe} ->

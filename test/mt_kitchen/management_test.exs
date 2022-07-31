@@ -62,4 +62,60 @@ defmodule MTKitchen.ManagementTest do
       assert %Ecto.Changeset{} = Management.change_recipe(recipe)
     end
   end
+
+  describe "steps" do
+    alias MTKitchen.Management.Step
+
+    import MTKitchen.ManagementFixtures
+
+    @invalid_attrs %{instruction: nil, order: nil}
+
+    test "list_steps/0 returns all steps" do
+      step = step_fixture()
+      assert Management.list_steps() == [step]
+    end
+
+    test "get_step!/1 returns the step with given id" do
+      step = step_fixture()
+      assert Management.get_step!(step.id) == step
+    end
+
+    test "create_step/1 with valid data creates a step" do
+      valid_attrs = %{instruction: "some instruction", order: 42}
+
+      assert {:ok, %Step{} = step} = Management.create_step(valid_attrs)
+      assert step.instruction == "some instruction"
+      assert step.order == 42
+    end
+
+    test "create_step/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Management.create_step(@invalid_attrs)
+    end
+
+    test "update_step/2 with valid data updates the step" do
+      step = step_fixture()
+      update_attrs = %{instruction: "some updated instruction", order: 43}
+
+      assert {:ok, %Step{} = step} = Management.update_step(step, update_attrs)
+      assert step.instruction == "some updated instruction"
+      assert step.order == 43
+    end
+
+    test "update_step/2 with invalid data returns error changeset" do
+      step = step_fixture()
+      assert {:error, %Ecto.Changeset{}} = Management.update_step(step, @invalid_attrs)
+      assert step == Management.get_step!(step.id)
+    end
+
+    test "delete_step/1 deletes the step" do
+      step = step_fixture()
+      assert {:ok, %Step{}} = Management.delete_step(step)
+      assert_raise Ecto.NoResultsError, fn -> Management.get_step!(step.id) end
+    end
+
+    test "change_step/1 returns a step changeset" do
+      step = step_fixture()
+      assert %Ecto.Changeset{} = Management.change_step(step)
+    end
+  end
 end

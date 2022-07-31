@@ -25,4 +25,19 @@ defmodule MTKitchen.ManagementFixtures do
 
     recipe
   end
+
+  @doc """
+  Generate a step.
+  """
+  def step_fixture(attrs \\ %{}) do
+    {:ok, step} =
+      attrs
+      |> Enum.into(%{
+        instruction: "some instruction",
+        order: 42
+      })
+      |> MTKitchen.Management.create_step()
+
+    step
+  end
 end
