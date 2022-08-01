@@ -33,8 +33,9 @@ defmodule MTKitchen.Management.Recipe do
     recipe
     |> cast(attrs, [:name, :slug, :description, :publicly_accessible, :user_id])
     |> cast_assoc(:steps)
-    |> validate_required([:name, :slug, :publicly_accessible])
-#    |> remove_deleted_steps()
+    |> validate_required([:name, :publicly_accessible])
+    |> assoc_constraint(:user)
+      #    |> remove_deleted_steps()
     |> consolidate_step_order()
     |> set_slug_if_changed()
     |> unique_constraint([:name, :user_id])

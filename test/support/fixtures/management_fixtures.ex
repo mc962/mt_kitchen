@@ -40,4 +40,26 @@ defmodule MTKitchen.ManagementFixtures do
 
     step
   end
+
+  @doc """
+  Generate a unique ingredient slug.
+  """
+  def unique_ingredient_slug, do: "some slug#{System.unique_integer([:positive])}"
+
+  @doc """
+  Generate a ingredient.
+  """
+  def ingredient_fixture(attrs \\ %{}) do
+    {:ok, ingredient} =
+      attrs
+      |> Enum.into(%{
+        ancestry: "some ancestry",
+        description: "some description",
+        name: "some name",
+        slug: unique_ingredient_slug()
+      })
+      |> MTKitchen.Management.create_ingredient()
+
+    ingredient
+  end
 end

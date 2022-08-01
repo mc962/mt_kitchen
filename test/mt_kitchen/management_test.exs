@@ -118,4 +118,64 @@ defmodule MTKitchen.ManagementTest do
       assert %Ecto.Changeset{} = Management.change_step(step)
     end
   end
+
+  describe "ingredients" do
+    alias MTKitchen.Management.Ingredient
+
+    import MTKitchen.ManagementFixtures
+
+    @invalid_attrs %{ancestry: nil, description: nil, name: nil, slug: nil}
+
+    test "list_ingredients/0 returns all ingredients" do
+      ingredient = ingredient_fixture()
+      assert Management.list_ingredients() == [ingredient]
+    end
+
+    test "get_ingredient!/1 returns the ingredient with given id" do
+      ingredient = ingredient_fixture()
+      assert Management.get_ingredient!(ingredient.id) == ingredient
+    end
+
+    test "create_ingredient/1 with valid data creates a ingredient" do
+      valid_attrs = %{ancestry: "some ancestry", description: "some description", name: "some name", slug: "some slug"}
+
+      assert {:ok, %Ingredient{} = ingredient} = Management.create_ingredient(valid_attrs)
+      assert ingredient.ancestry == "some ancestry"
+      assert ingredient.description == "some description"
+      assert ingredient.name == "some name"
+      assert ingredient.slug == "some slug"
+    end
+
+    test "create_ingredient/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Management.create_ingredient(@invalid_attrs)
+    end
+
+    test "update_ingredient/2 with valid data updates the ingredient" do
+      ingredient = ingredient_fixture()
+      update_attrs = %{ancestry: "some updated ancestry", description: "some updated description", name: "some updated name", slug: "some updated slug"}
+
+      assert {:ok, %Ingredient{} = ingredient} = Management.update_ingredient(ingredient, update_attrs)
+      assert ingredient.ancestry == "some updated ancestry"
+      assert ingredient.description == "some updated description"
+      assert ingredient.name == "some updated name"
+      assert ingredient.slug == "some updated slug"
+    end
+
+    test "update_ingredient/2 with invalid data returns error changeset" do
+      ingredient = ingredient_fixture()
+      assert {:error, %Ecto.Changeset{}} = Management.update_ingredient(ingredient, @invalid_attrs)
+      assert ingredient == Management.get_ingredient!(ingredient.id)
+    end
+
+    test "delete_ingredient/1 deletes the ingredient" do
+      ingredient = ingredient_fixture()
+      assert {:ok, %Ingredient{}} = Management.delete_ingredient(ingredient)
+      assert_raise Ecto.NoResultsError, fn -> Management.get_ingredient!(ingredient.id) end
+    end
+
+    test "change_ingredient/1 returns a ingredient changeset" do
+      ingredient = ingredient_fixture()
+      assert %Ecto.Changeset{} = Management.change_ingredient(ingredient)
+    end
+  end
 end
