@@ -12,6 +12,7 @@ defmodule MTKitchen.Management.Recipe do
 
     belongs_to :user, MTKitchen.Accounts.User
     has_many :steps, MTKitchen.Management.Step
+    has_many :ingredients, through: [:steps, :ingredients]
 
     timestamps()
   end
@@ -49,17 +50,6 @@ defmodule MTKitchen.Management.Recipe do
   """
   def stubbed_order do
     @max_steps + 1
-  end
-
-  defp remove_deleted_steps(recipe) do
-    if recipe.steps do
-      steps = recipe.steps
-              |> Enum.filter(fn step -> !step._destroy end)
-
-      put_assoc(recipe, :steps, steps)
-    else
-      recipe
-    end
   end
 
   defp consolidate_step_order(recipe) do

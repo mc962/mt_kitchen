@@ -178,4 +178,62 @@ defmodule MTKitchen.ManagementTest do
       assert %Ecto.Changeset{} = Management.change_ingredient(ingredient)
     end
   end
+
+  describe "step_ingredients" do
+    alias MTKitchen.Management.StepIngredient
+
+    import MTKitchen.ManagementFixtures
+
+    @invalid_attrs %{amount: nil, condition: nil, unit: nil}
+
+    test "list_step_ingredients/0 returns all step_ingredients" do
+      step_ingredient = step_ingredient_fixture()
+      assert Management.list_step_ingredients() == [step_ingredient]
+    end
+
+    test "get_step_ingredient!/1 returns the step_ingredient with given id" do
+      step_ingredient = step_ingredient_fixture()
+      assert Management.get_step_ingredient!(step_ingredient.id) == step_ingredient
+    end
+
+    test "create_step_ingredient/1 with valid data creates a step_ingredient" do
+      valid_attrs = %{amount: "120.5", condition: "some condition", unit: "some unit"}
+
+      assert {:ok, %StepIngredient{} = step_ingredient} = Management.create_step_ingredient(valid_attrs)
+      assert step_ingredient.amount == Decimal.new("120.5")
+      assert step_ingredient.condition == "some condition"
+      assert step_ingredient.unit == "some unit"
+    end
+
+    test "create_step_ingredient/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Management.create_step_ingredient(@invalid_attrs)
+    end
+
+    test "update_step_ingredient/2 with valid data updates the step_ingredient" do
+      step_ingredient = step_ingredient_fixture()
+      update_attrs = %{amount: "456.7", condition: "some updated condition", unit: "some updated unit"}
+
+      assert {:ok, %StepIngredient{} = step_ingredient} = Management.update_step_ingredient(step_ingredient, update_attrs)
+      assert step_ingredient.amount == Decimal.new("456.7")
+      assert step_ingredient.condition == "some updated condition"
+      assert step_ingredient.unit == "some updated unit"
+    end
+
+    test "update_step_ingredient/2 with invalid data returns error changeset" do
+      step_ingredient = step_ingredient_fixture()
+      assert {:error, %Ecto.Changeset{}} = Management.update_step_ingredient(step_ingredient, @invalid_attrs)
+      assert step_ingredient == Management.get_step_ingredient!(step_ingredient.id)
+    end
+
+    test "delete_step_ingredient/1 deletes the step_ingredient" do
+      step_ingredient = step_ingredient_fixture()
+      assert {:ok, %StepIngredient{}} = Management.delete_step_ingredient(step_ingredient)
+      assert_raise Ecto.NoResultsError, fn -> Management.get_step_ingredient!(step_ingredient.id) end
+    end
+
+    test "change_step_ingredient/1 returns a step_ingredient changeset" do
+      step_ingredient = step_ingredient_fixture()
+      assert %Ecto.Changeset{} = Management.change_step_ingredient(step_ingredient)
+    end
+  end
 end

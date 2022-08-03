@@ -7,6 +7,8 @@ defmodule MTKitchen.Management.Step do
     field :order, :integer
 
     belongs_to :recipe, MTKitchen.Management.Recipe
+    has_many :step_ingredients, MTKitchen.Management.StepIngredient
+    has_many :ingredients, through: [:step_ingredients, :ingredient]
 
     timestamps()
   end
@@ -18,5 +20,6 @@ defmodule MTKitchen.Management.Step do
     |> validate_required([:order, :instruction])
     |> validate_number(:order, greater_than: 0)
     |> assoc_constraint(:recipe)
+    |> cast_assoc(:step_ingredients)
   end
 end

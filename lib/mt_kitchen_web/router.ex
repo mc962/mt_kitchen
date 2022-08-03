@@ -27,10 +27,15 @@ defmodule MTKitchenWeb.Router do
   scope "/", MTKitchenWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    resources "/recipes", RecipeController
-    get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
-    put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
-    delete "/recipes/:recipe_id/steps/:id", StepController, :delete, as: :recipe_step
+
+    scope "/manage" do
+      resources "/recipes", RecipeController
+      get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
+      put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
+      delete "/recipes/:recipe_id/steps/:id", StepController, :delete, as: :recipe_step
+
+      get "/recipes/:recipe_id/steps/:id/edit", StepController, :delete, as: :recipe_step
+    end
   end
 
   # Other scopes may use custom stacks.

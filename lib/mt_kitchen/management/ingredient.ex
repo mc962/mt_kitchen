@@ -9,6 +9,9 @@ defmodule MTKitchen.Management.Ingredient do
     field :slug, :string
 
     belongs_to :user, MTKitchen.Accounts.User
+    has_many :step_ingredients, MTKitchen.Management.StepIngredient
+    has_many :steps, through: [:step_ingredients, :step]
+    has_many :recipes, through: [:steps, :recipe]
 
     timestamps()
   end
