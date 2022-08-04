@@ -23,7 +23,7 @@ defmodule MTKitchen.Management.Recipe do
     |> cast(attrs, [:name, :slug, :description, :publicly_accessible, :user_id])
     |> cast_assoc(:steps)
     |> validate_required([:name, :slug, :publicly_accessible])
-    |> set_slug_if_changed()
+    |> maybe_update_slug()
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
@@ -36,8 +36,8 @@ defmodule MTKitchen.Management.Recipe do
     |> cast_assoc(:steps)
     |> validate_required([:name, :publicly_accessible])
     |> assoc_constraint(:user)
-    |> consolidate_step_order()
-    |> set_slug_if_changed()
+    |> maybe_consolidate_step_order()
+    |> maybe_update_slug()
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
@@ -51,25 +51,18 @@ defmodule MTKitchen.Management.Recipe do
     @max_steps + 1
   end
 
-  defp consolidate_step_order(recipe) do
-    if get_change(recipe, :steps) do
-      steps = get_change(recipe, :steps)
-              |> Stream.with_index(1)
-              |> Enum.map(fn {step, new_order} -> put_change(step, :order, new_order) end)
+  defp maybe_consolidate_step_order(recipe), do: recipe
+  defp maybe_consolidate_step_order(%Ecto.Changeset{valid?: true, changes: %{steps: steps}} = recipe) do
+    steps
+    |> Stream.with_index(1)
+    |> Enum.map(fn {step, new_order} -> put_change(step, :order, new_order) end)
 
-      put_assoc(recipe, :steps, steps)
-    else
-      recipe
-    end
+    put_assoc(recipe, :steps, steps)
   end
 
-  defp set_slug_if_changed(recipe) do
-    # TODO basic slugging function before making something more robust
-    if get_change(recipe, :name) do
-      put_change(recipe, :slug, generate_slug(get_change(recipe, :name)))
-    else
-      recipe
-    end
+  defp maybe_update_slug(recipe), do: recipe
+  defp maybe_update_slug(%Ecto.Changeset{valid?: true, changes: %{name: name}} = recipe) do
+    put_change(recipe, :slug, generate_slug(get_change(recipe, :name)))
   end
 
   defp generate_slug(name) do
