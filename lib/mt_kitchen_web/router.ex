@@ -30,11 +30,14 @@ defmodule MTKitchenWeb.Router do
 
     scope "/manage" do
       resources "/recipes", RecipeController
+      # Edit all recipe steps together
       get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
+#      add delete param
       put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
-      delete "/recipes/:recipe_id/steps/:id", StepController, :delete, as: :recipe_step
 
-      get "/recipes/:recipe_id/steps/:id/edit", StepController, :delete, as: :recipe_step
+      # Edit all ingredients in a step together
+      get "/recipes/:recipe_id/steps/:id/edit", StepController, :get, as: :step_ingredients
+      put "/recipes/:recipe_id/steps/:id", StepController, :get, as: :step_ingredients
     end
   end
 

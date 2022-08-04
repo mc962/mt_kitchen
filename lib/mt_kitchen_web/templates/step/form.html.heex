@@ -11,7 +11,7 @@
       <h3><%= @recipe.name %></h3>
 
       <ol id="recipe_steps" class="resource-list draggable">
-        <%= inputs_for f, :steps, [append: [%MTKitchen.Management.Step{order: (MTKitchen.Management.Recipe.stubbed_order()), instruction: ""}]], fn sf -> %>
+        <%= inputs_for f, :steps, fn sf -> %>
             <li class="resource-item recipe-step">
                 <%= hidden_input sf, :order, class: "recipe-step-order ordered-item" %>
 
@@ -21,8 +21,9 @@
                 </div>
 
                 <%= if Ecto.get_meta(sf.data, :state) == :loaded do %>
-                    <div class="nested-form-actions">
-                      <span><%= link "Delete", to: Routes.recipe_step_path(@conn, :delete, sf.data.recipe_id, sf.data.id), method: :delete, data: [confirm: "Are you sure?"] %></span>
+                    <div class="form-ctrl-container">
+                        <%= label sf, :delete %><br>
+                        <%= checkbox sf, :delete %>
                     </div>
                 <% end %>
             </li>
