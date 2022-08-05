@@ -51,6 +51,7 @@ defmodule MTKitchen.Management.Recipe do
     @max_steps + 1
   end
 
+#  TODO this needs to happen _after_ db changes, otherwise step order will not be consolidated in relation to changed records
   defp maybe_consolidate_step_order(recipe), do: recipe
   defp maybe_consolidate_step_order(%Ecto.Changeset{valid?: true, changes: %{steps: steps}} = recipe) do
     steps

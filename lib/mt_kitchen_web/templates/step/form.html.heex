@@ -10,7 +10,7 @@
 
       <h3><%= @recipe.name %></h3>
 
-      <template id="new_step_template">
+      <template id="new_step_template" class="new-resource-template">
         <%= new_step(@conn, @recipe) %>
       </template>
       <ol id="recipe_steps" class="resource-list draggable">
@@ -19,7 +19,7 @@
         <% end %>
       </ol>
 
-      <button type="button" class="new-step-btn">Add Step</button>
+      <button type="button" class="new-resource-btn">Add Step</button>
 
       <div>
         <%= submit "Save" %>

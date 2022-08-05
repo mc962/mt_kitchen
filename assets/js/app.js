@@ -42,45 +42,65 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 document.addEventListener('DOMContentLoaded', () => {
-   addNewStepListener();
-   removeNewStepListener();
+   addNewNestedResourceListener(detectNestedItemTransforms());
+   removeNewNestedResourceListener();
 });
 
-const addNewStepListener = () => {
-    const newStepBtn = document.querySelector('.new-step-btn');
-    const existingSteps = document.getElementById('recipe_steps');
-    newStepBtn.addEventListener('click', () => {
-        const newStepTemplate = document.getElementById('new_step_template');
-        const newStepContent = newStepTemplate.content.cloneNode(true);
-        const newStepEl = newStepContent.querySelector('.recipe-step');
+const addNewNestedResourceListener = (itemTransforms = []) => {
+    const newResourceBtn = document.querySelector('.new-resource-btn');
+    const existingResources = document.querySelector('.resource-list');
+    newResourceBtn.addEventListener('click', () => {
+        const newResourceTemplate = document.querySelector('.new-resource-template');
+        const newResourceBtn = newResourceTemplate.content.cloneNode(true);
+        let newResourceEl = newResourceBtn.querySelector('.resource-item');
 
-        // Set unique 'id' for fields in this step so that ORM may know how to insert them
-        const nodeInputs = newStepContent.querySelectorAll('input');
-        const nodeTextAreas = newStepContent.querySelectorAll('textarea');
+        // Set unique 'id' for fields in this resource so that ORM may know how to insert them
+        const nodeInputs = newResourceBtn.querySelectorAll('input');
+        const nodeTextAreas = newResourceBtn.querySelectorAll('textarea');
         [...Array.from(nodeInputs), ...Array.from(nodeTextAreas)].forEach((nodeInput) => {
             const newRandVal = new Date().getTime().toString();
             nodeInput.name = nodeInput.name.replace(/\[0]/g, `[${newRandVal}]`)
             nodeInput.id = nodeInput.id.replace(/_0_/g, `_${newRandVal}_`)
         });
-        // Add a current order to the new step, which is required, based on the list length (so a new step would have
-        //   an order 1 beyond the existing list length).
-        newStepEl.querySelector('.recipe-step-order').value = existingSteps.getElementsByTagName('li').length + 1;
-        existingSteps.appendChild(newStepEl);
+
+        itemTransforms.forEach((transform) => {
+           newResourceEl = transform(existingResources, newResourceEl)
+        });
+
+        existingResources.appendChild(newResourceEl);
     })
 }
 
-const removeNewStepListener = () => {
-    const existingSteps = document.getElementById('recipe_steps');
-    existingSteps.addEventListener('click', (event) => {
-        const clickedBtn = event.target;
-        if (clickedBtn.classList.contains('remove-new-step-btn')) {
-            const removeStep = clickedBtn.closest('li.recipe-step');
+const setNewStepOrder = (existingResources, newResourceEl) => {
+    // Add a current order to the new step, which is required, based on the list length (so a new step would have
+    //   an order 1 beyond the existing list length).
+    newResourceEl.querySelector('.recipe-step-order').value = existingResources.getElementsByTagName('li').length + 1;
 
-            if (removeStep) {
-                removeStep.remove();
+    return newResourceEl
+}
+
+const removeNewNestedResourceListener = () => {
+    const existingResources = document.querySelector('.resource-list');
+    existingResources.addEventListener('click', (event) => {
+        const clickedBtn = event.target;
+        if (clickedBtn.classList.contains('remove-new-resource-btn')) {
+            const removedResource = clickedBtn.closest('li.resource-item');
+
+            if (removedResource) {
+                removedResource.remove();
             } else {
-                console.warn('Step to remove was not found.');
+                console.warn('Item to remove was not found.');
             }
         }
     });
+}
+
+const detectNestedItemTransforms = () => {
+    if (document.querySelector('#recipe_steps')) {
+        return [
+            setNewStepOrder
+        ];
+    } else {
+        return [];
+    }
 }
