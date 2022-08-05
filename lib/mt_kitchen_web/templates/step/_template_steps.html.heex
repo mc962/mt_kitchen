@@ -1,0 +1,3 @@
+<%= inputs_for @recipe_form, :steps, fn sf -> %>
+    <%= render "_step.html", step_form: sf, conn: @conn %>
+<% end %>

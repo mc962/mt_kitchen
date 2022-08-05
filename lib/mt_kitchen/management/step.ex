@@ -17,6 +17,8 @@ defmodule MTKitchen.Management.Step do
 
   @doc false
   def changeset(step, attrs) do
+    IO.inspect(step)
+    IO.inspect(attrs)
     step
     |> cast(attrs, [:order, :instruction, :delete])
     |> validate_required([:order, :instruction])

@@ -5,7 +5,6 @@ import "../css/app.css"
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
 // import "./user_socket.js"
-
 // You can include dependencies in two ways.
 //
 // The simplest option is to put them in assets/vendor and
@@ -18,7 +17,6 @@ import "../css/app.css"
 //
 //     import "some-package"
 //
-
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
@@ -43,3 +41,46 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+document.addEventListener('DOMContentLoaded', () => {
+   addNewStepListener();
+   removeNewStepListener();
+});
+
+const addNewStepListener = () => {
+    const newStepBtn = document.querySelector('.new-step-btn');
+    const existingSteps = document.getElementById('recipe_steps');
+    newStepBtn.addEventListener('click', () => {
+        const newStepTemplate = document.getElementById('new_step_template');
+        const newStepContent = newStepTemplate.content.cloneNode(true);
+        const newStepEl = newStepContent.querySelector('.recipe-step');
+
+        // Set unique 'id' for fields in this step so that ORM may know how to insert them
+        const nodeInputs = newStepContent.querySelectorAll('input');
+        const nodeTextAreas = newStepContent.querySelectorAll('textarea');
+        [...Array.from(nodeInputs), ...Array.from(nodeTextAreas)].forEach((nodeInput) => {
+            const newRandVal = new Date().getTime().toString();
+            nodeInput.name = nodeInput.name.replace(/\[0]/g, `[${newRandVal}]`)
+            nodeInput.id = nodeInput.id.replace(/_0_/g, `_${newRandVal}_`)
+        });
+        // Add a current order to the new step, which is required, based on the list length (so a new step would have
+        //   an order 1 beyond the existing list length).
+        newStepEl.querySelector('.recipe-step-order').value = existingSteps.getElementsByTagName('li').length + 1;
+        existingSteps.appendChild(newStepEl);
+    })
+}
+
+const removeNewStepListener = () => {
+    const existingSteps = document.getElementById('recipe_steps');
+    existingSteps.addEventListener('click', (event) => {
+        const clickedBtn = event.target;
+        if (clickedBtn.classList.contains('remove-new-step-btn')) {
+            const removeStep = clickedBtn.closest('li.recipe-step');
+
+            if (removeStep) {
+                removeStep.remove();
+            } else {
+                console.warn('Step to remove was not found.');
+            }
+        }
+    });
+}

@@ -1,4 +1,4 @@
-<section id="recipe_steps">
+<section id="recipe_steps_container">
     <h2>Steps</h2>
 
     <.form let={f} for={@changeset} action={Routes.recipe_steps_path(@conn, :update, @recipe)}>
@@ -10,26 +10,16 @@
 
       <h3><%= @recipe.name %></h3>
 
+      <template id="new_step_template">
+        <%= new_step(@conn, @recipe) %>
+      </template>
       <ol id="recipe_steps" class="resource-list draggable">
         <%= inputs_for f, :steps, fn sf -> %>
-            <li class="resource-item recipe-step">
-                <%= hidden_input sf, :order, class: "recipe-step-order ordered-item" %>
-
-                <div class="form-ctrl-container">
-                    <%= textarea sf, :instruction, aria_labelledby: "instruction" %>
-                    <%= error_tag sf, :instruction %>
-                </div>
-
-                <%= if Ecto.get_meta(sf.data, :state) == :loaded do %>
-                    <div class="form-ctrl-container">
-                        <%= label sf, :delete %><br>
-                        <%= checkbox sf, :delete %>
-                    </div>
-                <% end %>
-            </li>
+            <%= render "_step.html", step_form: sf, conn: @conn %>
         <% end %>
       </ol>
 
+      <button type="button" class="new-step-btn">Add Step</button>
 
       <div>
         <%= submit "Save" %>

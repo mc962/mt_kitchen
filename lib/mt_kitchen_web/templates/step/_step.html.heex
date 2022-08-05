@@ -1,0 +1,17 @@
+<li class="resource-item recipe-step">
+    <%= hidden_input @step_form, :order, class: "recipe-step-order ordered-item" %>
+
+    <div class="form-ctrl-container">
+        <%= textarea @step_form, :instruction, aria_labelledby: "instruction" %>
+        <%= error_tag @step_form, :instruction %>
+    </div>
+
+    <%= if Ecto.get_meta(@step_form.data, :state) == :loaded do %>
+        <div class="form-ctrl-container">
+            <%= label @step_form, :delete %><br>
+            <%= checkbox @step_form, :delete %>
+        </div>
+    <% else %>
+        <button class="remove-new-step-btn" type="button">Remove</button>
+    <% end %>
+</li>
