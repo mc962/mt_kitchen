@@ -10,12 +10,12 @@
 
       <h3><%= @recipe.name %></h3>
 
-      <template id="new_step_template" class="new-resource-template">
+      <template id="new_resource_template" class="new-resource-template">
         <%= new_step(@conn, @recipe) %>
       </template>
       <ol id="recipe_steps" class="resource-list draggable">
         <%= inputs_for f, :steps, fn sf -> %>
-            <%= render "_step.html", step_form: sf, conn: @conn %>
+            <%= render "_step.html", step_form: sf, conn: @conn, recipe: @recipe %>
         <% end %>
       </ol>
 

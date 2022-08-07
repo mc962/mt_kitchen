@@ -32,12 +32,11 @@ defmodule MTKitchenWeb.Router do
       resources "/recipes", RecipeController
       # Edit all recipe steps together
       get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
-#      add delete param
       put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
 
       # Edit all ingredients in a step together
-      get "/recipes/:recipe_id/steps/:id/edit", StepController, :get, as: :step_ingredients
-      put "/recipes/:recipe_id/steps/:id", StepController, :get, as: :step_ingredients
+      get "/recipes/:recipe_id/steps/:id/edit", IngredientController, :edit, as: :step_ingredients
+      put "/recipes/:recipe_id/steps/:id", IngredientController, :update, as: :step_ingredients
     end
   end
 

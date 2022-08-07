@@ -22,8 +22,15 @@ defmodule MTKitchen.Management.Step do
     |> validate_required([:order, :instruction])
     |> validate_number(:order, greater_than: 0)
     |> assoc_constraint(:recipe)
-    |> cast_assoc(:step_ingredients)
     |> maybe_mark_for_deletion()
+  end
+
+  @doc false
+  def ingredients_changeset(step, attrs) do
+    step
+    |> cast(attrs, [:recipe_id])
+    |> cast_assoc(:step_ingredients)
+    |> assoc_constraint(:recipe)
   end
 
   # If primary key id is nil / record is not persisted, then we will never mark for deletion
@@ -31,7 +38,6 @@ defmodule MTKitchen.Management.Step do
   # If record is currently persisted, and we noted in params that the record should be deleted, then mark in the
   #   [Changeset Action](https://hexdocs.pm/ecto/Ecto.Changeset.html#module-changeset-actions) to delete that record.
   defp maybe_mark_for_deletion(%Ecto.Changeset{valid?: true, changes: %{delete: _delete}} = changeset) do
-    IO.puts("DELETE IT")
     %{changeset | action: :delete}
   end
   # All other changesets that don't satisfy these conditions should just be passed through

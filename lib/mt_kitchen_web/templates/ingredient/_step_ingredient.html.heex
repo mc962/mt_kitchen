@@ -1,0 +1,42 @@
+<li class="resource-item recipe-step">
+   <%= inputs_for @step_ingredient_form, :ingredient, fn ingredient_form -> %>
+      <div class="form-ctrl-container">
+          <%= label ingredient_form, :name %>
+          <%= text_input ingredient_form, :name %>
+          <%= error_tag ingredient_form, :name %>
+      </div>
+
+      <div class="form-ctrl-container">
+          <%= label ingredient_form, :description %>
+          <%= textarea ingredient_form, :description %>
+          <%= error_tag ingredient_form, :description %>
+      </div>
+   <% end %>
+
+    <div class="form-ctrl-container">
+      <%= label @step_ingredient_form, :amount %>
+      <%= number_input @step_ingredient_form, :amount %>
+      <%= error_tag @step_ingredient_form, :amount %>
+    </div>
+
+    <div class="form-ctrl-container">
+      <%= label @step_ingredient_form, :condition %>
+      <%= text_input @step_ingredient_form, :condition %>
+      <%= error_tag @step_ingredient_form, :condition %>
+    </div>
+
+    <div class="form-ctrl-container">
+      <%= label @step_ingredient_form, :unit %>
+      <%= text_input @step_ingredient_form, :unit %>
+      <%= error_tag @step_ingredient_form, :unit %>
+    </div>
+
+    <%= if Ecto.get_meta(@step_ingredient_form.data, :state) == :loaded do %>
+        <div class="form-ctrl-container">
+            <%= label @step_ingredient_form, :delete %><br>
+            <%= checkbox @step_ingredient_form, :delete %>
+        </div>
+    <% else %>
+        <button class="remove-new-resource-btn" type="button">Remove</button>
+    <% end %>
+</li>

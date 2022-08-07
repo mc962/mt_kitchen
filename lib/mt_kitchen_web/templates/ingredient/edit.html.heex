@@ -1,0 +1,12 @@
+<h1>Edit Recipe</h1>
+
+<nav class="action-nav">
+    <ul class="action-nav-links">
+        <li class="action-nav-link"><%= link("Information", to: Routes.recipe_path(@conn, :edit, @step.recipe)) %></li>
+        <li class="action-nav-link"><%= link("Steps", to: Routes.recipe_steps_path(@conn, :edit, @step.recipe)) %></li>
+    </ul>
+</nav>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.step_ingredients_path(@conn, :update, @step.recipe, @step)) %>
+
+<span><%= link "Back", to: Routes.recipe_path(@conn, :index) %></span>

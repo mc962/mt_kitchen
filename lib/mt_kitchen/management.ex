@@ -156,6 +156,19 @@ defmodule MTKitchen.Management do
   alias MTKitchen.Management.Step
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for tracking recipe step ingredients changes.
+
+  ## Examples
+
+      iex> change_step_ingredients(step)
+      %Ecto.Changeset{data: %Step{}}
+
+  """
+  def change_step_ingredients(%Step{} = step, attrs \\ %{}) do
+    Step.ingredients_changeset(step, attrs)
+  end
+
+  @doc """
   Returns the list of steps.
 
   ## Examples
@@ -201,7 +214,7 @@ defmodule MTKitchen.Management do
   def get_full_step!(id) do
     Repo.one! from s in Step,
                     where: s.id == ^id,
-                    preload: [:recipe]
+                    preload: [:recipe, step_ingredients: [:ingredient]]
   end
 
   @doc """
@@ -237,6 +250,24 @@ defmodule MTKitchen.Management do
   def update_step(%Step{} = step, attrs) do
     step
     |> Step.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates a recipe step's ingredients.
+
+  ## Examples
+
+      iex> update_step_ingredients(step, %{field: new_value})
+      {:ok, %Recipe{}}
+
+      iex> update_step_ingredients(step, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_step_ingredients(%Step{} = step, attrs) do
+    step
+    |> Step.ingredients_changeset(attrs)
     |> Repo.update()
   end
 
