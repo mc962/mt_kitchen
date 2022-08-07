@@ -42,13 +42,19 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 document.addEventListener('DOMContentLoaded', () => {
-   addNewNestedResourceListener(detectNestedItemTransforms());
-   removeNewNestedResourceListener();
+   addNewNestedResourceListener(
+       detectNestedItemContainerTransforms(),
+       detectNestedItemTransforms()
+   );
+   removeNewNestedResourceListener(
+       detectNestedItemContainerTransforms(),
+       detectNestedItemTransforms()
+   );
 });
 
-const addNewNestedResourceListener = (itemTransforms = []) => {
+const addNewNestedResourceListener = (itemsTransforms = [], itemTransforms = []) => {
     const newResourceBtn = document.querySelector('.new-resource-btn');
-    const existingResources = document.querySelector('.resource-list');
+    let existingResources = document.querySelector('.resource-list');
     newResourceBtn.addEventListener('click', () => {
         const newResourceTemplate = document.querySelector('.new-resource-template');
         const newResourceBtn = newResourceTemplate.content.cloneNode(true);
@@ -63,24 +69,28 @@ const addNewNestedResourceListener = (itemTransforms = []) => {
             nodeInput.id = nodeInput.id.replace(/_0_/g, `_${newRandVal}_`)
         });
 
-        itemTransforms.forEach((transform) => {
-           newResourceEl = transform(existingResources, newResourceEl)
-        });
-
         existingResources.appendChild(newResourceEl);
+
+        itemsTransforms.forEach((transform) => {
+            existingResources = transform(existingResources)
+        });
+        itemTransforms.forEach((transform) => {
+            newResourceEl = transform(existingResources, newResourceEl)
+        });
     })
 }
 
-const setNewStepOrder = (existingResources, newResourceEl) => {
-    // Add a current order to the new step, which is required, based on the list length (so a new step would have
-    //   an order 1 beyond the existing list length).
-    newResourceEl.querySelector('.recipe-step-order').value = existingResources.getElementsByTagName('li').length + 1;
+const updateResourceOrder = (existingResources) => {
+    const currentItemOrders =  existingResources.querySelectorAll('.ordered-item');
+    currentItemOrders.forEach((item, idx) => {
+       item.value = idx + 1
+    });
 
-    return newResourceEl
+    return existingResources
 }
 
-const removeNewNestedResourceListener = () => {
-    const existingResources = document.querySelector('.resource-list');
+const removeNewNestedResourceListener = (itemsTransforms = [], itemTransforms = []) => {
+    let existingResources = document.querySelector('.resource-list');
     existingResources.addEventListener('click', (event) => {
         const clickedBtn = event.target;
         if (clickedBtn.classList.contains('remove-new-resource-btn')) {
@@ -88,6 +98,10 @@ const removeNewNestedResourceListener = () => {
 
             if (removedResource) {
                 removedResource.remove();
+
+                itemsTransforms.forEach((transform) => {
+                    existingResources = transform(existingResources)
+                });
             } else {
                 console.warn('Item to remove was not found.');
             }
@@ -95,11 +109,19 @@ const removeNewNestedResourceListener = () => {
     });
 }
 
-const detectNestedItemTransforms = () => {
+const detectNestedItemContainerTransforms = () => {
     if (document.querySelector('#recipe_steps')) {
         return [
-            setNewStepOrder
+            updateResourceOrder
         ];
+    } else {
+        return [];
+    }
+}
+
+const detectNestedItemTransforms = () => {
+    if (document.querySelector('#recipe_steps')) {
+        return [];
     } else {
         return [];
     }

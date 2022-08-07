@@ -17,8 +17,6 @@ defmodule MTKitchen.Management.Step do
 
   @doc false
   def changeset(step, attrs) do
-    IO.inspect(step)
-    IO.inspect(attrs)
     step
     |> cast(attrs, [:order, :instruction, :delete])
     |> validate_required([:order, :instruction])
@@ -29,15 +27,13 @@ defmodule MTKitchen.Management.Step do
   end
 
   # If primary key id is nil / record is not persisted, then we will never mark for deletion
-  # TODO eliminate if/else in other Schemas with this type of pattern matching
   defp maybe_mark_for_deletion(%{data: %{id: nil}} = changeset), do: changeset
   # If record is currently persisted, and we noted in params that the record should be deleted, then mark in the
   #   [Changeset Action](https://hexdocs.pm/ecto/Ecto.Changeset.html#module-changeset-actions) to delete that record.
-  defp maybe_mark_for_deletion(changeset) do
-    if get_change(changeset, :delete) do
-      %{changeset | action: :delete}
-    else
-      changeset
-    end
+  defp maybe_mark_for_deletion(%Ecto.Changeset{valid?: true, changes: %{delete: _delete}} = changeset) do
+    IO.puts("DELETE IT")
+    %{changeset | action: :delete}
   end
+  # All other changesets that don't satisfy these conditions should just be passed through
+  defp maybe_mark_for_deletion(changeset), do: changeset
 end
