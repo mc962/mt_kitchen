@@ -11,8 +11,9 @@
             <%= label @step_form, :delete %><br>
             <%= checkbox @step_form, :delete %>
         </div>
-            <%= link("Edit Ingredients", to: Routes.step_ingredients_path(@conn, :edit, @recipe, @step_form.data)) %>
+        <%= link("Edit Ingredients", to: Routes.step_ingredients_path(@conn, :edit, @recipe, @step_form.data)) %>
     <% else %>
+        <%= hidden_input @step_form, :temp_id, class: "temp-id" %>
         <button class="remove-new-resource-btn" type="button">Remove</button>
     <% end %>
 

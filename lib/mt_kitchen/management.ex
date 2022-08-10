@@ -107,7 +107,7 @@ defmodule MTKitchen.Management do
   """
   def update_recipe_steps(%Recipe{} = recipe, attrs) do
     recipe
-    |> Recipe.steps_changeset(attrs)
+    |> Recipe.recipe_steps_changeset(attrs)
     |> Repo.update()
   end
 
@@ -150,7 +150,7 @@ defmodule MTKitchen.Management do
 
   """
   def change_recipe_steps(%Recipe{} = recipe, attrs \\ %{}) do
-    Recipe.steps_changeset(recipe, attrs)
+    Recipe.recipe_steps_changeset(recipe, attrs)
   end
 
   alias MTKitchen.Management.Step
@@ -165,7 +165,7 @@ defmodule MTKitchen.Management do
 
   """
   def change_step_ingredients(%Step{} = step, attrs \\ %{}) do
-    Step.ingredients_changeset(step, attrs)
+    Step.step_ingredients_changeset(step, attrs)
   end
 
   @doc """
@@ -267,7 +267,7 @@ defmodule MTKitchen.Management do
   """
   def update_step_ingredients(%Step{} = step, attrs) do
     step
-    |> Step.ingredients_changeset(attrs)
+    |> Step.step_ingredients_changeset(attrs)
     |> Repo.update()
   end
 

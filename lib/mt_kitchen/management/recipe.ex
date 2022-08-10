@@ -22,16 +22,18 @@ defmodule MTKitchen.Management.Recipe do
     recipe
     |> cast(attrs, [:name, :slug, :description, :publicly_accessible, :user_id])
     |> cast_assoc(:steps)
-    |> validate_required([:name, :slug, :publicly_accessible])
     |> maybe_update_slug()
+    |> validate_required([:name, :slug, :publicly_accessible])
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
   end
 
   @doc false
-  def steps_changeset(recipe, attrs) do
-    recipe
+  def recipe_steps_changeset(recipe, attrs) do
+    IO.puts("recipe steps")
+    IO.inspect(attrs)
+    new_recipe=recipe
     |> cast(attrs, [:user_id])
     |> cast_assoc(:steps)
     |> assoc_constraint(:user)
@@ -40,6 +42,10 @@ defmodule MTKitchen.Management.Recipe do
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
+
+    IO.inspect(new_recipe)
+
+    new_recipe
   end
 
   @doc """

@@ -18,24 +18,26 @@ defmodule MTKitchen.Management.Ingredient do
 
   @doc false
   def changeset(ingredient, attrs) do
-    ingredient
+    new_ingredient = ingredient
     |> cast(attrs, [:name, :slug, :description, :ancestry])
-    |> validate_required([:name, :slug, :description, :ancestry])
+    |> maybe_update_slug()
+    |> validate_required([:name, :slug])
     |> assoc_constraint(:user)
-    |> set_slug_if_changed()
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
+
+    IO.inspect(attrs)
+    IO.puts "new_ingredient"
+    IO.inspect(new_ingredient)
+
+    new_ingredient
   end
 
-  defp set_slug_if_changed(recipe) do
-    # TODO basic slugging function before making something more robust
-    if get_change(recipe, :name) do
-      put_change(recipe, :slug, generate_slug(get_change(recipe, :name)))
-    else
-      recipe
-    end
+  defp maybe_update_slug(%Ecto.Changeset{valid?: true, changes: %{name: name}} = ingredient) do
+    put_change(ingredient, :slug, generate_slug(name))
   end
+  defp maybe_update_slug(ingredient), do: ingredient
 
   defp generate_slug(name) do
     name

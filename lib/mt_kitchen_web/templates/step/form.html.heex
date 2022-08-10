@@ -14,7 +14,7 @@
         <%= new_step(@conn, @recipe) %>
       </template>
       <ol id="recipe_steps" class="resource-list draggable">
-        <%= inputs_for f, :steps, fn sf -> %>
+        <%= inputs_for f, :steps, [append: [%MTKitchen.Management.Step{order: (MTKitchen.Management.Recipe.stubbed_order()), instruction: ""}]], fn sf -> %>
             <%= render "_step.html", step_form: sf, conn: @conn, recipe: @recipe %>
         <% end %>
       </ol>

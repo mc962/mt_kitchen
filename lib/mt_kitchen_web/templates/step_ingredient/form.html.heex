@@ -10,8 +10,10 @@
 
       <h3><%= @step.recipe.name %></h3>
 
-    <label for="step_instruction">Instruction</label>
-    <textarea id="step_instruction"><%= @step.instruction %></textarea>
+      <label for="step_instruction">Instruction</label>
+      <textarea id="step_instruction" disabled="true"><%= @step.instruction %></textarea>
+
+      <hr />
 
       <template id="new_resource_template" class="new-resource-template">
         <%= new_step_ingredient(@conn, @step.recipe, @step) %>

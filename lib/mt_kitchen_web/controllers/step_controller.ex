@@ -12,6 +12,8 @@ defmodule MTKitchenWeb.StepController do
   def update(conn, %{"id" => id, "recipe" => recipe_params}) do
     recipe = Management.get_full_recipe!(id)
 
+    IO.puts("recipe params")
+    IO.inspect(recipe_params)
     case Management.update_recipe_steps(recipe, recipe_params) do
       {:ok, recipe} ->
         conn

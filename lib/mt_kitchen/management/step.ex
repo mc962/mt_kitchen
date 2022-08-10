@@ -6,6 +6,7 @@ defmodule MTKitchen.Management.Step do
     field :instruction, :string
     field :order, :integer
 
+    field :temp_id, :string, virtual: true
     field :delete, :boolean, virtual: true
 
     belongs_to :recipe, MTKitchen.Management.Recipe
@@ -18,7 +19,8 @@ defmodule MTKitchen.Management.Step do
   @doc false
   def changeset(step, attrs) do
     step
-    |> cast(attrs, [:order, :instruction, :delete])
+    |> Map.put(:temp_id, (step.temp_id || attrs["temp_id"])) # So its persisted
+    |> cast(attrs, [:order, :instruction, :recipe_id, :delete])
     |> validate_required([:order, :instruction])
     |> validate_number(:order, greater_than: 0)
     |> assoc_constraint(:recipe)
@@ -26,11 +28,12 @@ defmodule MTKitchen.Management.Step do
   end
 
   @doc false
-  def ingredients_changeset(step, attrs) do
+  def step_ingredients_changeset(step, attrs) do
     step
     |> cast(attrs, [:recipe_id])
     |> cast_assoc(:step_ingredients)
     |> assoc_constraint(:recipe)
+    |> foreign_key_constraint(:recipe_id)
   end
 
   # If primary key id is nil / record is not persisted, then we will never mark for deletion
@@ -42,4 +45,6 @@ defmodule MTKitchen.Management.Step do
   end
   # All other changesets that don't satisfy these conditions should just be passed through
   defp maybe_mark_for_deletion(changeset), do: changeset
+
+  def get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64 |> binary_part(0, 5)
 end

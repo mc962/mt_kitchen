@@ -56,15 +56,21 @@ const addNewNestedResourceListener = (itemsTransforms = [], itemTransforms = [])
     const newResourceBtn = document.querySelector('.new-resource-btn');
     let existingResources = document.querySelector('.resource-list');
     newResourceBtn.addEventListener('click', () => {
+        const newRandVal = new Date().getTime().toString();
+
         const newResourceTemplate = document.querySelector('.new-resource-template');
         const newResourceBtn = newResourceTemplate.content.cloneNode(true);
         let newResourceEl = newResourceBtn.querySelector('.resource-item');
+
+        const tempIdInput = newResourceEl.querySelector('.temp-id');
+        if (tempIdInput) {
+            tempIdInput.value = newRandVal;
+        }
 
         // Set unique 'id' for fields in this resource so that ORM may know how to insert them
         const nodeInputs = newResourceBtn.querySelectorAll('input');
         const nodeTextAreas = newResourceBtn.querySelectorAll('textarea');
         [...Array.from(nodeInputs), ...Array.from(nodeTextAreas)].forEach((nodeInput) => {
-            const newRandVal = new Date().getTime().toString();
             nodeInput.name = nodeInput.name.replace(/\[0]/g, `[${newRandVal}]`)
             nodeInput.id = nodeInput.id.replace(/_0_/g, `_${newRandVal}_`)
         });
