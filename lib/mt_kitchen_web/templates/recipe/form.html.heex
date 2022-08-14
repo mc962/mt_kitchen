@@ -8,6 +8,8 @@
         </div>
       <% end %>
 
+    <%= hidden_input f, :user_id, value: @conn.assigns.current_user.public_id %>
+
       <%= label f, :name %>
       <%= text_input f, :name %>
       <%= error_tag f, :name %>

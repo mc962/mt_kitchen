@@ -4,13 +4,17 @@ defmodule MTKitchenWeb.StepIngredientController do
   alias MTKitchen.Management
 
   def edit(conn, %{"id" => id}) do
+    current_user = conn.assigns.current_user
+
     step = Management.get_full_step!(id)
     changeset = Management.change_step_ingredients(step)
     render(conn, "edit.html", step: step, changeset: changeset)
   end
 
   def update(conn, %{"recipe_id" => _recipe_id, "id" => id, "step" => step_params}) do
+    current_user = conn.assigns.current_user
     step = Management.get_full_step!(id)
+
     case Management.update_step_ingredients(step, step_params) do
       {:ok, step} ->
         conn

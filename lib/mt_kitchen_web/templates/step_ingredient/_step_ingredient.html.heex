@@ -1,5 +1,7 @@
 <li class="resource-item recipe-step">
    <%= inputs_for @step_ingredient_form, :ingredient, fn ingredient_form -> %>
+    <%= hidden_input ingredient_form, :user_id, value: @conn.assigns.current_user.public_id %>
+
       <div class="form-ctrl-container">
           <%= label ingredient_form, :name %>
           <%= text_input ingredient_form, :name %>

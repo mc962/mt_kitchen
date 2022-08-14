@@ -17,7 +17,7 @@ defmodule MTKitchen.Accounts.UserToken do
     field :token, :binary
     field :context, :string
     field :sent_to, :string
-    belongs_to :user, MTKitchen.Accounts.User
+    belongs_to :user, MTKitchen.Accounts.User, type: :binary_id
 
     timestamps(updated_at: false)
   end

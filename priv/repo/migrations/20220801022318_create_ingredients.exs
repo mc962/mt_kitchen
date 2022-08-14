@@ -3,12 +3,12 @@ defmodule MTKitchen.Repo.Migrations.CreateIngredients do
 
   def change do
     create table(:ingredients) do
-      add :name, :string, null: false
+      add :name, :citext, null: false
       add :slug, :string
       add :description, :text
       add :ancestry, :string
 
-      add :user_id, references(:users, on_delete: :delete_all)
+      add :user_id, references(:users, type: :binary_id, on_delete: :delete_all)
 
       timestamps()
     end
