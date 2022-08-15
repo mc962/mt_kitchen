@@ -10,9 +10,12 @@ defmodule MTKitchenWeb.StepIngredientController do
   end
 
   def update(conn, %{"recipe_id" => _recipe_id, "id" => id, "step" => step_params}) do
+    current_user = conn.assigns.current_user
     step = Management.get_full_step!(id)
 
-    case Management.update_step_ingredients(step, step_params) do
+    authenticated_step_params = authenticated_params(step_params, current_user)
+    IO.inspect(authenticated_step_params, label: "authenticated_step_params")
+    case Management.update_step_ingredients(step, authenticated_step_params) do
       {:ok, step} ->
         conn
         |> put_flash(:info, "Step Ingredients updated successfully.")
@@ -30,5 +33,24 @@ defmodule MTKitchenWeb.StepIngredientController do
     conn
     |> put_flash(:info, "Step deleted successfully.")
     |> redirect(to: Routes.recipe_steps_path(conn, :edit, step.recipe))
+  end
+
+  defp authenticated_params(step_params, current_user) do
+    IO.inspect(step_params, label: "unauthed params")
+    new_step_ingredients =
+      step_params
+      |> Map.get("step_ingredients")
+      |> Enum.map(fn {_k, step_ingredient} ->
+        new_ingredient =
+          step_ingredient
+          |> Map.get("ingredient")
+          |> case do
+              nil -> nil
+              ingredient -> Map.put(ingredient, "user_id", current_user.id)
+             end
+        Map.put(step_ingredient, "ingredient", new_ingredient)
+      end)
+
+    Map.put(step_params, "step_ingredients", new_step_ingredients)
   end
 end

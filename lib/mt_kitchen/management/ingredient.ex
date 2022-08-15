@@ -24,7 +24,7 @@ defmodule MTKitchen.Management.Ingredient do
     |> cast(attrs, [:name, :slug, :description, :ancestry, :user_id])
     # We can't insert current user_id value into Ingredient as it's the UUID User.public_id, not the internal primary key id,
     #   and so need to resolve this sort of thing separately.
-    |> maybe_resolve_public_user_id()
+#    |> maybe_resolve_public_user_id()
     |> maybe_update_slug()
     |> validate_required([:name, :slug])
     |> assoc_constraint(:user)
