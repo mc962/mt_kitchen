@@ -16,6 +16,6 @@ defmodule MTKitchen.Management.Utility.Sluggable do
   end
 
   defp generate_random_suffix(length \\ 6) do
-    MTKitchen.Accounts.SecureRandom.urlsafe_base64(length)
+    MTKitchen.Accounts.Utility.SecureRandom.urlsafe_base64(length)
   end
 end

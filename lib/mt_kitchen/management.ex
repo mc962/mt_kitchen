@@ -1,4 +1,6 @@
 defmodule MTKitchen.Management do
+  defdelegate authorize(action, user, params), to: MTKitchen.Management.Policy
+
   @moduledoc """
   The Management context.
   """
@@ -237,21 +239,6 @@ defmodule MTKitchen.Management do
 
   @doc """
   Updates a step.
-
-  ## Examples
-
-      iex> update_step(step, %{field: new_value})
-      {:ok, %Step{}}
-
-      iex> update_step(step, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_step(%Step{} = step, attrs) do
-    step
-    |> Step.changeset(attrs)
-    |> Repo.update()
-  end
 
   @doc """
   Updates a recipe step's ingredients.
