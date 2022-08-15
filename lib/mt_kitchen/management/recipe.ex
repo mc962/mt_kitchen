@@ -53,6 +53,9 @@ defmodule MTKitchen.Management.Recipe do
     @max_steps + 1
   end
 
+  def default_primary_picture_key do
+    "site/default_food.jpg"
+  end
 
   defp maybe_consolidate_step_order(%Ecto.Changeset{valid?: true, changes: %{steps: _steps}} = recipe) do
 #    new_order = 1

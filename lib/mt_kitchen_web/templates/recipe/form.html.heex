@@ -22,6 +22,8 @@
       <%= checkbox f, :publicly_accessible %>
       <%= error_tag f, :publicly_accessible %>
 
+      <%= render MTKitchenWeb.ImageView, "_tab.html", form: f %>
+
       <div>
         <%= submit "Save" %>
       </div>
