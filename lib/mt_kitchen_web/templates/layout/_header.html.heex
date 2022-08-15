@@ -1,0 +1,24 @@
+<header class="header">
+  <section class="container">
+    <nav role="navigation" class="site-navigation">
+      <div class="site-nav-link home-nav-link">
+        <%= link "Home", to: Routes.root_path(@conn, :index), class: "nav-anchor" %>
+      </div>
+
+      <ul class="site-nav-links">
+        <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+          <li class="site-nav-link"><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home), class: "nav-anchor" %></li>
+        <% end %>
+
+        <li class="site-nav-link">
+          <%= link "Recipes", to: Routes.recipe_path(@conn, :index), class: "nav-anchor" %>
+        </li>
+        <li class="site-nav-link">
+          <%= link "Posts", to: "#", class: "nav-anchor" %>
+        </li>
+
+        <%= render "_user_menu.html", assigns %>
+      </ul>
+    </nav>
+  </section>
+</header>
