@@ -1,6 +1,8 @@
 defmodule MTKitchen.Management.Recipe do
   use Ecto.Schema
   import Ecto.Changeset
+  import MTKitchen.Management.Utility.Sluggable
+  import MTKitchen.Management.Utility.PublicResourceable
 
   @max_steps 100
 
@@ -68,32 +70,4 @@ defmodule MTKitchen.Management.Recipe do
     recipe
   end
   defp maybe_consolidate_step_order(recipe), do: recipe
-
-  defp maybe_update_slug(%Ecto.Changeset{valid?: true, changes: %{name: name}} = recipe) do
-    put_change(recipe, :slug, generate_slug(name))
-  end
-  defp maybe_update_slug(recipe), do: recipe
-
-  defp generate_slug(name) do
-    base_slug = name
-                |> String.downcase
-                |> String.replace(~r/[^a-z0-9\s-]/, "")
-                |> String.replace(~r/(\s|-)+/, "-")
-
-    "#{base_slug}-#{generate_random_suffix()}"
-  end
-
-  defp generate_random_suffix(length \\ 6) do
-    SecureRandom.urlsafe_base64(length)
-  end
-
-  # Resolve User's public ID to private internal id, only if the changeset is still valid and the
-  #  user_id has not already been assigned.
-  defp maybe_resolve_public_user_id(%Ecto.Changeset{valid?: true, changes: %{user_id: user_id}} = changeset) do
-    case MTKitchen.Accounts.get_user_by_public_id(user_id) do
-      {:ok, user} -> put_change(changeset, :user_id, user.id)
-      {:error, _} -> add_error(changeset, :user_id, "user to associate record with was not found")
-    end
-  end
-  defp maybe_resolve_public_user_id(changeset), do: changeset
 end
