@@ -88,6 +88,40 @@ defmodule MTKitchen.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Gets a single recipe, including associated resources needed for main user page.
+
+  Raises `Ecto.NoResultsError` if the User does not exist.
+
+  ## Examples
+
+      iex> get_full_user!(123)
+      %User{}
+
+      iex> get_full_user!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_full_user!(id) do
+    Repo.one! from u in User,
+              where: u.id == ^id,
+              preload: [:recipes]
+  end
+
+  @doc """
+  Gets all associated recipes needed for initial User management page.
+  Done separately as user is already loaded in Authentication.
+
+  ## Examples
+
+      iex> get_user_recipes!(123)
+      [%MTKitchen.Management.Recipe{}, ...]
+  """
+  def get_user_recipes(user_id) do
+    Repo.all from r in MTKitchen.Management.Recipe,
+             where: r.user_id == ^user_id
+  end
+
   ## User registration
 
   @doc """

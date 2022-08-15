@@ -29,6 +29,8 @@ defmodule MTKitchenWeb.Router do
 
 
     scope "/manage" do
+      get "/", UserController, :show, as: :user
+
       resources "/recipes", RecipeController
       # Edit all recipe steps together
       get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
