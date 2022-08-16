@@ -27,34 +27,6 @@ defmodule MTKitchen.Accounts do
   end
 
   @doc """
-  Gets a user by their public id to avoid exposing internal database IDs
-
-    ## Examples
-
-      # Known UUID
-      iex> get_user_by_public_id("187b5a97-04af-476f-b413-62c23fba9078")
-      %User{}
-
-      # Unknown UUID
-      iex> get_user_by_public_id("8512f8d1-ecc2-4c41-aa40-3eae204d96bf")
-      nil
-
-  """
-  def get_user_by_public_id(public_id) when is_nil(public_id), do: {:error, "no user found for public ID"}
-  def get_user_by_public_id(public_id) do
-    # TODO cache this lookup (cachex?)
-    query = from u in User,
-             where: u.public_id == ^public_id
-
-    user = Repo.one(query)
-
-    cond do
-      is_nil(user) -> {:error, "no user found for public ID"}
-      user -> {:ok, user}
-    end
-  end
-
-  @doc """
   Gets a user by email and password.
 
   ## Examples
