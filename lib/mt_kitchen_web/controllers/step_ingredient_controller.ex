@@ -14,7 +14,6 @@ defmodule MTKitchenWeb.StepIngredientController do
     step = Management.get_full_step!(id)
 
     authenticated_step_params = authenticated_params(step_params, current_user)
-    IO.inspect(authenticated_step_params, label: "authenticated_step_params")
     case Management.update_step_ingredients(step, authenticated_step_params) do
       {:ok, step} ->
         conn
@@ -36,11 +35,10 @@ defmodule MTKitchenWeb.StepIngredientController do
   end
 
   defp authenticated_params(step_params, current_user) do
-    IO.inspect(step_params, label: "unauthed params")
     new_step_ingredients =
       step_params
       |> Map.get("step_ingredients")
-      |> Enum.map(fn {_k, step_ingredient} ->
+      |> Enum.reduce(%{}, fn ({input_id, step_ingredient}, acc) ->
         new_ingredient =
           step_ingredient
           |> Map.get("ingredient")
@@ -48,7 +46,9 @@ defmodule MTKitchenWeb.StepIngredientController do
               nil -> nil
               ingredient -> Map.put(ingredient, "user_id", current_user.id)
              end
-        Map.put(step_ingredient, "ingredient", new_ingredient)
+
+        new_step_ingredient = Map.put(step_ingredient, "ingredient", new_ingredient)
+        Map.put(acc, input_id, new_step_ingredient)
       end)
 
     Map.put(step_params, "step_ingredients", new_step_ingredients)
