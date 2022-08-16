@@ -2,7 +2,6 @@ defmodule MTKitchen.Management.Recipe do
   use Ecto.Schema
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
-  import MTKitchen.Management.Utility.PublicResourceable
 
   @max_steps 100
 
@@ -25,7 +24,6 @@ defmodule MTKitchen.Management.Recipe do
     |> cast(attrs, [:name, :slug, :description, :publicly_accessible, :user_id])
     |> cast_assoc(:steps)
     |> maybe_update_slug()
-    |> maybe_resolve_public_user_id()
     |> validate_required([:name, :slug, :publicly_accessible])
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
