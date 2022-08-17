@@ -1,27 +1,37 @@
-<section id="recipe_information_container">
-    <h2>Information</h2>
+<h2 class="tab-form-heading">Information</h2>
 
-    <.form let={f} for={@changeset} action={@action}>
-      <%= if @changeset.action do %>
-        <div class="alert alert-danger">
-          <p>Oops, something went wrong! Please check the errors below.</p>
-        </div>
-      <% end %>
+<.form let={f} for={@changeset} action={@action} class="resource-form">
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
 
-      <%= label f, :name %>
-      <%= text_input f, :name %>
-      <%= error_tag f, :name %>
-
-      <%= label f, :description %>
-      <%= textarea f, :description %>
-      <%= error_tag f, :description %>
-
-      <%= label f, :publicly_accessible %>
-      <%= checkbox f, :publicly_accessible %>
-      <%= error_tag f, :publicly_accessible %>
-
-      <div>
-        <%= submit "Save" %>
+  <section class="tab-form-section information">
+      <div class="form-ctrl-container">
+          <%= label f, :name, class: "form-ctrl-lbl" %>
+          <%= text_input f, :name, class: "form-ctrl" %>
+          <%= error_tag f, :name %>
       </div>
-    </.form>
-</section>
+      <div class="form-ctrl-container">
+          <%= label f, :publicly_accessible, class: "form-ctrl-lbl" %>
+          <%= checkbox f, :publicly_accessible, class: "form-ctrl-check" %>
+          <%= error_tag f, :publicly_accessible %>
+      </div>
+      <div class="form-ctrl-container">
+          <%= label f, :description, class: "form-ctrl-lbl" %>
+          <%= textarea f, :description, class: "form-ctrl-text" %>
+          <%= error_tag f, :description %>
+      </div>
+  </section>
+
+    <section class="tab-form-section images">
+        <!-- Not Yet Implemented -->
+    </section>
+    <section class="tab-form-section notes">
+        <!-- Not Yet Implemented -->
+    </section>
+  <div class="actions">
+    <%= submit "Save", class: "button submit-btn" %>
+  </div>
+</.form>

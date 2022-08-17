@@ -26,13 +26,13 @@
       <td><%= recipe.publicly_accessible %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.recipe_path(@conn, :show, recipe) %></span>
-        <span><%= link "Edit", to: Routes.recipe_path(@conn, :edit, recipe) %></span>
-        <span><%= link "Delete", to: Routes.recipe_path(@conn, :delete, recipe), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Show", to: Routes.manage_recipe_path(@conn, :show, recipe) %></span>
+        <span><%= link "Edit", to: Routes.manage_recipe_path(@conn, :edit, recipe) %></span>
+        <span><%= link "Delete", to: Routes.manage_recipe_path(@conn, :delete, recipe), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
-<span><%= link "New Recipe", to: Routes.recipe_path(@conn, :new) %></span>
+<span><%= link "New Recipe", to: Routes.manage_recipe_path(@conn, :new) %></span>
 

@@ -1,32 +1,21 @@
-<h1>Listing Recipes</h1>
+<h1 class="text-center">Listing Recipes</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Slug</th>
-      <th>Description</th>
-      <th>Publicly accessible</th>
+<div class="paginated-resources-container">
+  <p class="page-entries-info">
+  </p>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for recipe <- @recipes do %>
-    <tr>
-      <td><%= recipe.name %></td>
-      <td><%= recipe.slug %></td>
-      <td><%= recipe.description %></td>
-      <td><%= recipe.publicly_accessible %></td>
+  <ul id="directory_recipes" class="directory-items">
+    <%= for recipe <- @recipes do %>
+      <li class="directory-item">
+        <span><%= link recipe.name, to: Routes.manage_recipe_path(@conn, :show, recipe) %></span>
+        <div class="resource-action-links recipe-links">
+          <span><%= link "Edit", to: Routes.manage_recipe_path(@conn, :edit, recipe) %></span>
+          <span><%= link "Delete", to: Routes.manage_recipe_path(@conn, :delete, recipe), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        </div>
+      </li>
+    <% end %>
+  </ul>
 
-      <td>
-        <span><%= link "Show", to: Routes.recipe_path(@conn, :show, recipe) %></span>
-        <span><%= link "Edit", to: Routes.recipe_path(@conn, :edit, recipe) %></span>
-        <span><%= link "Delete", to: Routes.recipe_path(@conn, :delete, recipe), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+  <div class="new-resource-link"><%= link "New Recipe", to: Routes.manage_recipe_path(@conn, :new) %></div>
+</div>
 
-<span><%= link "New Recipe", to: Routes.recipe_path(@conn, :new) %></span>

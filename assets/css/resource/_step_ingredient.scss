@@ -1,0 +1,27 @@
+.resource-form {
+  .resource-list {
+    .resource-item.recipe-step-ingredient {
+      .tab-form-section.step-ingredients {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        .step-ingredient-col {
+          width: 45%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .form-ctrl-container.title-instruction {
+    width: 70%;
+  }
+
+  .new-resource-btn {
+    width: 15%;
+  }
+}
