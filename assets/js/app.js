@@ -29,13 +29,17 @@ import {
     detectNestedItemTransforms,
     removeNewNestedResourceListener
 } from "./resource/management";
+import {closeFlashListener} from "./layout/flash";
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
-window.addEventListener("phx:page-loading-start", info => topbar.show())
+window.addEventListener("phx:page-loading-start", info => {
+    window.liveViewEnabled = true
+    topbar.show()
+})
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
 // connect if there are any LiveViews on the page
@@ -48,12 +52,14 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 document.addEventListener('DOMContentLoaded', () => {
-   addNewNestedResourceListener(
-       detectNestedItemContainerTransforms(),
-       detectNestedItemTransforms()
-   );
-   removeNewNestedResourceListener(
-       detectNestedItemContainerTransforms(),
-       detectNestedItemTransforms()
-   );
+    closeFlashListener();
+
+    addNewNestedResourceListener(
+        detectNestedItemContainerTransforms(),
+        detectNestedItemTransforms()
+    );
+    removeNewNestedResourceListener(
+        detectNestedItemContainerTransforms(),
+        detectNestedItemTransforms()
+    );
 });

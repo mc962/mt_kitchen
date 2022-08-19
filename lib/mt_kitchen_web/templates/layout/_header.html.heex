@@ -6,10 +6,6 @@
       </div>
 
       <ul class="site-nav-links">
-        <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-          <li class="site-nav-link"><%= link "LiveDashboard", to: Routes.live_dashboard_path(assigns[:conn] || assigns[:socket], :home), class: "nav-anchor" %></li>
-        <% end %>
-
         <li class="site-nav-link">
           <%= link "Recipes", to: Routes.recipe_index_path(assigns[:conn] || assigns[:socket], :index), class: "nav-anchor" %>
         </li>
