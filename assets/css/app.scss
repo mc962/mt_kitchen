@@ -4,7 +4,11 @@
 @use "layout/page";
 @use "layout/live_view";
 
-@use "resource/recipe";
-@use "resource/step";
-@use "resource/step_ingredient";
-@use "resource/user";
+// Resource Management
+@use "resource/recipe" as resource_recipe;
+@use "resource/step" as resource_step;
+@use "resource/step_ingredient" as resource_step_ingredient;
+@use "resource/user" as resource_user;
+
+// Public Content
+@use "kitchen/recipe" as kitchen_recipe;

@@ -1,18 +1,18 @@
 <%= if @current_user do %>
   <li class="site-nav-link">
-    <%= link "Manage", to: Routes.manage_user_path(@conn, :show), class: "nav-anchor" %>
+    <%= link "Manage", to: Routes.manage_user_path(assigns[:conn] || assigns[:socket], :show), class: "nav-anchor" %>
   </li>
   <li class="site-nav-link">
-    <%= link "Settings", to: Routes.user_settings_path(@conn, :edit), class: "nav-anchor" %>
+    <%= link "Settings", to: Routes.user_settings_path(assigns[:conn] || assigns[:socket], :edit), class: "nav-anchor" %>
   </li>
   <li class="site-nav-link">
-    <%= link "Sign Out", to: Routes.user_session_path(@conn, :delete), method: :delete, class: "nav-anchor" %>
+    <%= link "Sign Out", to: Routes.user_session_path(assigns[:conn] || assigns[:socket], :delete), method: :delete, class: "nav-anchor" %>
   </li>
 <% else %>
   <li class="site-nav-link">
-    <%= link "Sign Up", to: Routes.user_registration_path(@conn, :new), class: "nav-anchor" %>
+    <%= link "Sign Up", to: Routes.user_registration_path(assigns[:conn] || assigns[:socket], :new), class: "nav-anchor" %>
   </li>
   <li class="site-nav-link">
-    <%= link "Sign In", to: Routes.user_session_path(@conn, :new), class: "nav-anchor" %>
+    <%= link "Sign In", to: Routes.user_session_path(assigns[:conn] || assigns[:socket], :new), class: "nav-anchor" %>
   </li>
 <% end %>

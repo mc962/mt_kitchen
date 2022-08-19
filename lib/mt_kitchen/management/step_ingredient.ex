@@ -19,7 +19,7 @@ defmodule MTKitchen.Management.StepIngredient do
   def changeset(step_ingredient, attrs) do
     step_ingredient
     |> cast(attrs, [:amount, :unit, :condition, :delete])
-    |> validate_required([:amount, :unit, :condition])
+    |> validate_required([:amount])
     |> assoc_constraint(:step)
     |> cast_assoc(:ingredient)
     |> foreign_key_constraint(:step_id)
