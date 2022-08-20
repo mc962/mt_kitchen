@@ -27,34 +27,6 @@ defmodule MTKitchen.Accounts do
   end
 
   @doc """
-  Gets a user by their public id to avoid exposing internal database IDs
-
-    ## Examples
-
-      # Known UUID
-      iex> get_user_by_public_id("187b5a97-04af-476f-b413-62c23fba9078")
-      %User{}
-
-      # Unknown UUID
-      iex> get_user_by_public_id("8512f8d1-ecc2-4c41-aa40-3eae204d96bf")
-      nil
-
-  """
-  def get_user_by_public_id(public_id) when is_nil(public_id), do: {:error, "no user found for public ID"}
-  def get_user_by_public_id(public_id) do
-    # TODO cache this lookup (cachex?)
-    query = from u in User,
-             where: u.public_id == ^public_id
-
-    user = Repo.one(query)
-
-    cond do
-      is_nil(user) -> {:error, "no user found for public ID"}
-      user -> {:ok, user}
-    end
-  end
-
-  @doc """
   Gets a user by email and password.
 
   ## Examples
@@ -87,6 +59,40 @@ defmodule MTKitchen.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Gets a single recipe, including associated resources needed for main user page.
+
+  Raises `Ecto.NoResultsError` if the User does not exist.
+
+  ## Examples
+
+      iex> get_full_user!(123)
+      %User{}
+
+      iex> get_full_user!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_full_user!(id) do
+    Repo.one! from u in User,
+              where: u.id == ^id,
+              preload: [:recipes]
+  end
+
+  @doc """
+  Gets all associated recipes needed for initial User management page.
+  Done separately as user is already loaded in Authentication.
+
+  ## Examples
+
+      iex> get_user_recipes!(123)
+      [%MTKitchen.Management.Recipe{}, ...]
+  """
+  def get_user_recipes(user_id) do
+    Repo.all from r in MTKitchen.Management.Recipe,
+             where: r.user_id == ^user_id
+  end
 
   ## User registration
 

@@ -1,0 +1,64 @@
+.resource-form {
+  .resource-list {
+    .resource-item {
+      .delete-resource-container {
+        width: 5%;
+        padding: 1%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        color: red;
+
+        .form-ctrl-check {
+          align-self: center;
+        }
+      }
+      .remove-new-resource-container {
+        width: 32%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .remove-new-resource-btn {
+          cursor: pointer;
+          width: 70%;
+          padding: 4%;
+          background-color: red;
+          border: 1px solid #861111;
+          color: white;
+          border-radius: 4px;
+          &:hover {
+            background-color: #861111;
+          }
+        }
+      }
+      .step-ingredients-link-container {
+        width: 20%;
+        padding: 1%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  .new-resource-btn {
+    align-self: flex-end;
+    margin: 0 10%;
+    width: 10%;
+    padding: 1%;
+    cursor: pointer;
+    border-radius: 8px;
+
+    color: white;
+    background-color: #14a318;
+    border: 1px solid #1f8922;
+
+    &:hover {
+      background-color: #1f8922;
+    }
+  }
+}

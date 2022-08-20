@@ -1,19 +1,22 @@
 <li class="resource-item recipe-step">
     <%= hidden_input @step_form, :order, class: "recipe-step-order ordered-item" %>
 
-    <div class="form-ctrl-container">
-        <%= textarea @step_form, :instruction, aria_labelledby: "instruction" %>
+    <div class="form-ctrl-container instruction-container">
+        <%= textarea @step_form, :instruction, aria_labelledby: "instruction", class: "form-ctrl-text instruction" %>
         <%= error_tag @step_form, :instruction %>
     </div>
 
     <%= if Ecto.get_meta(@step_form.data, :state) == :loaded do %>
-        <div class="form-ctrl-container">
-            <%= label @step_form, :delete %><br>
-            <%= checkbox @step_form, :delete %>
+        <div class="form-ctrl-container delete-resource-container">
+            <%= label @step_form, :delete, class: "form-ctrl-lbl" %>
+            <%= checkbox @step_form, :delete, class: "form-ctrl-check" %>
         </div>
-        <%= link("Edit Ingredients", to: Routes.step_ingredients_path(@conn, :edit, @recipe, @step_form.data)) %>
+        <div class="step-ingredients-link-container">
+            <%= link("Edit Ingredients", to: Routes.manage_step_ingredients_path(@conn, :edit, @recipe, @step_form.data), class: "step-ingredients-link") %>
+        </div>
     <% else %>
-        <button class="remove-new-resource-btn" type="button">Remove</button>
+        <div class="remove-new-resource-container">
+            <button class="remove-new-resource-btn" type="button">Remove</button>
+        </div>
     <% end %>
-
 </li>

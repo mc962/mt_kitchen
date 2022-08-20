@@ -16,7 +16,7 @@ defmodule MTKitchenWeb.StepController do
       {:ok, recipe} ->
         conn
         |> put_flash(:info, "Recipe updated successfully.")
-        |> redirect(to: Routes.recipe_steps_path(conn, :edit, recipe))
+        |> redirect(to: Routes.manage_recipe_steps_path(conn, :edit, recipe))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", recipe: recipe, changeset: changeset)
@@ -29,6 +29,6 @@ defmodule MTKitchenWeb.StepController do
 
     conn
     |> put_flash(:info, "Step deleted successfully.")
-    |> redirect(to: Routes.recipe_steps_path(conn, :edit, step.recipe))
+    |> redirect(to: Routes.manage_recipe_steps_path(conn, :edit, step.recipe))
   end
 end

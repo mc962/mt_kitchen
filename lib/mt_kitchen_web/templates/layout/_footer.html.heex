@@ -1,0 +1,9 @@
+<footer class="footer">
+  <nav id="footer_nav">
+    <ul class="footer-links">
+        <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+          <li class="footer-link"><%= link "LiveDashboard", to: Routes.live_dashboard_path(assigns[:conn] || assigns[:socket], :home), class: "nav-anchor" %></li>
+        <% end %>
+    </ul>
+  </nav>
+</footer>

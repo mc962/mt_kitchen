@@ -1,53 +1,71 @@
-<h1>Settings</h1>
+<h1 class="manage-resource-heading">Settings</h1>
 
-<h3>Change email</h3>
+<section id="change_email_container">
+    <h3 class="tab-form-heading">Change email</h3>
 
-<.form let={f} for={@email_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_email">
-  <%= if @email_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+    <.form let={f} for={@email_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_email" class="resource-form">
+      <%= if @email_changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
 
-  <%= hidden_input f, :action, name: "action", value: "update_email" %>
+      <%= hidden_input f, :action, name: "action", value: "update_email" %>
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
+      <div class="form-ctrl-container">
+          <%= label f, :email, class: "form-ctrl-lbl" %>
+          <%= email_input f, :email, required: true, class: "form-ctrl" %>
+          <%= error_tag f, :email %>
+      </div>
 
-  <%= label f, :current_password, for: "current_password_for_email" %>
-  <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email" %>
-  <%= error_tag f, :current_password %>
+      <div class="form-ctrl-container">
+          <%= label f, :current_password, for: "current_password_for_email", class: "form-ctrl-lbl" %>
+          <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email", class: "form-ctrl" %>
+          <%= error_tag f, :current_password %>
+      </div>
 
-  <div>
-    <%= submit "Change email" %>
-  </div>
-</.form>
+      <div class="actions">
+        <%= submit "Change email", class: "button submit-btn" %>
+      </div>
+    </.form>
+</section>
 
-<h3>Change password</h3>
+<section id="change_password_container">
+    <h3 class="tab-form-heading">Change password</h3>
 
-<.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password">
-  <%= if @password_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+    <.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password" class="resource-form">
+      <%= if @password_changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
 
-  <%= hidden_input f, :action, name: "action", value: "update_password" %>
+      <%= hidden_input f, :action, name: "action", value: "update_password" %>
 
-  <%= label f, :password, "New password" %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
+      <div class="form-ctrl-container">
+          <%= label f, :password, "New password", class: "form-ctrl-lbl" %>
+          <%= password_input f, :password, required: true, class: "form-ctrl" %>
+          <%= error_tag f, :password %>
+      </div>
+      <div class="form-ctrl-container">
+          <%= label f, :password_confirmation, "Confirm new password", class: "form-ctrl-lbl" %>
+          <%= password_input f, :password_confirmation, required: true, class: "form-ctrl" %>
+          <%= error_tag f, :password_confirmation %>
+      </div>
+      <div class="form-ctrl-container">
+          <%= label f, :current_password, for: "current_password_for_password", class: "form-ctrl-lbl" %>
+          <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password", class: "form-ctrl" %>
+          <%= error_tag f, :current_password %>
+      </div>
+      <div class="actions">
+        <%= submit "Change password", class: "button submit-btn" %>
+      </div>
+    </.form>
+</section>
 
-  <%= label f, :password_confirmation, "Confirm new password" %>
-  <%= password_input f, :password_confirmation, required: true %>
-  <%= error_tag f, :password_confirmation %>
+<section id="change_username_container">
+    <!-- Not Implemented Yet -->
+</section>
 
-  <%= label f, :current_password, for: "current_password_for_password" %>
-  <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password" %>
-  <%= error_tag f, :current_password %>
 
-  <div>
-    <%= submit "Change password" %>
-  </div>
-</.form>
+

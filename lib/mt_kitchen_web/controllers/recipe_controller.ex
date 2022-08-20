@@ -15,11 +15,15 @@ defmodule MTKitchenWeb.RecipeController do
   end
 
   def create(conn, %{"recipe" => recipe_params}) do
-    case Management.create_recipe(recipe_params) do
+    current_user = conn.assigns.current_user
+
+    authenticated_recipe_params = authenticated_params(recipe_params, current_user)
+
+    case Management.create_recipe(authenticated_recipe_params) do
       {:ok, recipe} ->
         conn
         |> put_flash(:info, "Recipe created successfully.")
-        |> redirect(to: Routes.recipe_path(conn, :show, recipe))
+        |> redirect(to: Routes.manage_recipe_path(conn, :show, recipe))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -44,7 +48,7 @@ defmodule MTKitchenWeb.RecipeController do
       {:ok, recipe} ->
         conn
         |> put_flash(:info, "Recipe updated successfully.")
-        |> redirect(to: Routes.recipe_path(conn, :show, recipe))
+        |> redirect(to: Routes.manage_recipe_path(conn, :show, recipe))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", recipe: recipe, changeset: changeset)
@@ -57,6 +61,10 @@ defmodule MTKitchenWeb.RecipeController do
 
     conn
     |> put_flash(:info, "Recipe deleted successfully.")
-    |> redirect(to: Routes.recipe_path(conn, :index))
+    |> redirect(to: Routes.manage_recipe_path(conn, :index))
+  end
+
+  defp authenticated_params(recipe_params, current_user) do
+    Map.put(recipe_params, "user_id", current_user.id)
   end
 end

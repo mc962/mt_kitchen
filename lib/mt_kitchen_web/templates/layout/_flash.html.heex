@@ -1,0 +1,24 @@
+<%= for {name, message_content} <- @flashes do %>
+  <div class={"flash-container flash-#{name}"} phx-click="lv:clear-flash" phx-value-key={name}>
+    <%= cond do %>
+    <% is_list(message_content) -> %>
+      <ul class="flash-messages">
+        <%= for message <- message_content do %>
+            <li class="flash-message-container">
+                <p class="flash-message">
+                    <%= message %>
+                </p>
+            </li>
+        <% end %>
+      </ul>
+    <% true -> %>
+        <div class="flash-message-container">
+            <p class="flash-message"><%= message_content %></p>
+        </div>
+    <% end %>
+
+    <button type="button" class="flash-close button" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<% end %>
