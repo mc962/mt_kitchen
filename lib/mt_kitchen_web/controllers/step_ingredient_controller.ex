@@ -4,34 +4,36 @@ defmodule MTKitchenWeb.StepIngredientController do
   alias MTKitchen.Management
 
   def edit(conn, %{"id" => id}) do
+    current_user = conn.assigns.current_user
     step = Management.get_full_step!(id)
-    changeset = Management.change_step_ingredients(step)
-    render(conn, "edit.html", step: step, changeset: changeset)
+
+    with :ok <- Bodyguard.permit(Management, :get_full_step!, current_user, step),
+         {:ok, step}
+    do
+      changeset = Management.change_step_ingredients(step)
+      render(conn, "edit.html", step: step, changeset: changeset)
+    end
+
   end
 
   def update(conn, %{"recipe_id" => _recipe_id, "id" => id, "step" => step_params}) do
     current_user = conn.assigns.current_user
     step = Management.get_full_step!(id)
 
-    authenticated_step_params = authenticated_params(step_params, current_user)
-    case Management.update_step_ingredients(step, authenticated_step_params) do
-      {:ok, step} ->
-        conn
-        |> put_flash(:info, "Step Ingredients updated successfully.")
-        |> redirect(to: Routes.manage_step_ingredients_path(conn, :edit, step.recipe, step))
+    with :ok <- Bodyguard.permit(Management, :update_step_ingredients, current_user, step),
+         {:ok, step}
+    do
+      authenticated_step_params = authenticated_params(step_params, current_user)
+      case Management.update_step_ingredients(step, authenticated_step_params) do
+        {:ok, step} ->
+          conn
+          |> put_flash(:info, "Step Ingredients updated successfully.")
+          |> redirect(to: Routes.manage_step_ingredients_path(conn, :edit, step.recipe, step))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", step: step, changeset: changeset)
+        {:error, %Ecto.Changeset{} = changeset} ->
+          render(conn, "edit.html", step: step, changeset: changeset)
+      end
     end
-  end
-
-  def delete(conn, %{"id" => id}) do
-    step = Management.get_full_step!(id)
-    {:ok, _recipe} = Management.delete_step(step)
-
-    conn
-    |> put_flash(:info, "Step deleted successfully.")
-    |> redirect(to: Routes.manage_recipe_steps_path(conn, :edit, step.recipe))
   end
 
   defp authenticated_params(step_params, current_user) do

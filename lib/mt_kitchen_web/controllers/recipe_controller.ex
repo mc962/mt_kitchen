@@ -35,8 +35,14 @@ defmodule MTKitchenWeb.RecipeController do
   end
 
   def show(conn, %{"id" => id}) do
+    current_user = conn.assigns.current_user
     recipe = Management.get_recipe!(id)
-    render(conn, "show.html", recipe: recipe)
+
+    with :ok <- Bodyguard.permit(Management, :get_recipe!, current_user, recipe),
+         {:ok, recipe}
+    do
+      render(conn, "show.html", recipe: recipe)
+    end
   end
 
   def edit(conn, %{"id" => id}) do
@@ -72,12 +78,18 @@ defmodule MTKitchenWeb.RecipeController do
   end
 
   def delete(conn, %{"id" => id}) do
+    current_user = conn.assigns.current_user
     recipe = Management.get_recipe!(id)
-    {:ok, _recipe} = Management.delete_recipe(recipe)
 
-    conn
-    |> put_flash(:info, "Recipe deleted successfully.")
-    |> redirect(to: Routes.manage_recipe_path(conn, :index))
+    with :ok <- Bodyguard.permit(Management, :delete_recipe!, current_user, recipe),
+         {:ok, recipe}
+    do
+      {:ok, _recipe} = Management.delete_recipe(recipe)
+
+      conn
+      |> put_flash(:info, "Recipe deleted successfully.")
+      |> redirect(to: Routes.manage_recipe_path(conn, :index))
+    end
   end
 
   defp authenticated_params(recipe_params, current_user) do
