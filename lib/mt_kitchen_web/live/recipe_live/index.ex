@@ -2,7 +2,6 @@ defmodule MTKitchenWeb.RecipeLive.Index do
   use MTKitchenWeb, :live_view
 
   alias MTKitchen.Kitchen
-  alias MTKitchen.Kitchen.Recipe
 
   @impl true
   def mount(_params, _session, socket) do

@@ -38,12 +38,12 @@ Flash
   color: black;
 }
 
-.flash-container.flash-alert {
+.flash-container.flash-alert, .flash-container.flash-error {
   background-color: #f3665b;
   color: #80231d;
 }
 
-.flash-container.flash-notice {
+.flash-container.flash-notice, .flash-container.flash-info {
   background-color: #7bc4e7;
   color: #2a5c73;
 }

@@ -24,6 +24,20 @@ defmodule MTKitchen.Management do
   end
 
   @doc """
+  Returns the list of recipes owned by the current user.
+
+  ## Examples
+
+      iex> list_owned_recipes()
+      [%Recipe{}, ...]
+
+  """
+  def list_owned_recipes(user_id) do
+    Repo.all from r in Recipe,
+              where: r.user_id == ^user_id
+  end
+
+  @doc """
   Gets a single recipe.
 
   Raises `Ecto.NoResultsError` if the Recipe does not exist.

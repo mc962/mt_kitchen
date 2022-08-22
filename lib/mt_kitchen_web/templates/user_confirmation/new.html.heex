@@ -1,11 +1,13 @@
-<h1>Resend confirmation instructions</h1>
+<h1 class="text-center">Resend confirmation instructions</h1>
 
-<.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create)}>
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+<.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create)} class="resource-form user-confirmation-form">
+  <div class="form-ctrl-container">
+      <%= label f, :email, class: "form-ctrl-lbl" %>
+      <%= email_input f, :email, required: true, class: "form-ctrl" %>
+  </div>
 
-  <div>
-    <%= submit "Resend confirmation instructions" %>
+  <div class="actions">
+    <%= submit "Resend confirmation instructions", class: "button submit-btn" %>
   </div>
 </.form>
 
@@ -13,3 +15,14 @@
   <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
   <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
 </p>
+
+<nav id="bottom_nav">
+    <ul class="bottom-nav-links">
+        <li class="bottom-nav-link">
+          <%= link "Register", to: Routes.user_registration_path(@conn, :new) %>
+        </li>
+        <li class="bottom-nav-link">
+          <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+        </li>
+    </ul>
+</nav>
