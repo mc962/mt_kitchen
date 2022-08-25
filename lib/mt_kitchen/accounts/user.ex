@@ -10,11 +10,17 @@ defmodule MTKitchen.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-
-    many_to_many :roles, MTKitchen.Accounts.Role,
-      join_through: MTKitchen.Accounts.UserRole
+    field :role, Ecto.Enum, values: [:admin, :moderator, :editor]
 
     timestamps()
+  end
+
+  @doc"""
+  A user changeset for assigning a role for resource access authorization.
+  """
+  def role_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:role])
   end
 
   @doc """

@@ -8,6 +8,7 @@ defmodule MTKitchen.Repo.Migrations.CreateUsersAuthTables do
       add :id, :binary_id, primary_key: true
       add :email, :citext, null: false
       add :username, :string, null: false
+      add :role, :string
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime
       timestamps()

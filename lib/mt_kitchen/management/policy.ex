@@ -2,9 +2,12 @@ defmodule MTKitchen.Management.Policy do
   @behaviour Bodyguard.Policy
 
   alias MTKitchen.Accounts.User
-  alias MTKitchen.Accounts.Role
   alias MTKitchen.Management.Recipe
   alias MTKitchen.Management.Step
+
+
+  # Admins can do anything
+  def authorize(_action, %User{role: :admin} = _user, _resource), do: :ok
 
   # Regular users can create resources
   def authorize(:create_recipe, _, _), do: true
@@ -46,14 +49,6 @@ defmodule MTKitchen.Management.Policy do
     :update_step_ingredients,
     :delete_step
   ], do: true
-
-  # Admins can update anything
-  def authorize(_, %User{id: user_id} = user, _opts) do
-    MTKitchen.Accounts.Utility.Rolify.has_role?(
-      user,
-      "admin"
-    )
-  end
 
   # Catch-all: deny everything else
   def authorize(_, _, _), do: false

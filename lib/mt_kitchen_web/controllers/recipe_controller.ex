@@ -81,7 +81,7 @@ defmodule MTKitchenWeb.RecipeController do
     current_user = conn.assigns.current_user
     recipe = Management.get_recipe!(id)
 
-    with :ok <- Bodyguard.permit(Management, :delete_recipe!, current_user, recipe),
+    with :ok <- Bodyguard.permit(Management, :delete_recipe, current_user, recipe),
          {:ok, recipe}
     do
       {:ok, _recipe} = Management.delete_recipe(recipe)
