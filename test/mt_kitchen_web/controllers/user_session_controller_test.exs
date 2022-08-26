@@ -11,7 +11,7 @@ defmodule MTKitchenWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Log in</h1>"
       assert response =~ "Register</a>"
       assert response =~ "Forgot your password?</a>"
     end
@@ -35,9 +35,7 @@ defmodule MTKitchenWeb.UserSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ user.email
       assert response =~ "Settings</a>"
-      assert response =~ "Log out</a>"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user} do
@@ -75,7 +73,7 @@ defmodule MTKitchenWeb.UserSessionControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Log in</h1>"
       assert response =~ "Invalid email or password"
     end
   end

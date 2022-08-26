@@ -21,7 +21,7 @@ defmodule MTKitchen.Management.Recipe do
   @doc false
   def information_changeset(recipe, attrs) do
     recipe
-    |> cast(attrs, [:name, :slug, :description, :publicly_accessible, :user_id])
+    |> cast(attrs, [:name, :description, :publicly_accessible, :user_id])
     |> cast_assoc(:steps)
     |> maybe_update_slug()
     |> validate_required([:name, :slug, :publicly_accessible])
