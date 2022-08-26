@@ -75,9 +75,11 @@ defmodule MTKitchen.Accounts do
 
   """
   def get_full_user!(id) do
-    Repo.one! from u in User,
-              where: u.id == ^id,
-              preload: [:recipes]
+    Repo.one!(
+      from u in User,
+        where: u.id == ^id,
+        preload: [:recipes]
+    )
   end
 
   @doc """
@@ -90,8 +92,10 @@ defmodule MTKitchen.Accounts do
       [%MTKitchen.Management.Recipe{}, ...]
   """
   def get_user_recipes(user_id) do
-    Repo.all from r in MTKitchen.Management.Recipe,
-             where: r.user_id == ^user_id
+    Repo.all(
+      from r in MTKitchen.Management.Recipe,
+        where: r.user_id == ^user_id
+    )
   end
 
   ## User registration

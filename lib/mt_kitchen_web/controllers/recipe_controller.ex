@@ -39,8 +39,7 @@ defmodule MTKitchenWeb.RecipeController do
     recipe = Management.get_recipe!(id)
 
     with :ok <- Bodyguard.permit(Management, :get_recipe!, current_user, recipe),
-         {:ok, recipe}
-    do
+         {:ok, recipe} do
       render(conn, "show.html", recipe: recipe)
     end
   end
@@ -50,8 +49,7 @@ defmodule MTKitchenWeb.RecipeController do
     recipe = Management.get_full_recipe!(id)
 
     with :ok <- Bodyguard.permit(Management, :get_full_recipe!, current_user, recipe),
-         {:ok, recipe}
-    do
+         {:ok, recipe} do
       changeset = Management.change_recipe(recipe)
 
       render(conn, "edit.html", recipe: recipe, changeset: changeset)
@@ -63,8 +61,7 @@ defmodule MTKitchenWeb.RecipeController do
     recipe = Management.get_full_recipe!(id)
 
     with :ok <- Bodyguard.permit(Management, :update_recipe, current_user, recipe),
-         {:ok, recipe}
-    do
+         {:ok, recipe} do
       case Management.update_recipe(recipe, recipe_params) do
         {:ok, recipe} ->
           conn
@@ -82,8 +79,7 @@ defmodule MTKitchenWeb.RecipeController do
     recipe = Management.get_recipe!(id)
 
     with :ok <- Bodyguard.permit(Management, :delete_recipe, current_user, recipe),
-         {:ok, recipe}
-    do
+         {:ok, recipe} do
       {:ok, _recipe} = Management.delete_recipe(recipe)
 
       conn

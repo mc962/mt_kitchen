@@ -39,8 +39,11 @@ defmodule MTKitchenWeb.Router do
       put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
 
       # Edit all ingredients in a step together
-      get "/recipes/:recipe_id/steps/:id/edit", StepIngredientController, :edit, as: :step_ingredients
-      put "/recipes/:recipe_id/steps/:id", StepIngredientController, :update, as: :step_ingredients
+      get "/recipes/:recipe_id/steps/:id/edit", StepIngredientController, :edit,
+        as: :step_ingredients
+
+      put "/recipes/:recipe_id/steps/:id", StepIngredientController, :update,
+        as: :step_ingredients
     end
   end
 

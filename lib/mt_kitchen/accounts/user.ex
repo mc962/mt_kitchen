@@ -15,7 +15,7 @@ defmodule MTKitchen.Accounts.User do
     timestamps()
   end
 
-  @doc"""
+  @doc """
   A user changeset for assigning a role for resource access authorization.
   """
   def role_changeset(user, attrs) do
@@ -113,9 +113,9 @@ defmodule MTKitchen.Accounts.User do
     |> cast(attrs, [:username])
     |> validate_username()
     |> case do
-         %{changes: %{username: _}} = changeset -> changeset
-         %{} = changeset -> add_error(changeset, :username, "did not change")
-       end
+      %{changes: %{username: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :username, "did not change")
+    end
   end
 
   @doc """

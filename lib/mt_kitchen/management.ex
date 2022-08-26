@@ -33,8 +33,10 @@ defmodule MTKitchen.Management do
 
   """
   def list_owned_recipes(user_id) do
-    Repo.all from r in Recipe,
-              where: r.user_id == ^user_id
+    Repo.all(
+      from r in Recipe,
+        where: r.user_id == ^user_id
+    )
   end
 
   @doc """
@@ -68,9 +70,11 @@ defmodule MTKitchen.Management do
 
   """
   def get_full_recipe!(id) do
-    Repo.one! from r in Recipe,
-              where: r.id == ^id,
-              preload: [:steps]
+    Repo.one!(
+      from r in Recipe,
+        where: r.id == ^id,
+        preload: [:steps]
+    )
   end
 
   @doc """
@@ -228,9 +232,11 @@ defmodule MTKitchen.Management do
 
   """
   def get_full_step!(id) do
-    Repo.one! from s in Step,
-                    where: s.id == ^id,
-                    preload: [:recipe, step_ingredients: [:ingredient]]
+    Repo.one!(
+      from s in Step,
+        where: s.id == ^id,
+        preload: [:recipe, step_ingredients: [:ingredient]]
+    )
   end
 
   @doc """
@@ -254,7 +260,7 @@ defmodule MTKitchen.Management do
   @doc """
   Updates a step.
 
-  @doc """
+  @doc \"""
   Updates a recipe step's ingredients.
 
   ## Examples

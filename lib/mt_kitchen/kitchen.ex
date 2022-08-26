@@ -26,8 +26,10 @@ defmodule MTKitchen.Kitchen do
   Returns the list of recipes displayed to the public
   """
   def directory_recipes do
-    Repo.all from r in Recipe,
-             where: r.publicly_accessible == true
+    Repo.all(
+      from r in Recipe,
+        where: r.publicly_accessible == true
+    )
   end
 
   @doc """
@@ -47,11 +49,14 @@ defmodule MTKitchen.Kitchen do
   def get_recipe!(id), do: Repo.get!(Recipe, id)
 
   def get_full_recipe!(id) do
-    Repo.one! from r in Recipe,
-              where: r.id == ^id or
-                     r.slug == ^id and
-                     r.publicly_accessible == true,
-              preload: [steps: [step_ingredients: [:ingredient]]]
+    Repo.one!(
+      from r in Recipe,
+        where:
+          r.id == ^id or
+            (r.slug == ^id and
+               r.publicly_accessible == true),
+        preload: [steps: [step_ingredients: [:ingredient]]]
+    )
   end
 
   @doc """
