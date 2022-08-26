@@ -27,5 +27,12 @@ defmodule MTKitchen.Management.Ingredient do
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
+    |> on_conflict_upsert()
   end
+
+  defp on_conflict_upsert(%Ecto.Changeset{valid?: true} = changeset) do
+    changeset
+    |> Map.put(:repo_opts, [on_conflict: [set: [name: get_change(changeset, :name)]], conflict_target: [:name, :user_id]])
+  end
+  defp on_conflict_upsert(changeset), do: changeset
 end
