@@ -171,4 +171,13 @@ defmodule MTKitchen.Accounts.User do
       add_error(changeset, :current_password, "is not valid")
     end
   end
+
+  @doc """
+  Determines if a user is active for the purposes of authenticating and logging in
+  """
+  def active_for_authentication?(user) do
+    user.active &&
+      user.confirmed_at &&
+      user.confirmed_at <= DateTime.now!("Etc/UTC")
+  end
 end

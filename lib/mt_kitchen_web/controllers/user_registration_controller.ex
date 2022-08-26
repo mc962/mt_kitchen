@@ -20,8 +20,8 @@ defmodule MTKitchenWeb.UserRegistrationController do
           )
 
         conn
-        |> put_flash(:info, "User created successfully.")
-        |> UserAuth.log_in_user(user)
+        |> put_flash(:info, "You have signed up successfully but your account has not been approved by your administrator yet.")
+        |> redirect(to: Routes.root_path(conn))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
