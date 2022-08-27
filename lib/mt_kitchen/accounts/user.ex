@@ -22,6 +22,16 @@ defmodule MTKitchen.Accounts.User do
   def role_changeset(user, attrs) do
     user
     |> cast(attrs, [:role])
+    |> validate_required([:role])
+  end
+
+  @doc """
+  A user changeset for approving a user manually by one such as an admin.
+  """
+  def approval_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:approved, :confirmed_at])
+    |> validate_required([:approved, :confirmed_at])
   end
 
   @doc """

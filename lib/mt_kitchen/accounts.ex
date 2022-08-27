@@ -428,4 +428,9 @@ defmodule MTKitchen.Accounts do
             u.confirmed_at <= ^now
     )
   end
+
+  def approve_user(user) do
+    user
+    |> User.approval_changeset(%{approved: true, confirmed_at: DateTime.now("Etc/UTC")})
+  end
 end
