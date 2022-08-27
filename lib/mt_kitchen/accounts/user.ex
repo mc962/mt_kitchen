@@ -187,7 +187,7 @@ defmodule MTKitchen.Accounts.User do
   Determines if a user is active for the purposes of authenticating and logging in
   """
   def active_for_authentication?(user) do
-    user.active &&
+    user.approved &&
       user.confirmed_at &&
       user.confirmed_at <= DateTime.now!("Etc/UTC")
   end
