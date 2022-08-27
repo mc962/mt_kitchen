@@ -11,6 +11,7 @@ defmodule MTKitchen.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     field :role, Ecto.Enum, values: [:admin, :moderator, :editor]
+    field :approved, :boolean
 
     timestamps()
   end

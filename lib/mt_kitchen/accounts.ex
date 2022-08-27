@@ -8,6 +8,8 @@ defmodule MTKitchen.Accounts do
 
   alias MTKitchen.Accounts.{User, UserToken, UserNotifier}
 
+  require Logger
+
   ## Database getters
 
   @doc """
@@ -387,5 +389,41 @@ defmodule MTKitchen.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  @doc """
+  Delivers emails instructing admin users to activate a new account.
+
+  ## Examples
+
+      iex> new_user_waiting_for_approval()
+      {:ok, %{to: ..., body: ...}}
+
+  """
+  def new_user_waiting_for_approval do
+    # Query for admin user emails, and take 3 random emails from that. This ensures that, as admin user count may
+    #   grow bigger, we aren't sending emails to lots of admins every time, as well as that the same people at the
+    #   beginning of the default query order are not always selected.
+    send_admin_emails = Enum.take_random(admin_user_emails(), 3)
+
+    if length(send_admin_emails) == 0 do
+      Logger.warn("No admin users present to approve users. Promote a user to Admin in order to approve users for logging in.")
+    else
+      UserNotifier.new_user_waiting_for_approval(send_admin_emails)
+    end
+  end
+
+  defp admin_user_emails do
+    now = DateTime.now!("Etc/UTC")
+
+    MTKitchen.Repo.all(
+      from u in MTKitchen.Accounts.User,
+        select: u.email,
+        where:
+          u.role == :admin and
+            u.approved == true and
+            not is_nil(u.confirmed_at) and
+            u.confirmed_at <= ^now
+    )
   end
 end

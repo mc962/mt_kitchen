@@ -16,7 +16,9 @@ defmodule MTKitchenWeb.UserSessionController do
         UserAuth.log_in_user(conn, user, user_params)
       else
         # TODO put in i18n
-        render(conn, "new.html", error_message: "Your account has not been approved by your administrator yet.")
+        render(conn, "new.html",
+          error_message: "Your account has not been approved by your administrator yet."
+        )
       end
     else
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
