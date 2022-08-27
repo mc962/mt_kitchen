@@ -1,5 +1,7 @@
 # MTKitchen
 
+[![.github/workflows/ci.yml](https://github.com/mc962/mt_kitchen/actions/workflows/ci.yml/badge.svg)](https://github.com/mc962/mt_kitchen/actions/workflows/ci.yml)
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
