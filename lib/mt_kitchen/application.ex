@@ -7,6 +7,8 @@ defmodule MTKitchen.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies) || []
+
     children = [
       # Start the Ecto repository
       MTKitchen.Repo,
@@ -15,7 +17,9 @@ defmodule MTKitchen.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: MTKitchen.PubSub},
       # Start the Endpoint (http/https)
-      MTKitchenWeb.Endpoint
+      MTKitchenWeb.Endpoint,
+      # setup for clustering
+      {Cluster.Supervisor, [topologies, [name: MTKitchen.ClusterSupervisor]]}
       # Start a worker by calling: MTKitchen.Worker.start_link(arg)
       # {MTKitchen.Worker, arg}
     ]
