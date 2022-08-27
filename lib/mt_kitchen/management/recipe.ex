@@ -51,21 +51,23 @@ defmodule MTKitchen.Management.Recipe do
     @max_steps + 1
   end
 
-
-  defp maybe_consolidate_step_order(%Ecto.Changeset{valid?: true, changes: %{steps: _steps}} = recipe) do
-#    new_order = 1
-#    # TODO this still doesn't appear to work, but currently is harmless so will fix later
-#    steps
-#    |> Enum.map(fn step ->
-#        unless step.action == :delete do
-#          # Only count a step for re-ordering if it is not getting deleted.
-#          put_change(step, :order, new_order)
-#          new_order = ^new_order + 1
-#        end
-#      end)
-#
-#    put_assoc(recipe, :steps, steps)
+  defp maybe_consolidate_step_order(
+         %Ecto.Changeset{valid?: true, changes: %{steps: _steps}} = recipe
+       ) do
+    #    new_order = 1
+    #    # TODO this still doesn't appear to work, but currently is harmless so will fix later
+    #    steps
+    #    |> Enum.map(fn step ->
+    #        unless step.action == :delete do
+    #          # Only count a step for re-ordering if it is not getting deleted.
+    #          put_change(step, :order, new_order)
+    #          new_order = ^new_order + 1
+    #        end
+    #      end)
+    #
+    #    put_assoc(recipe, :steps, steps)
     recipe
   end
+
   defp maybe_consolidate_step_order(recipe), do: recipe
 end

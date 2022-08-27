@@ -39,7 +39,7 @@ defmodule MTKitchen.AccountsTest do
     test "raises if id is invalid" do
       assert_raise Ecto.NoResultsError, fn ->
         # UUIDs are generally unique, so generating a new one each time would not likely collide with anything existing
-        not_found_id = Ecto.UUID.generate
+        not_found_id = Ecto.UUID.generate()
         Accounts.get_user!(not_found_id)
       end
     end

@@ -10,9 +10,7 @@ defmodule MTKitchen.KitchenFixtures do
   def recipe_fixture(attrs \\ %{}) do
     {:ok, recipe} =
       attrs
-      |> Enum.into(%{
-
-      })
+      |> Enum.into(%{})
       |> MTKitchen.Kitchen.create_recipe()
 
     recipe

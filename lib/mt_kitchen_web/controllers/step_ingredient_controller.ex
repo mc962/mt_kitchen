@@ -8,12 +8,10 @@ defmodule MTKitchenWeb.StepIngredientController do
     step = Management.get_full_step!(id)
 
     with :ok <- Bodyguard.permit(Management, :get_full_step!, current_user, step),
-         {:ok, step}
-    do
+         {:ok, step} do
       changeset = Management.change_step_ingredients(step)
       render(conn, "edit.html", step: step, changeset: changeset)
     end
-
   end
 
   def update(conn, %{"recipe_id" => _recipe_id, "id" => id, "step" => step_params}) do
@@ -21,9 +19,9 @@ defmodule MTKitchenWeb.StepIngredientController do
     step = Management.get_full_step!(id)
 
     with :ok <- Bodyguard.permit(Management, :update_step_ingredients, current_user, step),
-         {:ok, step}
-    do
+         {:ok, step} do
       authenticated_step_params = authenticated_params(step_params, current_user)
+
       case Management.update_step_ingredients(step, authenticated_step_params) do
         {:ok, step} ->
           conn
@@ -40,14 +38,14 @@ defmodule MTKitchenWeb.StepIngredientController do
     new_step_ingredients =
       step_params
       |> Map.get("step_ingredients")
-      |> Enum.reduce(%{}, fn ({input_id, step_ingredient}, acc) ->
+      |> Enum.reduce(%{}, fn {input_id, step_ingredient}, acc ->
         new_ingredient =
           step_ingredient
           |> Map.get("ingredient")
           |> case do
-              nil -> nil
-              ingredient -> Map.put(ingredient, "user_id", current_user.id)
-             end
+            nil -> nil
+            ingredient -> Map.put(ingredient, "user_id", current_user.id)
+          end
 
         new_step_ingredient = Map.put(step_ingredient, "ingredient", new_ingredient)
         Map.put(acc, input_id, new_step_ingredient)

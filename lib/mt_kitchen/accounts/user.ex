@@ -11,11 +11,12 @@ defmodule MTKitchen.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     field :role, Ecto.Enum, values: [:admin, :moderator, :editor]
+    field :approved, :boolean
 
     timestamps()
   end
 
-  @doc"""
+  @doc """
   A user changeset for assigning a role for resource access authorization.
   """
   def role_changeset(user, attrs) do
@@ -113,9 +114,9 @@ defmodule MTKitchen.Accounts.User do
     |> cast(attrs, [:username])
     |> validate_username()
     |> case do
-         %{changes: %{username: _}} = changeset -> changeset
-         %{} = changeset -> add_error(changeset, :username, "did not change")
-       end
+      %{changes: %{username: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :username, "did not change")
+    end
   end
 
   @doc """
@@ -170,5 +171,14 @@ defmodule MTKitchen.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  @doc """
+  Determines if a user is active for the purposes of authenticating and logging in
+  """
+  def active_for_authentication?(user) do
+    user.active &&
+      user.confirmed_at &&
+      user.confirmed_at <= DateTime.now!("Etc/UTC")
   end
 end

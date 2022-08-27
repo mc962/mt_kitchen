@@ -6,9 +6,9 @@ defmodule MTKitchenWeb.StepController do
   def edit(conn, %{"id" => id}) do
     current_user = conn.assigns.current_user
     recipe = Management.get_full_recipe!(id)
+
     with :ok <- Bodyguard.permit(Management, :get_full_recipe!, current_user, recipe),
-         {:ok, recipe}
-    do
+         {:ok, recipe} do
       changeset = Management.change_recipe_steps(recipe)
       render(conn, "edit.html", recipe: recipe, changeset: changeset)
     end
@@ -19,8 +19,7 @@ defmodule MTKitchenWeb.StepController do
     recipe = Management.get_full_recipe!(id)
 
     with :ok <- Bodyguard.permit(Management, :update_recipe_steps, current_user, recipe),
-         {:ok, recipe}
-    do
+         {:ok, recipe} do
       case Management.update_recipe_steps(recipe, recipe_params) do
         {:ok, recipe} ->
           conn
@@ -38,8 +37,7 @@ defmodule MTKitchenWeb.StepController do
     step = Management.get_full_step!(id)
 
     with :ok <- Bodyguard.permit(Management, :delete_step, current_user, step),
-         {:ok, step}
-    do
+         {:ok, step} do
       {:ok, _} = Management.delete_step(step)
 
       conn

@@ -8,7 +8,8 @@ defmodule MTKitchen.Kitchen.Step do
 
     belongs_to :recipe, MTKitchen.Kitchen.Recipe
     has_many :step_ingredients, MTKitchen.Kitchen.StepIngredient
-    has_many :ingredients, through: [:step_ingredients, :ingredient] # TODO preload_order ingredient name on has_many/through
+    # TODO preload_order ingredient name on has_many/through
+    has_many :ingredients, through: [:step_ingredients, :ingredient]
 
     timestamps()
   end
