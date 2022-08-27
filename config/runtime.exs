@@ -86,16 +86,15 @@ if config_env() == :prod do
       raise "FLY_APP_NAME not available"
 
   config :libcluster,
-         debug: true,
-         topologies: [
-           fly6pn: [
-             strategy: Cluster.Strategy.DNSPoll,
-             config: [
-               polling_interval: 5_000,
-               query: "#{app_name}.internal",
-               node_basename: app_name
-             ]
-           ]
-         ]
-
+    debug: true,
+    topologies: [
+      fly6pn: [
+        strategy: Cluster.Strategy.DNSPoll,
+        config: [
+          polling_interval: 5_000,
+          query: "#{app_name}.internal",
+          node_basename: app_name
+        ]
+      ]
+    ]
 end
