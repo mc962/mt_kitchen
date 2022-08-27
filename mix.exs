@@ -54,7 +54,7 @@ defmodule MTKitchen.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:ecto_psql_extras, "~> 0.6"},
       {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
-      {:bodyguard, "~> 2.4"},
+      {:bodyguard, "~> 2.4"}
     ]
   end
 
