@@ -55,6 +55,7 @@ defmodule MTKitchen.MixProject do
       {:ecto_psql_extras, "~> 0.6"},
       {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
       {:bodyguard, "~> 2.4"},
+      {:mix_audit, "~> 2.0", only: [:dev, :test], runtime: false},
       {:libcluster, "~> 3.3"}
     ]
   end
