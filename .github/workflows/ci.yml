@@ -18,7 +18,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Set up Elixir
-        uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
+        uses: erlef/setup-beam@v1
         with:
           elixir-version: '1.13.4' # Define the elixir version [required]
           otp-version: '24' # Define the OTP version [required]
@@ -40,7 +40,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Setup Elixir
-        uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
+        uses: erlef/setup-beam@v1
         with:
           elixir-version: '1.13.4' # Define the elixir version [required]
           otp-version: '24' # Define the OTP version [required]
@@ -77,7 +77,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Setup Elixir
-        uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
+        uses: erlef/setup-beam@v1
         with:
           elixir-version: '1.13.4' # Define the elixir version [required]
           otp-version: '24' # Define the OTP version [required]
