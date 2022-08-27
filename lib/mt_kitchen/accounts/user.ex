@@ -35,6 +35,15 @@ defmodule MTKitchen.Accounts.User do
   end
 
   @doc """
+  A user changeset for promoting a User to a particular role
+  """
+  def promotion_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:role])
+    |> validate_required([:role])
+  end
+
+  @doc """
   A user changeset for registration.
 
   It is important to validate the length of both email and password.
