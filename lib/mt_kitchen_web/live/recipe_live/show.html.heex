@@ -1,0 +1,40 @@
+<h1 class="text-center"><%= @recipe.name %></h1>
+
+<section class="recipe-section">
+    <div class="recipe-profile-img-container">
+        <img src="#" alt="Main picture of recipe food" class="recipe-profile-img recipe-picture" />
+    </div>
+
+    <p aria-label="Recipe description"><%= @recipe.description %></p>
+</section>
+
+<section class="recipe-section recipe-content">
+  <section class="recipe-col recipe-ingredients-container">
+        <h3><label for="ingredients">Ingredients</label></h3>
+        <ul id="ingredients">
+            <%= for step <- @recipe.steps do %>
+                <%= for step_ingredient <- step.step_ingredients do %>
+                    <li class="ingredient">
+                      <%= step_ingredient.amount %>
+                      <%= step_ingredient.unit %>
+                      <%= step_ingredient_list_name(step_ingredient) %>
+                    </li>
+                <% end %>
+            <% end %>
+        </ul>
+  </section>
+  <section class="recipe-col recipe-steps-container">
+      <h3><label for="steps">Steps</label></h3>
+      <ol id="steps">
+          <%= for step <- @recipe.steps do %>
+            <li class="step">
+              <%= step.instruction %>
+            </li>
+          <% end %>
+      </ol>
+  </section>
+</section>
+
+<div class="return-link-container">
+    <%= link "All Recipes", to: Routes.recipe_index_path(@socket, :index), class: "return-link" %>
+</div>

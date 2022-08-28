@@ -10,9 +10,37 @@ defmodule MTKitchen.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-    field :public_id, Ecto.UUID, autogenerate: true
+    field :role, Ecto.Enum, values: [:admin, :moderator, :editor]
+    field :approved, :boolean
 
     timestamps()
+  end
+
+  @doc """
+  A user changeset for assigning a role for resource access authorization.
+  """
+  def role_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:role])
+    |> validate_required([:role])
+  end
+
+  @doc """
+  A user changeset for approving a user manually by one such as an admin.
+  """
+  def approval_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:approved, :confirmed_at])
+    |> validate_required([:approved, :confirmed_at])
+  end
+
+  @doc """
+  A user changeset for promoting a User to a particular role
+  """
+  def promotion_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:role])
+    |> validate_required([:role])
   end
 
   @doc """
@@ -105,9 +133,9 @@ defmodule MTKitchen.Accounts.User do
     |> cast(attrs, [:username])
     |> validate_username()
     |> case do
-         %{changes: %{username: _}} = changeset -> changeset
-         %{} = changeset -> add_error(changeset, :username, "did not change")
-       end
+      %{changes: %{username: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :username, "did not change")
+    end
   end
 
   @doc """
@@ -162,5 +190,14 @@ defmodule MTKitchen.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  @doc """
+  Determines if a user is active for the purposes of authenticating and logging in
+  """
+  def active_for_authentication?(user) do
+    user.approved &&
+      user.confirmed_at &&
+      user.confirmed_at <= DateTime.now!("Etc/UTC")
   end
 end

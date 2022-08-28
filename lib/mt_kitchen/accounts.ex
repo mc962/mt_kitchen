@@ -8,6 +8,8 @@ defmodule MTKitchen.Accounts do
 
   alias MTKitchen.Accounts.{User, UserToken, UserNotifier}
 
+  require Logger
+
   ## Database getters
 
   @doc """
@@ -24,34 +26,6 @@ defmodule MTKitchen.Accounts do
   """
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
-  end
-
-  @doc """
-  Gets a user by their public id to avoid exposing internal database IDs
-
-    ## Examples
-
-      # Known UUID
-      iex> get_user_by_public_id("187b5a97-04af-476f-b413-62c23fba9078")
-      %User{}
-
-      # Unknown UUID
-      iex> get_user_by_public_id("8512f8d1-ecc2-4c41-aa40-3eae204d96bf")
-      nil
-
-  """
-  def get_user_by_public_id(public_id) when is_nil(public_id), do: {:error, "no user found for public ID"}
-  def get_user_by_public_id(public_id) do
-    # TODO cache this lookup (cachex?)
-    query = from u in User,
-             where: u.public_id == ^public_id
-
-    user = Repo.one(query)
-
-    cond do
-      is_nil(user) -> {:error, "no user found for public ID"}
-      user -> {:ok, user}
-    end
   end
 
   @doc """
@@ -87,6 +61,44 @@ defmodule MTKitchen.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Gets a single recipe, including associated resources needed for main user page.
+
+  Raises `Ecto.NoResultsError` if the User does not exist.
+
+  ## Examples
+
+      iex> get_full_user!(123)
+      %User{}
+
+      iex> get_full_user!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_full_user!(id) do
+    Repo.one!(
+      from u in User,
+        where: u.id == ^id,
+        preload: [:recipes]
+    )
+  end
+
+  @doc """
+  Gets all associated recipes needed for initial User management page.
+  Done separately as user is already loaded in Authentication.
+
+  ## Examples
+
+      iex> get_user_recipes!(123)
+      [%MTKitchen.Management.Recipe{}, ...]
+  """
+  def get_user_recipes(user_id) do
+    Repo.all(
+      from r in MTKitchen.Management.Recipe,
+        where: r.user_id == ^user_id
+    )
+  end
 
   ## User registration
 
@@ -377,5 +389,48 @@ defmodule MTKitchen.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  @doc """
+  Delivers emails instructing admin users to activate a new account.
+
+  ## Examples
+
+      iex> new_user_waiting_for_approval()
+      {:ok, %{to: ..., body: ...}}
+
+  """
+  def new_user_waiting_for_approval do
+    # Query for admin user emails, and take 3 random emails from that. This ensures that, as admin user count may
+    #   grow bigger, we aren't sending emails to lots of admins every time, as well as that the same people at the
+    #   beginning of the default query order are not always selected.
+    send_admin_emails = Enum.take_random(admin_user_emails(), 3)
+
+    if length(send_admin_emails) == 0 do
+      Logger.warn(
+        "No admin users present to approve users. Promote a user to Admin in order to approve users for logging in."
+      )
+    else
+      UserNotifier.new_user_waiting_for_approval(send_admin_emails)
+    end
+  end
+
+  defp admin_user_emails do
+    now = DateTime.now!("Etc/UTC")
+
+    MTKitchen.Repo.all(
+      from u in MTKitchen.Accounts.User,
+        select: u.email,
+        where:
+          u.role == :admin and
+            u.approved == true and
+            not is_nil(u.confirmed_at) and
+            u.confirmed_at <= ^now
+    )
+  end
+
+  def approve_user(user) do
+    user
+    |> User.approval_changeset(%{approved: true, confirmed_at: DateTime.now("Etc/UTC")})
   end
 end

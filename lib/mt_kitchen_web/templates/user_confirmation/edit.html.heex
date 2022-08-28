@@ -1,12 +1,18 @@
-<h1>Confirm account</h1>
+<h1 class="text-center">Confirm account</h1>
 
-<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)}>
-  <div>
-    <%= submit "Confirm my account" %>
+<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)} class="resource-form user-confirmation-form">
+  <div class="actions">
+    <%= submit "Confirm my account", class: "button submit-btn" %>
   </div>
 </.form>
 
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+<nav id="bottom_nav">
+    <ul class="bottom-nav-links">
+        <li class="bottom-nav-link">
+          <%= link "Register", to: Routes.user_registration_path(@conn, :new) %>
+        </li>
+        <li class="bottom-nav-link">
+          <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+        </li>
+    </ul>
+</nav>

@@ -8,13 +8,35 @@ defmodule MTKitchen.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"MTKitchen", "contact@example.com"})
+      |> from({"MTKitchen", "no-reply@mtkitchen.com"})
       |> subject(subject)
       |> text_body(body)
 
     with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}
     end
+  end
+
+  @doc """
+  Deliver notification to admin users to approve an account for logging in.
+  """
+  def new_user_waiting_for_approval(admin_user_emails) do
+    deliver(admin_user_emails, "New user awaiting admin approval", """
+
+    ==============================
+
+    Hello Admins,
+
+    New users are awaiting your approval.
+
+    In order to protect their data, their email addresses are not included in this email.
+
+    Please inspect and improve them at your earliest convenience.
+
+    Thank you.
+
+    ==============================
+    """)
   end
 
   @doc """

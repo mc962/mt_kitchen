@@ -1,0 +1,14 @@
+/* This file is for your main application CSS */
+//@use "phoenix";
+@use "layout/global";
+@use "layout/page";
+@use "layout/live_view";
+
+// Resource Management
+@use "resource/recipe" as resource_recipe;
+@use "resource/step" as resource_step;
+@use "resource/step_ingredient" as resource_step_ingredient;
+@use "resource/user" as resource_user;
+
+// Public Content
+@use "kitchen/recipe" as kitchen_recipe;

@@ -20,23 +20,30 @@ defmodule MTKitchenWeb.Router do
   scope "/", MTKitchenWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", PageController, :index, as: :root
+
+    live "/recipes", RecipeLive.Index, :index
+    live "/recipes/:id", RecipeLive.Show, :show
   end
 
   # Authenticate Scope
   scope "/", MTKitchenWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    scope "/manage", as: :manage do
+      get "/", UserController, :show, as: :user
 
-    scope "/manage" do
       resources "/recipes", RecipeController
       # Edit all recipe steps together
       get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
       put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
 
       # Edit all ingredients in a step together
-      get "/recipes/:recipe_id/steps/:id/edit", StepIngredientController, :edit, as: :step_ingredients
-      put "/recipes/:recipe_id/steps/:id", StepIngredientController, :update, as: :step_ingredients
+      get "/recipes/:recipe_id/steps/:id/edit", StepIngredientController, :edit,
+        as: :step_ingredients
+
+      put "/recipes/:recipe_id/steps/:id", StepIngredientController, :update,
+        as: :step_ingredients
     end
   end
 

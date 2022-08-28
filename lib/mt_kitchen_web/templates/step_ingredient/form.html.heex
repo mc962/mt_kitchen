@@ -1,33 +1,34 @@
-<section id="recipe_step_ingredients_container">
-    <h2>Step Ingredients</h2>
+<h2 class="tab-form-heading">Step Ingredients</h2>
 
-    <.form let={f} for={@changeset} action={Routes.step_ingredients_path(@conn, :update, @step.recipe_id, @step)}>
-      <%= if @changeset.action do %>
-        <div class="alert alert-danger">
-          <p>Oops, something went wrong! Please check the errors below.</p>
-        </div>
-      <% end %>
+<.form let={f} for={@changeset} action={Routes.manage_step_ingredients_path(@conn, :update, @step.recipe_id, @step)}, class="resource-form">
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
 
-      <h3><%= @step.recipe.name %></h3>
+  <h3>Recipe: <%= @step.recipe.name %></h3>
 
-      <label for="step_instruction">Instruction</label>
-      <textarea id="step_instruction" disabled="true"><%= @step.instruction %></textarea>
+  <div class="form-ctrl-container title-instruction">
+      <textarea id="step_instruction" disabled="true" aria-labelledby="instruction" class="form-ctrl-text instruction">
+        <%= @step.instruction %>
+      </textarea>
+  </div>
 
-      <hr />
+  <hr />
 
-      <template id="new_resource_template" class="new-resource-template">
-        <%= new_step_ingredient(@conn, @step.recipe, @step) %>
-      </template>
-      <ol id="step_ingredients" class="resource-list">
-        <%= inputs_for f, :step_ingredients, fn si -> %>
-            <%= render "_step_ingredient.html", step_ingredient_form: si, conn: @conn %>
-       <% end %>
-      </ol>
+  <template id="new_resource_template" class="new-resource-template">
+    <%= new_step_ingredient(@conn, @step.recipe, @step) %>
+  </template>
+  <ol id="step_ingredients" class="resource-list">
+    <%= inputs_for f, :step_ingredients, fn si -> %>
+        <%= render "_step_ingredient.html", step_ingredient_form: si, conn: @conn %>
+   <% end %>
+  </ol>
 
-      <button type="button" class="new-resource-btn">Add Ingredient</button>
+  <button type="button" class="new-resource-btn">Add Ingredient</button>
 
-      <div>
-        <%= submit "Save" %>
-      </div>
-    </.form>
-</section>
+  <div class="actions">
+    <%= submit "Save", class: "button submit-btn" %>
+  </div>
+</.form>

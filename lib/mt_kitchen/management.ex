@@ -1,4 +1,6 @@
 defmodule MTKitchen.Management do
+  defdelegate authorize(action, user, params), to: MTKitchen.Management.Policy
+
   @moduledoc """
   The Management context.
   """
@@ -19,6 +21,22 @@ defmodule MTKitchen.Management do
   """
   def list_recipes do
     Repo.all(Recipe)
+  end
+
+  @doc """
+  Returns the list of recipes owned by the current user.
+
+  ## Examples
+
+      iex> list_owned_recipes()
+      [%Recipe{}, ...]
+
+  """
+  def list_owned_recipes(user_id) do
+    Repo.all(
+      from r in Recipe,
+        where: r.user_id == ^user_id
+    )
   end
 
   @doc """
@@ -52,9 +70,11 @@ defmodule MTKitchen.Management do
 
   """
   def get_full_recipe!(id) do
-    Repo.one! from r in Recipe,
-              where: r.id == ^id,
-              preload: [:steps]
+    Repo.one!(
+      from r in Recipe,
+        where: r.id == ^id,
+        preload: [:steps]
+    )
   end
 
   @doc """
@@ -212,9 +232,11 @@ defmodule MTKitchen.Management do
 
   """
   def get_full_step!(id) do
-    Repo.one! from s in Step,
-                    where: s.id == ^id,
-                    preload: [:recipe, step_ingredients: [:ingredient]]
+    Repo.one!(
+      from s in Step,
+        where: s.id == ^id,
+        preload: [:recipe, step_ingredients: [:ingredient]]
+    )
   end
 
   @doc """
@@ -238,22 +260,7 @@ defmodule MTKitchen.Management do
   @doc """
   Updates a step.
 
-  ## Examples
-
-      iex> update_step(step, %{field: new_value})
-      {:ok, %Step{}}
-
-      iex> update_step(step, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_step(%Step{} = step, attrs) do
-    step
-    |> Step.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
+  @doc \"""
   Updates a recipe step's ingredients.
 
   ## Examples

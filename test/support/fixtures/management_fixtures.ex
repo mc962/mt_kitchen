@@ -34,7 +34,8 @@ defmodule MTKitchen.ManagementFixtures do
       attrs
       |> Enum.into(%{
         instruction: "some instruction",
-        order: 42
+        order: 42,
+        recipe_id: Map.get(attrs, :recipe_id) || recipe_fixture().id
       })
       |> MTKitchen.Management.create_step()
 

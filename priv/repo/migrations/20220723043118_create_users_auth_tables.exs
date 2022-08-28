@@ -8,9 +8,10 @@ defmodule MTKitchen.Repo.Migrations.CreateUsersAuthTables do
       add :id, :binary_id, primary_key: true
       add :email, :citext, null: false
       add :username, :string, null: false
+      add :role, :string
+      add :approved, :boolean, null: false, default: false
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime
-      add :public_id, :binary_id, null: false, default: fragment("gen_random_uuid()")
       timestamps()
     end
 

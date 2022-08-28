@@ -1,0 +1,11 @@
+@use 'shared/nested_resource_form_action';
+
+.resource-form {
+  .resource-list {
+    .resource-item {
+      .form-ctrl-text.instruction {
+        width: 90%;
+      }
+    }
+  }
+}

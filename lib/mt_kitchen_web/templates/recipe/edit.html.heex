@@ -1,12 +1,12 @@
-<h1>Edit Recipe</h1>
+<h1 class="manage-resource-heading">Edit Recipe</h1>
 
-<nav class="action-nav">
-    <ul class="action-nav-links">
-        <li class="action-nav-link"><%= link("Information", to: Routes.recipe_path(@conn, :edit, @recipe)) %></li>
-        <li class="action-nav-link"><%= link("Steps", to: Routes.recipe_steps_path(@conn, :edit, @recipe)) %></li>
-    </ul>
-</nav>
+<%= render MTKitchenWeb.ResourceView, "_action_nav.html", conn: @conn, recipe: @recipe %>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.recipe_path(@conn, :update, @recipe)) %>
+<section id="recipe_information_container">
+    <%= render "form.html", Map.put(assigns, :action, Routes.manage_recipe_path(@conn, :update, @recipe)) %>
+</section>
 
-<span><%= link "Back", to: Routes.recipe_path(@conn, :index) %></span>
+
+<div class="return-link-container">
+    <%= link "Back", to: Routes.manage_recipe_path(@conn, :index), class: "return-link" %>
+</div>

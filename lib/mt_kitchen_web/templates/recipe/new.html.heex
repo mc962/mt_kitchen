@@ -1,5 +1,7 @@
-<h1>New Recipe</h1>
+<h1 class="text-center">New Recipe</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.recipe_path(@conn, :create)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.manage_recipe_path(@conn, :create)) %>
 
-<span><%= link "Back", to: Routes.recipe_path(@conn, :index) %></span>
+<div class="return-link-container">
+    <%= link "Back", to: Routes.manage_recipe_path(@conn, :index), class: "return-link" %>
+</div>
