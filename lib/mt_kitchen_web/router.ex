@@ -21,14 +21,14 @@ defmodule MTKitchenWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index, as: :root
+
+    live "/recipes", RecipeLive.Index, :index
+    live "/recipes/:id", RecipeLive.Show, :show
   end
 
   # Authenticate Scope
   scope "/", MTKitchenWeb do
     pipe_through [:browser, :require_authenticated_user]
-
-    live "/recipes", RecipeLive.Index, :index
-    live "/recipes/:id", RecipeLive.Show, :show
 
     scope "/manage", as: :manage do
       get "/", UserController, :show, as: :user

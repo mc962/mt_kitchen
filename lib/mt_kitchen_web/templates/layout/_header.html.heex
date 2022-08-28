@@ -9,10 +9,11 @@
         <li class="site-nav-link">
           <%= link "Recipes", to: Routes.recipe_index_path(assigns[:conn] || assigns[:socket], :index), class: "nav-anchor" %>
         </li>
+        <!--
         <li class="site-nav-link">
           <%= link "Posts", to: "#", class: "nav-anchor" %>
         </li>
-
+        -->
         <%= render "_user_menu.html", assigns %>
       </ul>
     </nav>

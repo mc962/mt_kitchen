@@ -47,7 +47,7 @@ defmodule MTKitchenWeb do
       use Phoenix.LiveView,
         layout: {MTKitchenWeb.LayoutView, "live.html"}
 
-      on_mount MTKitchenWeb.UserLiveAuth
+#      on_mount MTKitchenWeb.UserLiveAuth
 
       unquote(view_helpers())
     end

@@ -22,7 +22,7 @@
         <section class="step-ingredient-col measurement-col">
             <div class="form-ctrl-container">
                 <%= label @step_ingredient_form, :amount, class: "form-ctrl-lbl" %>
-                <%= number_input @step_ingredient_form, :amount, class: "form-ctrl" %>
+                <%= number_input @step_ingredient_form, :amount, step: 0.1, class: "form-ctrl" %>
                 <%= error_tag @step_ingredient_form, :amount %>
             </div>
 
