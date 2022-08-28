@@ -9,7 +9,8 @@ processes = []
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = "mt-kitchen.fly.dev"
+  # PHX_HOST = "mt-kitchen.fly.dev"
+  PHX_HOST = "alazykitchen.com"
   PORT = "8080"
 
 [experimental]
