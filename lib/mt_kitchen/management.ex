@@ -9,6 +9,7 @@ defmodule MTKitchen.Management do
   alias MTKitchen.Repo
 
   alias MTKitchen.Management.Recipe
+  alias MtKitchenWeb.Uploaders.Image
 
   @doc """
   Returns the list of recipes.
@@ -108,9 +109,26 @@ defmodule MTKitchen.Management do
 
   """
   def update_recipe(%Recipe{} = recipe, attrs) do
-    recipe
-    |> Recipe.information_changeset(attrs)
-    |> Repo.update()
+    original_url = recipe.primary_picture
+
+    result =
+      recipe
+      |> Recipe.information_changeset(attrs)
+      |> Repo.update()
+
+    case result do
+      {:ok, recipe_result} ->
+        # Only delete image url if recipe change was successful, and only do so if there was a change from some
+        #   image url to something else
+        if original_url && recipe_result.primary_picture != original_url do
+          Image.delete({original_url, recipe_result})
+        end
+
+      {:err, changeset} ->
+        changeset
+    end
+
+    result
   end
 
   @doc """
@@ -144,7 +162,21 @@ defmodule MTKitchen.Management do
 
   """
   def delete_recipe(%Recipe{} = recipe) do
-    Repo.delete(recipe)
+    original_url = recipe.primary_picture
+
+    result = Repo.delete(recipe)
+
+    case result do
+      {:ok, recipe_result} ->
+        # Only delete image url if recipe deletion was successful.
+        # As the image has been deleted, we should always delete the image in this case.
+        Image.delete({original_url, recipe_result})
+
+      {:err, changeset} ->
+        changeset
+    end
+
+    result
   end
 
   @doc """
@@ -369,9 +401,26 @@ defmodule MTKitchen.Management do
 
   """
   def update_ingredient(%Ingredient{} = ingredient, attrs) do
-    ingredient
-    |> Ingredient.changeset(attrs)
-    |> Repo.update()
+    original_url = ingredient.primary_picture
+
+    result =
+      ingredient
+      |> Ingredient.changeset(attrs)
+      |> Repo.update()
+
+    case result do
+      {:ok, ingredient_result} ->
+        # Only delete image url if ingredient change was successful, and only do so if there was a change from some
+        #   image url to something else
+        if original_url && ingredient_result.primary_picture != original_url do
+          Image.delete({original_url, ingredient_result})
+        end
+
+      {:err, changeset} ->
+        changeset
+    end
+
+    result
   end
 
   @doc """
@@ -387,7 +436,21 @@ defmodule MTKitchen.Management do
 
   """
   def delete_ingredient(%Ingredient{} = ingredient) do
-    Repo.delete(ingredient)
+    original_url = ingredient.primary_picture
+
+    result = Repo.delete(ingredient)
+
+    case result do
+      {:ok, ingredient_result} ->
+        # Only delete image url if ingredient deletion was successful.
+        # As the image has been deleted, we should always delete the image in this case.
+        Image.delete({original_url, ingredient_result})
+
+      {:err, changeset} ->
+        changeset
+    end
+
+    result
   end
 
   @doc """

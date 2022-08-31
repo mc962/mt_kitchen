@@ -43,7 +43,7 @@ defmodule MtKitchenWeb.Uploaders.Image do
     storage_dir_parts = %{
       prefix: "/assets/images/resources",
       env: "",
-      resource: "#{scope.__struct__}"
+      resource: scope.__struct__.resource_scope()
     }
 
     storage_dir_parts =

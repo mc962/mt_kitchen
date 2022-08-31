@@ -87,6 +87,6 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :waffle,
   storage: Waffle.Storage.Local,
-  storage_dir_prefix: "priv/static",
   # or {:system, "ASSET_HOST"}
-  asset_host: "http://lcl.alazykitchen.com:4000"
+  #  asset_host: "http://lcl.alazykitchen.com:4000",
+  storage_dir_prefix: "priv/static"

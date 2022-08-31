@@ -11,6 +11,8 @@ defmodule MTKitchen.Management.Ingredient do
     field :slug, :string
 
     field :primary_picture, MtKitchenWeb.Uploaders.Image.Type
+    # Delete primary_picture
+    field :delete, :boolean, virtual: true
 
     belongs_to :user, MTKitchen.Accounts.User, type: :binary_id
     has_many :step_ingredients, MTKitchen.Management.StepIngredient
@@ -24,6 +26,7 @@ defmodule MTKitchen.Management.Ingredient do
   def changeset(ingredient, attrs) do
     ingredient
     |> cast(attrs, [:name, :slug, :description, :ancestry, :user_id])
+    |> cast_attachments(attrs, [:primary_picture])
     |> maybe_update_slug()
     |> validate_required([:name, :slug])
     |> assoc_constraint(:user)
@@ -31,6 +34,11 @@ defmodule MTKitchen.Management.Ingredient do
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
     |> on_conflict_upsert()
+    |> maybe_delete_image()
+  end
+
+  def resource_scope do
+    "ingredients"
   end
 
   defp on_conflict_upsert(%Ecto.Changeset{valid?: true} = changeset) do
@@ -42,4 +50,16 @@ defmodule MTKitchen.Management.Ingredient do
   end
 
   defp on_conflict_upsert(changeset), do: changeset
+
+  # If primary key id is nil / record is not persisted, then we will never mark for deletion
+  defp maybe_delete_image(%{data: %{id: nil}} = changeset), do: changeset
+
+  # If record is currently persisted, and we noted in params that the record should be deleted, then mark in the
+  #   [Changeset Action](https://hexdocs.pm/ecto/Ecto.Changeset.html#module-changeset-actions) to delete that record.
+  defp maybe_delete_image(%Ecto.Changeset{valid?: true, changes: %{delete: true}} = changeset) do
+    put_change(changeset, :primary_picture, nil)
+  end
+
+  # All other changesets that don't satisfy these conditions should just be passed through
+  defp maybe_delete_image(changeset), do: changeset
 end
