@@ -1,7 +1,7 @@
 defmodule MTKitchenWeb.RecipeLive.Show do
   use MTKitchenWeb, :live_view
 
-  alias MTKitchen.Kitchen
+  alias MTKitchen.Management
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,7 +13,7 @@ defmodule MTKitchenWeb.RecipeLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:recipe, Kitchen.get_full_recipe!(id))}
+     |> assign(:recipe, Management.get_full_recipe!(id))}
   end
 
   def step_ingredient_list_name(step_ingredient) do

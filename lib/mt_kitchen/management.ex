@@ -25,6 +25,16 @@ defmodule MTKitchen.Management do
   end
 
   @doc """
+  Returns the list of recipes displayed to the public
+  """
+  def directory_recipes do
+    Repo.all(
+      from r in Recipe,
+      where: r.publicly_accessible == true
+    )
+  end
+
+  @doc """
   Returns the list of recipes owned by the current user.
 
   ## Examples
@@ -80,6 +90,18 @@ defmodule MTKitchen.Management do
         preload: [:steps]
     )
   end
+
+  def get_full_public_recipe!(id) do
+    Repo.one!(
+      from r in Recipe,
+      where:
+        r.id == ^id or
+        (r.slug == ^id and
+         r.publicly_accessible == true),
+      preload: [steps: [step_ingredients: [:ingredient]]]
+    )
+  end
+
 
   @doc """
   Creates a recipe.

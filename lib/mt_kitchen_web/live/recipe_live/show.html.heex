@@ -2,9 +2,7 @@
 
 <section class="recipe-section">
     <div class="recipe-profile-img-container">
-        <img src="#" alt="Main picture of recipe food" class="recipe-profile-img recipe-picture" />
         <%= img_tag(MtKitchenWeb.Uploaders.Image.url({@recipe.primary_picture, @recipe}), alt: "Main picture of food", class: "recipe-profile-img recipe-picture") %>
-
     </div>
 
     <p aria-label="Recipe description"><%= @recipe.description %></p>
