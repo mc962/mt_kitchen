@@ -1,5 +1,6 @@
 defmodule MTKitchen.Management.Recipe do
   use Ecto.Schema
+  use Waffle.Ecto.Schema
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
 
@@ -10,6 +11,8 @@ defmodule MTKitchen.Management.Recipe do
     field :name, :string
     field :publicly_accessible, :boolean, default: false
     field :slug, :string
+
+    field :primary_picture, MtKitchenWeb.Uploaders.Image.Type
 
     belongs_to :user, MTKitchen.Accounts.User, type: :binary_id
     has_many :steps, MTKitchen.Management.Step, preload_order: [asc: :order]

@@ -1,4 +1,4 @@
 <h3 class="tab-form-heading">Images</h3>
 
-<%= render "_primary_picture.html", form: @form %>
+<%= render "_primary_picture.html", form: @form, conn: @conn %>
 <%= render "_gallery_pictures.html", form: @form, standard_alt_text: "A picture of #{@form.data.name}" %>

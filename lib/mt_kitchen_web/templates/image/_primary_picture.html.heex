@@ -1,5 +1,15 @@
 <section class="resource-primary-img-container">
   <div class="edit-recipe-profile-img-container">
-
+    <%= img_tag(Routes.static_path(@conn, MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}, signed: true)), alt: "Main picture of food", class: "recipe-profile-img recipe-picture", data_original_src: Routes.static_path(@conn, MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}, signed: true))) %>
   </div>
+
+  <div class="delete-img-container form-ctrl-container">
+    <%= label @form, :delete, class: "form-ctrl-lbl" %>
+    <%= checkbox @form, :delete, class: "form-ctrl-check" %>
+  </div>
+
+    <div class="form-ctrl-container upload-ctrl-container" id="primary_picture_upload_ctrl_container">
+        <%= file_input @form, :primary_picture, class: "synced-single-img recipe-primary-picture" %>
+        <button type="button" class="button cancel-btn cancel-primary-picture-upload-btn">Cancel</button>
+    </div>
 </section>

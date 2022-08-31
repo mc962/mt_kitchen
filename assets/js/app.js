@@ -28,8 +28,9 @@ import {
     detectNestedItemContainerTransforms,
     detectNestedItemTransforms,
     removeNewNestedResourceListener
-} from "./resource/management";
+} from "./resource/nested_resource";
 import {closeFlashListener} from "./layout/flash";
+import {setupPrimaryPicture} from "./resource/image";
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
@@ -62,4 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         detectNestedItemContainerTransforms(),
         detectNestedItemTransforms()
     );
+
+    setupPrimaryPicture();
 });

@@ -1,5 +1,6 @@
 defmodule MTKitchen.Management.Ingredient do
   use Ecto.Schema
+  use Waffle.Ecto.Schema
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
 
@@ -8,6 +9,8 @@ defmodule MTKitchen.Management.Ingredient do
     field :description, :string
     field :name, :string
     field :slug, :string
+
+    field :primary_picture, MtKitchenWeb.Uploaders.Image.Type
 
     belongs_to :user, MTKitchen.Accounts.User, type: :binary_id
     has_many :step_ingredients, MTKitchen.Management.StepIngredient

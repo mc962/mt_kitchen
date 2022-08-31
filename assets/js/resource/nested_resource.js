@@ -42,6 +42,7 @@ const updateResourceOrder = (existingResources) => {
 
     return existingResources
 }
+
 export const removeNewNestedResourceListener = (itemsTransforms = [], itemTransforms = []) => {
     let existingResources = document.querySelector('.resource-list');
 
@@ -64,6 +65,7 @@ export const removeNewNestedResourceListener = (itemsTransforms = [], itemTransf
         });
     }
 }
+
 export const detectNestedItemContainerTransforms = () => {
     if (document.querySelector('#recipe_steps')) {
         return [
@@ -73,6 +75,7 @@ export const detectNestedItemContainerTransforms = () => {
         return [];
     }
 }
+
 export const detectNestedItemTransforms = () => {
     if (document.querySelector('#recipe_steps')) {
         return [];
