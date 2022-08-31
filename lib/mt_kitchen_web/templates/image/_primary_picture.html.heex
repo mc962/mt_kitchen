@@ -1,6 +1,6 @@
 <section class="resource-primary-img-container">
   <div class="edit-recipe-profile-img-container">
-    <%= img_tag(Routes.static_path(@conn, MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}, signed: true)), alt: "Main picture of food", class: "recipe-profile-img recipe-picture", data_original_src: Routes.static_path(@conn, MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}, signed: true))) %>
+    <%= img_tag(MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}), alt: "Main picture of food", class: "recipe-profile-img recipe-picture", data_original_src: MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}, signed: true)) %>
   </div>
 
   <div class="delete-img-container form-ctrl-container">

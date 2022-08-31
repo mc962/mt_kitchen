@@ -18,6 +18,8 @@ defmodule MtKitchenWeb.Uploaders.Image do
   #   scope.bucket || bucket()
   # end
 
+  def acl(:original, _), do: :public_read
+
   # Whitelist file extensions:
   def validate({file, _}) do
     file_extension = file.file_name |> Path.extname() |> String.downcase()

@@ -27,7 +27,7 @@ defmodule MTKitchenWeb.RecipeController do
       {:ok, recipe} ->
         conn
         |> put_flash(:info, "Recipe created successfully.")
-        |> redirect(to: Routes.manage_recipe_path(conn, :show, recipe))
+        |> redirect(to: Routes.manage_recipe_path(conn, :show, recipe.slug))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -66,7 +66,7 @@ defmodule MTKitchenWeb.RecipeController do
         {:ok, recipe} ->
           conn
           |> put_flash(:info, "Recipe updated successfully.")
-          |> redirect(to: Routes.manage_recipe_path(conn, :show, recipe))
+          |> redirect(to: Routes.manage_recipe_path(conn, :show, recipe.slug))
 
         {:error, %Ecto.Changeset{} = changeset} ->
           render(conn, "edit.html", recipe: recipe, changeset: changeset)

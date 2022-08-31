@@ -54,7 +54,10 @@ defmodule MTKitchen.Management do
       ** (Ecto.NoResultsError)
 
   """
-  def get_recipe!(id), do: Repo.get!(Recipe, id)
+  def get_recipe!(id) do
+    Repo.one! from r in Recipe,
+              where: r.slug == ^id
+  end
 
   @doc """
   Gets a single recipe, including associated resources needed for editing.
@@ -73,7 +76,7 @@ defmodule MTKitchen.Management do
   def get_full_recipe!(id) do
     Repo.one!(
       from r in Recipe,
-        where: r.id == ^id,
+        where: r.slug == ^id,
         preload: [:steps]
     )
   end
@@ -168,9 +171,11 @@ defmodule MTKitchen.Management do
 
     case result do
       {:ok, recipe_result} ->
-        # Only delete image url if recipe deletion was successful.
-        # As the image has been deleted, we should always delete the image in this case.
-        Image.delete({original_url, recipe_result})
+        if original_url do
+          # Only delete image url if recipe deletion was successful and only if the image url actually exists.
+          # As the image has been deleted, we should always delete the image in this case.
+          Image.delete({original_url, recipe_result})
+        end
 
       {:err, changeset} ->
         changeset
@@ -368,7 +373,10 @@ defmodule MTKitchen.Management do
       ** (Ecto.NoResultsError)
 
   """
-  def get_ingredient!(id), do: Repo.get!(Ingredient, id)
+  def get_ingredient!(id) do
+    Repo.one! from i in Ingredient,
+              where: i.slug == ^id
+  end
 
   @doc """
   Creates a ingredient.
