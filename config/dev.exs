@@ -1,5 +1,8 @@
 import Config
 
+# GLobal config
+config :mt_kitchen, :environment, :dev
+
 # Configure your database
 config :mt_kitchen, MTKitchen.Repo,
   username: "postgres",

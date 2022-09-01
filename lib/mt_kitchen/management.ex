@@ -97,9 +97,8 @@ defmodule MTKitchen.Management do
     Repo.one!(
       from r in Recipe,
         where:
-          r.id == ^id or
-            (r.slug == ^id and
-               r.publicly_accessible == true),
+          r.slug == ^id and
+            r.publicly_accessible == true,
         preload: [steps: [step_ingredients: [:ingredient]]]
     )
   end

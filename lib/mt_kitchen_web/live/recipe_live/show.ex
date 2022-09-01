@@ -13,7 +13,7 @@ defmodule MTKitchenWeb.RecipeLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:recipe, Management.get_full_recipe!(id))}
+     |> assign(:recipe, Management.get_full_public_recipe!(id))}
   end
 
   def step_ingredient_list_name(step_ingredient) do

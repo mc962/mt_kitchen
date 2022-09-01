@@ -1,5 +1,8 @@
 import Config
 
+# GLobal config
+config :mt_kitchen, :environment, :test
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :argon2_elixir, t_cost: 1, m_cost: 8
 

@@ -6,6 +6,8 @@ defmodule MtKitchenWeb.Uploaders.Image do
 
   @versions [:original]
 
+  @bucket_url "https://lazy-kitchen.s3.amazonaws.com"
+
   # To add a thumbnail version:
   # @versions [:original, :thumb]
 
@@ -49,7 +51,7 @@ defmodule MtKitchenWeb.Uploaders.Image do
     }
 
     storage_dir_parts =
-      if Application.get_env(:mt_kitchen, :env) == :prod do
+      if Application.get_env(:mt_kitchen, :environment) == :prod do
         Map.put(storage_dir_parts, :env, "live")
       else
         Map.put(storage_dir_parts, :env, "dev")
@@ -60,7 +62,7 @@ defmodule MtKitchenWeb.Uploaders.Image do
 
   # Provide a default URL if there hasn't been a file uploaded
   def default_url(_version, _scope) do
-    "/assets/images/site/default_food.jpeg"
+    "#{@bucket_url}/assets/images/site/default_food.jpeg"
   end
 
   # Specify custom headers for s3 objects

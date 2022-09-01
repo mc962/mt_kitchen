@@ -1,5 +1,8 @@
 import Config
 
+# GLobal config
+config :mt_kitchen, :environment, :prod
+
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.
@@ -50,3 +53,10 @@ config :logger, level: :info
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
 # any configurations provided by https://github.com/ex-aws/ex_aws
+
+config :waffle,
+  storage: Waffle.Storage.S3,
+  # or {:system, "AWS_S3_BUCKET"}
+  bucket: "lazy-kitchen"
+
+# or {:system, "ASSET_HOST"}
