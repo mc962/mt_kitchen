@@ -3,7 +3,7 @@
 <%= render MTKitchenWeb.ResourceView, "_action_nav.html", conn: @conn, recipe: @recipe %>
 
 <section id="recipe_information_container">
-    <%= render "form.html", Map.put(assigns, :action, Routes.manage_recipe_path(@conn, :update, @recipe)) %>
+    <%= render "form.html", Map.put(assigns, :action, Routes.manage_recipe_path(@conn, :update, @recipe.slug)) %>
 </section>
 
 

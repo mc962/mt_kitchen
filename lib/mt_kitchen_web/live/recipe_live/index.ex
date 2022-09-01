@@ -1,7 +1,7 @@
 defmodule MTKitchenWeb.RecipeLive.Index do
   use MTKitchenWeb, :live_view
 
-  alias MTKitchen.Kitchen
+  alias MTKitchen.Management
 
   @impl true
   def mount(_params, _session, socket) do
@@ -20,6 +20,6 @@ defmodule MTKitchenWeb.RecipeLive.Index do
   end
 
   defp directory_recipes do
-    Kitchen.directory_recipes()
+    Management.directory_recipes()
   end
 end

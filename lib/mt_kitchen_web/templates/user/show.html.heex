@@ -39,11 +39,11 @@
     <ul id="directory_recipes" class="directory-items">
         <%= for recipe <- @recipes do %>
             <li class="directory-item">
-                <span><%= link recipe.name, to: Routes.manage_recipe_path(@conn, :show, recipe) %></span>
+                <span><%= link recipe.name, to: Routes.manage_recipe_path(@conn, :show, recipe.slug) %></span>
                 <%= if @current_user do %>
                     <div class="resource-action-links recipe-links">
-                      <span><%= link "Edit", to: Routes.manage_recipe_path(@conn, :edit, recipe) %></span>
-                      <span><%= link "Delete", to: Routes.manage_recipe_path(@conn, :delete, recipe), method: :delete, data: [confirm: "Are you sure?"] %></span>
+                      <span><%= link "Edit", to: Routes.manage_recipe_path(@conn, :edit, recipe.slug) %></span>
+                      <span><%= link "Delete", to: Routes.manage_recipe_path(@conn, :delete, recipe.slug), method: :delete, data: [confirm: "Are you sure?"] %></span>
                     </div>
                 <% end %>
             </li>

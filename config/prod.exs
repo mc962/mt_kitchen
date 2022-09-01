@@ -48,3 +48,5 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
+
+# any configurations provided by https://github.com/ex-aws/ex_aws

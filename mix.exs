@@ -46,7 +46,6 @@ defmodule MTKitchen.MixProject do
       {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
       {:gen_smtp, "~> 1.2"},
-      {:hackney, "~> 1.18"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
@@ -56,7 +55,13 @@ defmodule MTKitchen.MixProject do
       {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
       {:bodyguard, "~> 2.4"},
       {:mix_audit, "~> 2.0", only: [:dev, :test], runtime: false},
-      {:libcluster, "~> 3.3"}
+      {:libcluster, "~> 3.3"},
+      {:waffle, "~> 1.1"},
+      {:ex_aws, "~> 2.1.2"},
+      {:ex_aws_s3, "~> 2.0"},
+      {:hackney, "~> 1.9"},
+      {:sweet_xml, "~> 0.6"},
+      {:waffle_ecto, "~> 0.0"}
     ]
   end
 

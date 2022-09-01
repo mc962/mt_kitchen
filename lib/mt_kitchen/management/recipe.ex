@@ -1,5 +1,6 @@
 defmodule MTKitchen.Management.Recipe do
   use Ecto.Schema
+  use Waffle.Ecto.Schema
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
 
@@ -11,6 +12,10 @@ defmodule MTKitchen.Management.Recipe do
     field :publicly_accessible, :boolean, default: false
     field :slug, :string
 
+    field :primary_picture, MtKitchenWeb.Uploaders.Image.Type
+    # Delete primary_picture
+    field :delete, :boolean, virtual: true
+
     belongs_to :user, MTKitchen.Accounts.User, type: :binary_id
     has_many :steps, MTKitchen.Management.Step, preload_order: [asc: :order]
     has_many :ingredients, through: [:steps, :ingredients]
@@ -21,13 +26,15 @@ defmodule MTKitchen.Management.Recipe do
   @doc false
   def information_changeset(recipe, attrs) do
     recipe
-    |> cast(attrs, [:name, :description, :publicly_accessible, :user_id])
+    |> cast(attrs, [:name, :description, :publicly_accessible, :user_id, :delete])
+    |> cast_attachments(attrs, [:primary_picture])
     |> cast_assoc(:steps)
     |> maybe_update_slug()
     |> validate_required([:name, :slug, :publicly_accessible])
     |> unique_constraint([:name, :user_id])
     |> unique_constraint(:slug)
     |> foreign_key_constraint(:user_id)
+    |> maybe_delete_image()
   end
 
   @doc false
@@ -51,6 +58,10 @@ defmodule MTKitchen.Management.Recipe do
     @max_steps + 1
   end
 
+  def resource_scope do
+    "recipes"
+  end
+
   defp maybe_consolidate_step_order(
          %Ecto.Changeset{valid?: true, changes: %{steps: _steps}} = recipe
        ) do
@@ -70,4 +81,16 @@ defmodule MTKitchen.Management.Recipe do
   end
 
   defp maybe_consolidate_step_order(recipe), do: recipe
+
+  # If primary key id is nil / record is not persisted, then we will never mark for deletion
+  defp maybe_delete_image(%{data: %{id: nil}} = changeset), do: changeset
+
+  # If record is currently persisted, and we noted in params that the record should be deleted, then mark in the
+  #   [Changeset Action](https://hexdocs.pm/ecto/Ecto.Changeset.html#module-changeset-actions) to delete that record.
+  defp maybe_delete_image(%Ecto.Changeset{valid?: true, changes: %{delete: true}} = changeset) do
+    put_change(changeset, :primary_picture, nil)
+  end
+
+  # All other changesets that don't satisfy these conditions should just be passed through
+  defp maybe_delete_image(changeset), do: changeset
 end

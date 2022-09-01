@@ -1,6 +1,6 @@
 <h2 class="tab-form-heading">Step Ingredients</h2>
 
-<.form let={f} for={@changeset} action={Routes.manage_step_ingredients_path(@conn, :update, @step.recipe_id, @step)}, class="resource-form">
+<.form let={f} for={@changeset} action={Routes.manage_step_ingredients_path(@conn, :update, @step.recipe_id, @step)} multipart={true} class="resource-form">
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       <p>Oops, something went wrong! Please check the errors below.</p>
