@@ -64,19 +64,19 @@ defmodule MTKitchen.ManagementFixtures do
     ingredient
   end
 
-#  @doc """
-#  Generate a step_ingredient.
-#  """
-#  def step_ingredient_fixture(attrs \\ %{}) do
-#    {:ok, step_ingredient} =
-#      attrs
-#      |> Enum.into(%{
-#        amount: "120.5",
-#        condition: "some condition",
-#        unit: "some unit"
-#      })
-#      |> MTKitchen.Management.create_step_ingredient()
-#
-#    step_ingredient
-#  end
+  #  @doc """
+  #  Generate a step_ingredient.
+  #  """
+  #  def step_ingredient_fixture(attrs \\ %{}) do
+  #    {:ok, step_ingredient} =
+  #      attrs
+  #      |> Enum.into(%{
+  #        amount: "120.5",
+  #        condition: "some condition",
+  #        unit: "some unit"
+  #      })
+  #      |> MTKitchen.Management.create_step_ingredient()
+  #
+  #    step_ingredient
+  #  end
 end

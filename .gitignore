@@ -32,6 +32,9 @@ mt_kitchen-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# System Files
+.DS_Store
+
 # IDEs
 .idea/
 .vscode/
