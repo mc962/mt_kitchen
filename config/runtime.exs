@@ -103,7 +103,7 @@ if config_env() == :prod do
     # or {:system, "AWS_S3_BUCKET"}
     bucket: "lazy-kitchen",
     # or {:system, "ASSET_HOST"}
-    asset_host: "https://alazykitchen.com"
+    asset_host: "https://lazy-kitchen.s3.amazonaws.com"
 
   config :ex_aws,
     access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, :instance_role],
