@@ -30,7 +30,7 @@ defmodule MTKitchen.Management do
   def directory_recipes do
     Repo.all(
       from r in Recipe,
-      where: r.publicly_accessible == true
+        where: r.publicly_accessible == true
     )
   end
 
@@ -65,8 +65,10 @@ defmodule MTKitchen.Management do
 
   """
   def get_recipe!(id) do
-    Repo.one! from r in Recipe,
-              where: r.slug == ^id
+    Repo.one!(
+      from r in Recipe,
+        where: r.slug == ^id
+    )
   end
 
   @doc """
@@ -94,14 +96,13 @@ defmodule MTKitchen.Management do
   def get_full_public_recipe!(id) do
     Repo.one!(
       from r in Recipe,
-      where:
-        r.id == ^id or
-        (r.slug == ^id and
-         r.publicly_accessible == true),
-      preload: [steps: [step_ingredients: [:ingredient]]]
+        where:
+          r.id == ^id or
+            (r.slug == ^id and
+               r.publicly_accessible == true),
+        preload: [steps: [step_ingredients: [:ingredient]]]
     )
   end
-
 
   @doc """
   Creates a recipe.
@@ -396,8 +397,10 @@ defmodule MTKitchen.Management do
 
   """
   def get_ingredient!(id) do
-    Repo.one! from i in Ingredient,
-              where: i.slug == ^id
+    Repo.one!(
+      from i in Ingredient,
+        where: i.slug == ^id
+    )
   end
 
   @doc """
