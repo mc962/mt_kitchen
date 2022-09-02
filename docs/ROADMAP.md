@@ -57,7 +57,6 @@ Items may be added, updated, or removed from the Roadmap, but it should more or 
 - [ ] Recipe/User Ingredients vs. Canonical Ingredients
   - May need to re-implement core features of Ruby/Rails `ancestry` gem
   - Migration Notes: When the time comes to implement this feature, all existing ingredients would become Recipe/User Ingredients that may be linked to canonical ingredients as needed
-- [ ] Custom Favicon
 - [ ] Resource Limits
 - [ ] Alerting and Monitoring Tools
 - [ ] Full LiveView-enabled Site
