@@ -58,10 +58,11 @@ Items may be added, updated, or removed from the Roadmap, but it should more or 
   - May need to re-implement core features of Ruby/Rails `ancestry` gem
   - Migration Notes: When the time comes to implement this feature, all existing ingredients would become Recipe/User Ingredients that may be linked to canonical ingredients as needed
 - [ ] Resource Limits
-- [ ] Alerting and Monitoring Tools
+- [X] Alerting and Monitoring Tools
 - [ ] Full LiveView-enabled Site
 - [ ] Search
   - SQL-based 
+- [ ] Better Tests
 
 ## Workflows
 - [ ] GitHub Actions
