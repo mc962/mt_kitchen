@@ -1,4 +1,4 @@
-defmodule MTKitchenWeb.UserLive.Show do
+defmodule MTKitchenWeb.Manage.UserLive.Show do
   use MTKitchenWeb, :live_view
 
   on_mount MTKitchenWeb.UserLiveAuth

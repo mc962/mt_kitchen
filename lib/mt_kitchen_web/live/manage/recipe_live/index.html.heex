@@ -1,0 +1,21 @@
+<h1 class="text-center">Listing Recipes</h1>
+
+<div class="paginated-resources-container">
+  <p class="page-entries-info">
+  </p>
+
+  <ul id="directory_recipes" class="directory-items">
+    <%= for recipe <- @recipes do %>
+      <li class="directory-item">
+        <span><%= link recipe.name, to: Routes.manage_recipe_path(@socket, :show, recipe.slug) %></span>
+        <div class="resource-action-links recipe-links">
+          <span><%= link "Edit", to: Routes.manage_recipe_path(@socket, :edit, recipe.slug) %></span>
+          <span><%= link "Delete", to: Routes.manage_recipe_path(@socket, :delete, recipe.slug), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="new-resource-link"><%= link "New Recipe", to: Routes.manage_recipe_path(@socket, :new) %></div>
+</div>
+

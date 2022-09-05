@@ -1,0 +1,37 @@
+<h1 class="text-center">Show Recipe</h1>
+
+<div class="recipe-information">
+    <section class="recipe-information-section identification">
+        <div>
+            <label class="recipe-information-lbl" for="recipe_name">Name: </label>
+            <p id="recipe_name"><%= @recipe.name %></p>
+        </div>
+
+        <div>
+            <label class="recipe-information-lbl" for="recipe_slug">Slug: </label>
+            <p id="recipe_slug"><%= @recipe.slug %></p>
+        </div>
+    </section>
+
+    <section class="recipe-information-section additional-info">
+        <div>
+            <label class="recipe-information-lbl" for="recipe_description">Description: </label>
+            <p id="recipe_description"><%= @recipe.description %></p>
+        </div>
+        <div>
+            <label class="recipe-information-lbl" for="recipe_publicly_accessible">Publicly Accessible: </label>
+            <p id="recipe_publicly_accessible"><%= @recipe.publicly_accessible %></p>
+        </div>
+    </section>
+</div>
+
+<nav id="bottom_nav">
+    <ul class="bottom-nav-links">
+        <li class="bottom-nav-link">
+            <span><%= link "Edit", to: Routes.manage_recipe_path(@socket, :edit, @recipe.slug) %></span>
+        </li>
+        <li class="bottom-nav-link">
+            <span><%= link "Back", to: Routes.manage_recipe_path(@socket, :index) %></span>
+        </li>
+    </ul>
+</nav>
