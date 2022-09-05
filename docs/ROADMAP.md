@@ -15,7 +15,7 @@ Items may be added, updated, or removed from the Roadmap, but it should more or 
     - [ ] Authorization
       - [X] Simple, linear role hierarchy
       - [ ] More robust role system
-- [X] Resource Management
+- [ ] Resource Management
     - [X] Slugs
     - [X] Core Schemas and Nested Forms
       - [X] Recipes

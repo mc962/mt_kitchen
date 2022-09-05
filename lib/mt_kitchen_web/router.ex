@@ -31,7 +31,7 @@ defmodule MTKitchenWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     scope "/manage", as: :manage do
-      get "/", UserController, :show, as: :user
+      live "/", UserLive.Show, :show, as: :user
 
       resources "/recipes", RecipeController
       # Edit all recipe steps together
