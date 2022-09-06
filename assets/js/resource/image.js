@@ -15,8 +15,8 @@ export const setupPrimaryPicture = () => {
  * @param {HTMLImageElement} previewImg Img tag for previewing uploaded image
  */
 const syncPrimaryPicture = (primaryPictureInput, previewImg) => {
-    primaryPictureInput.addEventListener('change', (event) => {
-        const imageFile = event.currentTarget.files[0];
+    window.addEventListener('phx:sync-primary-picture', (event) => {
+        const imageFile = primaryPictureInput.files[0];
 
         if (imageFile) {
             const currentImgUrl = previewImg.src;

@@ -13,8 +13,8 @@ defmodule MTKitchenWeb.Manage.RecipeLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     {:noreply,
-      socket
-      |> assign(:page_title, "Show Recipe")
-      |> assign(:recipe, Management.get_full_public_recipe!(id))}
+     socket
+     |> assign(:page_title, "Show Recipe")
+     |> assign(:recipe, Management.get_full_public_recipe!(id))}
   end
 end

@@ -1,6 +1,6 @@
 <h1 class="manage-resource-heading">Edit Recipe</h1>
 
-<%= render MTKitchenWeb.ResourceView, "_action_nav.html", conn: @conn, recipe: @step.recipe %>
+<%= render MTKitchenWeb.ResourceView, "_action_nav.html", socket: @conn, recipe: @step.recipe %>
 
 <section id="recipe_step_ingredients_container">
     <%= render "form.html", Map.put(assigns, :action, Routes.manage_step_ingredients_path(@conn, :update, @step.recipe, @step)) %>

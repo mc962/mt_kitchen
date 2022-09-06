@@ -33,9 +33,11 @@ defmodule MTKitchenWeb.Router do
     scope "/manage", as: :manage do
       live "/", Manage.UserLive.Show, :show, as: :user
       live "/recipes", Manage.RecipeLive.Index, :index, as: :recipe
+      live "/recipes/new", Manage.RecipeLive.New, :new, as: :recipe
       live "/recipes/:id", Manage.RecipeLive.Show, :show, as: :recipe
+      live "/recipes/:id/edit", Manage.RecipeLive.Edit, :edit, as: :recipe
 
-      resources "/recipes", RecipeController, except: [:index, :show]
+      resources "/recipes", RecipeController, except: [:index, :show, :new, :edit]
       # Edit all recipe steps together
       get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
       put "/recipes/:id/steps", StepController, :update, as: :recipe_steps

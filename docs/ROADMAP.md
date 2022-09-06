@@ -13,7 +13,7 @@ Items may be added, updated, or removed from the Roadmap, but it should more or 
   - [X] Users
     - [X] Authentication
     - [ ] Authorization
-      - [X] Simple, linear role hierarchy
+      - [ ] Simple, linear role hierarchy
       - [ ] More robust role system
 - [ ] Resource Management
     - [X] Slugs
