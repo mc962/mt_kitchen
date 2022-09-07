@@ -3,9 +3,9 @@
 
     <%= render MTKitchenWeb.ResourceView, "_action_nav.html", socket: @socket, recipe: @recipe %>
 
-    <section id="recipe_information_container">
-        <.live_component
-            module={MTKitchenWeb.Manage.RecipeLive.FormComponent}
+    <section id="recipe_steps_container">
+       <.live_component
+            module={MTKitchenWeb.Manage.StepLive.FormComponent}
             id={:edit}
             title={@page_title}
             action={@live_action}

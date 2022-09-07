@@ -1,4 +1,4 @@
-defmodule MTKitchenWeb.Manage.RecipeLive.Edit do
+defmodule MTKitchenWeb.Manage.StepLive.Edit do
   use MTKitchenWeb, :live_view
 
   alias MTKitchen.Management
@@ -19,6 +19,6 @@ defmodule MTKitchenWeb.Manage.RecipeLive.Edit do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Recipe")
-    |> assign(:recipe, Management.get_full_recipe!(id))
+    |> assign(:recipe, Management.get_full_recipe!(id))  # TODO this fails on edit/redirect of steps
   end
 end

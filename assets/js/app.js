@@ -41,18 +41,9 @@ window.addEventListener("phx:page-loading-start", info => {
     window.liveViewEnabled = true
     topbar.show()
 })
-window.addEventListener("phx:page-loading-stop", info => topbar.hide())
+window.addEventListener("phx:page-loading-stop", info => {
+    topbar.hide();
 
-// connect if there are any LiveViews on the page
-liveSocket.connect()
-
-// expose liveSocket on window for web console debug logs and latency simulation:
-// >> liveSocket.enableDebug()
-// >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
-// >> liveSocket.disableLatencySim()
-window.liveSocket = liveSocket
-
-document.addEventListener('DOMContentLoaded', () => {
     closeFlashListener();
 
     addNewNestedResourceListener(
@@ -65,4 +56,28 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     setupPrimaryPicture();
-});
+})
+
+// connect if there are any LiveViews on the page
+liveSocket.connect()
+
+// expose liveSocket on window for web console debug logs and latency simulation:
+// >> liveSocket.enableDebug()
+// >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
+// >> liveSocket.disableLatencySim()
+window.liveSocket = liveSocket
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     closeFlashListener();
+//
+//     addNewNestedResourceListener(
+//         detectNestedItemContainerTransforms(),
+//         detectNestedItemTransforms()
+//     );
+//     removeNewNestedResourceListener(
+//         detectNestedItemContainerTransforms(),
+//         detectNestedItemTransforms()
+//     );
+//
+//     setupPrimaryPicture();
+// });
