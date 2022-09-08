@@ -15,6 +15,6 @@ defmodule MTKitchenWeb.Manage.RecipeLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, "Show Recipe")
-     |> assign(:recipe, Management.get_full_public_recipe!(id))}
+     |> assign(:recipe, Management.get_full_recipe!(id))}
   end
 end

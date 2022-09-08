@@ -15,6 +15,14 @@ defmodule MTKitchenWeb.Manage.RecipeLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  @impl true
+  def handle_event("delete", %{"id" => id}, socket) do
+    recipe = Management.get_recipe!(id)
+    {:ok, _} = Management.delete_recipe(recipe)
+
+    {:noreply, assign(socket, :recipes, owned_recipes(socket.assigns.current_user))}
+  end
+
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Listing Recipes")

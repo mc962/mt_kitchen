@@ -12,9 +12,9 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
     changeset = Management.change_recipe_steps(recipe)
 
     {:ok,
-      socket
-      |> assign(assigns)
-      |> assign(:changeset, changeset)}
+     socket
+     |> assign(assigns)
+     |> assign(:changeset, changeset)}
   end
 
   @impl true
@@ -40,8 +40,9 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
           |> put_flash(:info, "Recipe updated successfully.")
           |> push_redirect(to: Routes.manage_recipe_steps_path(socket, :edit, recipe.slug))
         }
-        {:error, %Ecto.Changeset{} = changeset} ->
-          {:noreply, assign(socket, :changeset, changeset)}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 end

@@ -1,0 +1,20 @@
+<div>
+    <h1 class="manage-resource-heading">Edit Recipe</h1>
+
+    <%= render MTKitchenWeb.ResourceView, "_action_nav.html", socket: @socket, recipe: @step.recipe %>
+
+    <section id="recipe_step_ingredients_container">
+        <.live_component
+            module={MTKitchenWeb.Manage.StepIngredientLive.FormComponent}
+            id={:edit}
+            title={@page_title}
+            action={@live_action}
+            step={@step}
+            current_user={@current_user}
+        />
+    </section>
+
+    <div class="return-link-container">
+        <%= live_redirect "Back", to: Routes.manage_recipe_steps_path(@socket, :edit, @step.recipe.slug), class: "return-link" %>
+    </div>
+</div>

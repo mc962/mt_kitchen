@@ -36,16 +36,10 @@ defmodule MTKitchenWeb.Router do
       live "/recipes/new", Manage.RecipeLive.New, :new, as: :recipe
       live "/recipes/:id", Manage.RecipeLive.Show, :show, as: :recipe
       live "/recipes/:id/edit", Manage.RecipeLive.Edit, :edit, as: :recipe
-      live "/recipes/:id/steps/edit", Manage.StepLive.Edit, :edit, as: :recipe_steps
-
       # Edit all recipe steps together
-#      put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
-
+      live "/recipes/:id/steps/edit", Manage.StepLive.Edit, :edit, as: :recipe_steps
       # Edit all ingredients in a step together
-      get "/recipes/:recipe_id/steps/:id/edit", StepIngredientController, :edit,
-        as: :step_ingredients
-
-      put "/recipes/:recipe_id/steps/:id", StepIngredientController, :update,
+      live "/recipes/:recipe_id/steps/:id/edit", Manage.StepIngredientLive.Edit, :edit,
         as: :step_ingredients
     end
   end

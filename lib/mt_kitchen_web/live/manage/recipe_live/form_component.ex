@@ -68,18 +68,3 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
     Map.put(recipe_params, "user_id", current_user.id)
   end
 end
-
-#  @impl true
-#  def handle_event("delete", %{"id" => id}, socket) do
-#    recipe = Management.get_recipe!(id)
-#    {:ok, _recipe} = Management.delete_recipe(recipe)
-#
-#
-#    room = Chat.get_room!(id)
-#    {:ok, _} = Chat.delete_room(room)
-#
-#
-#    socket
-#    |> put_flash(:info, "Recipe deleted successfully.")
-#    {:noreply, push_redirect(to: Routes.manage_recipes_path(socket, :show))}
-#  end

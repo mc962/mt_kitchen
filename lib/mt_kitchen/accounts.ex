@@ -84,22 +84,6 @@ defmodule MTKitchen.Accounts do
     )
   end
 
-  @doc """
-  Gets all associated recipes needed for initial User management page.
-  Done separately as user is already loaded in Authentication.
-
-  ## Examples
-
-      iex> get_user_recipes!(123)
-      [%MTKitchen.Management.Recipe{}, ...]
-  """
-  def get_user_recipes(user_id) do
-    Repo.all(
-      from r in MTKitchen.Management.Recipe,
-        where: r.user_id == ^user_id
-    )
-  end
-
   ## User registration
 
   @doc """

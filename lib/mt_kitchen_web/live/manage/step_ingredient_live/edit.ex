@@ -1,14 +1,14 @@
-defmodule MTKitchenWeb.Manage.StepLive.Edit do
+defmodule MTKitchenWeb.Manage.StepIngredientLive.Edit do
   use MTKitchenWeb, :live_view
 
   alias MTKitchen.Management
-  alias MTKitchen.Management.Recipe
+  alias MTKitchen.Management.Step
 
   on_mount MTKitchenWeb.UserLiveAuth
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :recipe, %Recipe{})}
+    {:ok, assign(socket, :step, %Step{})}
   end
 
   @impl true
@@ -19,6 +19,6 @@ defmodule MTKitchenWeb.Manage.StepLive.Edit do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Recipe")
-    |> assign(:recipe, Management.get_full_recipe!(id))
+    |> assign(:step, Management.get_full_step!(id))
   end
 end
