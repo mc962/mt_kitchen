@@ -20,7 +20,7 @@ defmodule MTKitchenWeb.Router do
   scope "/", MTKitchenWeb do
     pipe_through :browser
 
-    get "/", PageController, :index, as: :root
+    live "/", PageLive.Index, :index, as: :root
 
     live "/recipes", RecipeLive.Index, :index
     live "/recipes/:id", RecipeLive.Show, :show

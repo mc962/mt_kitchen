@@ -28,10 +28,10 @@
 <nav id="bottom_nav">
     <ul class="bottom-nav-links">
         <li class="bottom-nav-link">
-            <span><%= link "Edit", to: Routes.manage_recipe_path(@socket, :edit, @recipe.slug) %></span>
+            <span><%= live_redirect "Edit", to: Routes.manage_recipe_path(@socket, :edit, @recipe.slug) %></span>
         </li>
         <li class="bottom-nav-link">
-            <span><%= link "Back", to: Routes.manage_recipe_path(@socket, :index) %></span>
+            <span><%= live_redirect "Back", to: Routes.manage_recipe_path(@socket, :index) %></span>
         </li>
     </ul>
 </nav>

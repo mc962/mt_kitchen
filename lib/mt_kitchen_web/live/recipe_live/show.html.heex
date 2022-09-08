@@ -36,5 +36,5 @@
 </section>
 
 <div class="return-link-container">
-    <%= link "All Recipes", to: Routes.recipe_index_path(@socket, :index), class: "return-link" %>
+    <%= live_redirect "All Recipes", to: Routes.recipe_index_path(@socket, :index), class: "return-link" %>
 </div>

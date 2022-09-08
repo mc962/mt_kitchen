@@ -39,7 +39,7 @@
     <ul id="directory_recipes" class="directory-items">
         <%= for recipe <- @recipes do %>
             <li class="directory-item">
-                <span><%= link recipe.name, to: Routes.manage_recipe_path(@socket, :show, recipe.slug) %></span>
+                <span><%= live_redirect recipe.name, to: Routes.manage_recipe_path(@socket, :show, recipe.slug) %></span>
                 <%= if @current_user do %>
                     <div class="resource-action-links recipe-links">
                       <span><%= live_redirect "Edit", to: Routes.manage_recipe_path(@socket, :edit, recipe.slug) %></span>
@@ -49,5 +49,5 @@
             </li>
         <% end %>
     </ul>
-    <div class="new-resource-link"><%= link "New Recipe", to: Routes.manage_recipe_path(@socket, :new) %></div>
+    <div class="new-resource-link"><%= live_redirect "New Recipe", to: Routes.manage_recipe_path(@socket, :new) %></div>
 </div>
