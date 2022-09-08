@@ -2,10 +2,10 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
   use MTKitchenWeb, :live_component
 
   alias MTKitchen.Management
+  alias MTKitchen.Management.StepIngredient
+  alias MTKitchen.Management.Ingredient
 
   on_mount MTKitchenWeb.UserLiveAuth
-
-  # TODO hook this up properly to liveview, as it tends to unfocus the textarea after adding el to frontend
 
   @impl true
   def update(%{step: step} = assigns, socket) do
@@ -15,6 +15,42 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign(:changeset, changeset)}
+  end
+
+  @impl true
+  def handle_event("add-new-step-ingredient", _, socket) do
+    existing_step_ingredients =
+      Map.get(socket.assigns.changeset.changes, :steps, socket.assigns.step.step_ingredients)
+
+    step_ingredients =
+      existing_step_ingredients
+      |> Enum.concat([
+        Management.change_step_ingredient(%StepIngredient{
+          temp_id: get_temp_id(),
+          ingredient: %Ingredient{}
+        })
+      ])
+
+    changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_assoc(:step_ingredients, step_ingredients)
+
+    {:noreply, assign(socket, changeset: changeset)}
+  end
+
+  @impl true
+  def handle_event("remove-new-step-ingredient", %{"remove" => remove_id}, socket) do
+    step_ingredients =
+      socket.assigns.changeset.changes.step_ingredients
+      |> Enum.reject(fn %{data: step_ingredient} ->
+        step_ingredient.temp_id == remove_id
+      end)
+
+    changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_assoc(:step_ingredients, step_ingredients)
+
+    {:noreply, assign(socket, changeset: changeset)}
   end
 
   @impl true
@@ -32,7 +68,10 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
   end
 
   defp save_step_ingredients(socket, :edit, step_params) do
-    case Management.update_step_ingredients(socket.assigns.step, step_params) do
+    current_user = socket.assigns.current_user
+    authenticated_step_params = authenticated_params(step_params, current_user)
+
+    case Management.update_step_ingredients(socket.assigns.step, authenticated_step_params) do
       {:ok, step} ->
         {
           :noreply,
@@ -52,5 +91,27 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+  end
+
+  defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
+
+  defp authenticated_params(step_params, current_user) do
+    new_step_ingredients =
+      step_params
+      |> Map.get("step_ingredients")
+      |> Enum.reduce(%{}, fn {input_id, step_ingredient}, acc ->
+        new_ingredient =
+          step_ingredient
+          |> Map.get("ingredient")
+          |> case do
+               nil -> nil
+               ingredient -> Map.put(ingredient, "user_id", current_user.id)
+             end
+
+        new_step_ingredient = Map.put(step_ingredient, "ingredient", new_ingredient)
+        Map.put(acc, input_id, new_step_ingredient)
+      end)
+
+    Map.put(step_params, "step_ingredients", new_step_ingredients)
   end
 end

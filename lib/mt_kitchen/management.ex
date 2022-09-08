@@ -497,4 +497,19 @@ defmodule MTKitchen.Management do
   def change_ingredient(%Ingredient{} = ingredient, attrs \\ %{}) do
     Ingredient.changeset(ingredient, attrs)
   end
+
+  alias MTKitchen.Management.StepIngredient
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking step_ingredient changes.
+
+  ## Examples
+
+      iex> change_step_ingredient(step_ingredient)
+      %Ecto.Changeset{data: %StepIngredient{}}
+
+  """
+  def change_step_ingredient(%StepIngredient{} = step_ingredient, attrs \\ %{}) do
+    StepIngredient.changeset(step_ingredient, attrs)
+  end
 end

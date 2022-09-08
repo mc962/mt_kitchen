@@ -11,16 +11,13 @@
         phx-submit="save">
       <h3>Recipe: <%= @recipe.name %></h3>
 
-      <template id="new_resource_template" class="new-resource-template">
-        <%= MTKitchenWeb.StepView.new_step(@socket, @recipe) %>
-      </template>
       <ol id="recipe_steps" class="resource-list draggable">
         <%= inputs_for f, :steps, fn sf -> %>
-            <%= render MTKitchenWeb.StepView, "_step.html", step_form: sf, socket: @socket, recipe: @recipe %>
+            <%= render MTKitchenWeb.StepView, "_step.html", step_form: sf, form_target: @myself, socket: @socket, recipe: @recipe %>
        <% end %>
       </ol>
 
-      <button type="button" class="new-resource-btn">Add Step</button>
+      <button type="button" class="new-resource-btn" phx-click="add-new-step" phx-target={@myself}>Add Step</button>
 
       <div class="actions">
         <%= submit "Save", class: "button submit-btn" %>

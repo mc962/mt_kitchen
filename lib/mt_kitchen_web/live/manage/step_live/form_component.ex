@@ -2,10 +2,9 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
   use MTKitchenWeb, :live_component
 
   alias MTKitchen.Management
+  alias MTKitchen.Management.Step
 
   on_mount MTKitchenWeb.UserLiveAuth
-
-  # TODO hook this up properly to liveview, as it tends to unfocus the textarea after adding el to frontend
 
   @impl true
   def update(%{recipe: recipe} = assigns, socket) do
@@ -15,6 +14,39 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign(:changeset, changeset)}
+  end
+
+  @impl true
+  def handle_event("add-new-step", _, socket) do
+    existing_steps =
+      Map.get(socket.assigns.changeset.changes, :steps, socket.assigns.recipe.steps)
+
+    steps =
+      existing_steps
+      |> Enum.concat([
+        Management.change_step(%Step{temp_id: get_temp_id(), order: length(existing_steps) + 1})
+      ])
+
+    changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_assoc(:steps, steps)
+
+    {:noreply, assign(socket, changeset: changeset)}
+  end
+
+  @impl true
+  def handle_event("remove-new-step", %{"remove" => remove_id}, socket) do
+    steps =
+      socket.assigns.changeset.changes.steps
+      |> Enum.reject(fn %{data: step} ->
+        step.temp_id == remove_id
+      end)
+
+    changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_assoc(:steps, steps)
+
+    {:noreply, assign(socket, changeset: changeset)}
   end
 
   @impl true
@@ -45,4 +77,6 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
+
+  defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 end

@@ -21,16 +21,13 @@
 
       <hr />
 
-      <template id="new_resource_template" class="new-resource-template">
-        <%= MTKitchenWeb.StepIngredientView.new_step_ingredient(@socket, @step.recipe, @step) %>
-      </template>
       <ol id="step_ingredients" class="resource-list">
         <%= inputs_for f, :step_ingredients, fn si -> %>
-            <%= render MTKitchenWeb.StepIngredientView, "_step_ingredient.html", step_ingredient_form: si, socket: @socket %>
-                                                      <% end %>
+            <%= render MTKitchenWeb.StepIngredientView, "_step_ingredient.html", step_ingredient_form: si, form_target: @myself, socket: @socket %>
+        <% end %>
       </ol>
 
-      <button type="button" class="new-resource-btn">Add Ingredient</button>
+      <button type="button" class="new-resource-btn" phx-click="add-new-step-ingredient" phx-target={@myself}>Add Ingredient</button>
 
       <div class="actions">
         <%= submit "Save", class: "button submit-btn" %>

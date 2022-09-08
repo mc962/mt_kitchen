@@ -14,8 +14,9 @@
                     <%= checkbox @step_ingredient_form, :delete, class: "form-ctrl-check" %>
                 </div>
             <% else %>
+                <%= hidden_input @step_ingredient_form, :temp_id %>
                 <div class="remove-new-resource-container">
-                    <button class="remove-new-resource-btn" type="button">Remove</button>
+                    <button class="remove-new-resource-btn" type="button" phx-click="remove-new-step-ingredient" phx-value-remove={@step_ingredient_form.data.temp_id} phx-target={@form_target}>Remove</button>
                 </div>
             <% end %>
         </section>

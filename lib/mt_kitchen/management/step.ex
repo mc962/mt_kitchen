@@ -7,6 +7,7 @@ defmodule MTKitchen.Management.Step do
     field :order, :integer
 
     field :delete, :boolean, virtual: true
+    field :temp_id, :string, virtual: true
 
     belongs_to :recipe, MTKitchen.Management.Recipe
     has_many :step_ingredients, MTKitchen.Management.StepIngredient
@@ -19,6 +20,8 @@ defmodule MTKitchen.Management.Step do
   @doc false
   def changeset(step, attrs) do
     step
+    # So its persisted
+    |> Map.put(:temp_id, step.temp_id || attrs["temp_id"])
     |> cast(attrs, [:order, :instruction, :recipe_id, :delete])
     |> validate_required([:order, :instruction])
     |> validate_number(:order, greater_than: 0)

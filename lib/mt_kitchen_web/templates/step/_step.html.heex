@@ -15,8 +15,9 @@
             <%= live_redirect("Edit Ingredients", to: Routes.manage_step_ingredients_path(@socket, :edit, @recipe.slug, @step_form.data), class: "step-ingredients-link") %>
         </div>
     <% else %>
+        <%= hidden_input @step_form, :temp_id %>
         <div class="remove-new-resource-container">
-            <button class="remove-new-resource-btn" type="button">Remove</button>
+            <button class="remove-new-resource-btn" type="button" phx-click="remove-new-step" phx-value-remove={@step_form.data.temp_id} phx-target={@form_target}>Remove</button>
         </div>
     <% end %>
 </li>
