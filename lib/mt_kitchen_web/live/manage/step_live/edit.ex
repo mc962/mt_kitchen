@@ -17,8 +17,14 @@ defmodule MTKitchenWeb.Manage.StepLive.Edit do
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Recipe")
-    |> assign(:recipe, Management.get_full_recipe!(id))
+    current_user = socket.assigns.current_user
+    recipe = Management.get_full_recipe!(id)
+
+    with :ok <- Bodyguard.permit!(Management, :get_full_recipe!, current_user, recipe),
+         {:ok, recipe} do
+      socket
+      |> assign(:page_title, "Edit Recipe")
+      |> assign(:recipe, recipe)
+    end
   end
 end

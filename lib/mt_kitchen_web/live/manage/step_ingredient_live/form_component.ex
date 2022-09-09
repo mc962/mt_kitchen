@@ -69,27 +69,31 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
 
   defp save_step_ingredients(socket, :edit, step_params) do
     current_user = socket.assigns.current_user
+    step = socket.assigns.step
     authenticated_step_params = authenticated_params(step_params, current_user)
 
-    case Management.update_step_ingredients(socket.assigns.step, authenticated_step_params) do
-      {:ok, step} ->
-        {
-          :noreply,
-          socket
-          |> put_flash(:info, "Recipe updated successfully.")
-          |> push_redirect(
-            to:
-              Routes.manage_step_ingredients_path(
-                socket,
-                :edit,
-                socket.assigns.step.recipe.slug,
-                step
-              )
-          )
-        }
+    with :ok <- Bodyguard.permit!(Management, :update_step_ingredients, current_user, step),
+         {:ok, step} do
+      case Management.update_step_ingredients(socket.assigns.step, authenticated_step_params) do
+        {:ok, step} ->
+          {
+            :noreply,
+            socket
+            |> put_flash(:info, "Recipe updated successfully.")
+            |> push_redirect(
+              to:
+                Routes.manage_step_ingredients_path(
+                  socket,
+                  :edit,
+                  socket.assigns.step.recipe.slug,
+                  step
+                )
+            )
+          }
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign(socket, :changeset, changeset)}
+      end
     end
   end
 
@@ -104,9 +108,9 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
           step_ingredient
           |> Map.get("ingredient")
           |> case do
-               nil -> nil
-               ingredient -> Map.put(ingredient, "user_id", current_user.id)
-             end
+            nil -> nil
+            ingredient -> Map.put(ingredient, "user_id", current_user.id)
+          end
 
         new_step_ingredient = Map.put(step_ingredient, "ingredient", new_ingredient)
         Map.put(acc, input_id, new_step_ingredient)

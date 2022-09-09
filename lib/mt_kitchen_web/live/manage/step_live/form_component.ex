@@ -64,17 +64,23 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
   end
 
   defp save_recipe_steps(socket, :edit, recipe_params) do
-    case Management.update_recipe(socket.assigns.recipe, recipe_params) do
-      {:ok, recipe} ->
-        {
-          :noreply,
-          socket
-          |> put_flash(:info, "Recipe updated successfully.")
-          |> push_redirect(to: Routes.manage_recipe_steps_path(socket, :edit, recipe.slug))
-        }
+    current_user = socket.assigns.current_user
+    recipe = socket.assigns.recipe
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+    with :ok <- Bodyguard.permit!(Management, :update_recipe_steps, current_user, recipe),
+         {:ok, recipe} do
+      case Management.update_recipe(socket.assigns.recipe, recipe_params) do
+        {:ok, recipe} ->
+          {
+            :noreply,
+            socket
+            |> put_flash(:info, "Recipe updated successfully.")
+            |> push_redirect(to: Routes.manage_recipe_steps_path(socket, :edit, recipe.slug))
+          }
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign(socket, :changeset, changeset)}
+      end
     end
   end
 

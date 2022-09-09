@@ -12,9 +12,15 @@ defmodule MTKitchenWeb.Manage.RecipeLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    {:noreply,
-     socket
-     |> assign(:page_title, "Show Recipe")
-     |> assign(:recipe, Management.get_full_recipe!(id))}
+    current_user = socket.assigns.current_user
+    recipe = Management.get_full_recipe!(id)
+
+    with :ok <- Bodyguard.permit!(Management, :get_full_recipe!, current_user, recipe),
+         {:ok, recipe} do
+      {:noreply,
+       socket
+       |> assign(:page_title, "Show Recipe")
+       |> assign(:recipe, recipe)}
+    end
   end
 end

@@ -17,10 +17,15 @@ defmodule MTKitchenWeb.Manage.RecipeLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
+    current_user = socket.assigns.current_user
     recipe = Management.get_recipe!(id)
-    {:ok, _} = Management.delete_recipe(recipe)
 
-    {:noreply, assign(socket, :recipes, owned_recipes(socket.assigns.current_user))}
+    with :ok <- Bodyguard.permit!(Management, :delete_recipe, current_user, recipe),
+         {:ok, recipe} do
+      {:ok, _} = Management.delete_recipe(recipe)
+
+      {:noreply, assign(socket, :recipes, owned_recipes(socket.assigns.current_user))}
+    end
   end
 
   defp apply_action(socket, :index, _params) do
