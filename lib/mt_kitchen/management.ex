@@ -149,7 +149,7 @@ defmodule MTKitchen.Management do
           Image.delete({original_url, recipe_result})
         end
 
-      {:err, changeset} ->
+      {:error, changeset} ->
         changeset
     end
 

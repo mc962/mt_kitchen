@@ -19,8 +19,9 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
 
   @impl true
   def handle_event("add-new-step-ingredient", _, socket) do
+    # TODO figure out why error tags on nested resources don't get cleared when setting a brand new item
     existing_step_ingredients =
-      Map.get(socket.assigns.changeset.changes, :steps, socket.assigns.step.step_ingredients)
+      Map.get(socket.assigns.changeset.changes, :step_ingredients, socket.assigns.step.step_ingredients)
 
     step_ingredients =
       existing_step_ingredients
