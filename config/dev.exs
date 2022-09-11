@@ -71,7 +71,7 @@ config :mt_kitchen, MTKitchenWeb.Endpoint,
 config :mt_kitchen, MTKitchenWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/(?!uploads).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/mt_kitchen_web/(live|views)/.*(ex)$",
       ~r"lib/mt_kitchen_web/templates/.*(eex)$"

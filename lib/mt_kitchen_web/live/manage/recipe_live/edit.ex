@@ -8,8 +8,15 @@ defmodule MTKitchenWeb.Manage.RecipeLive.Edit do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :recipe, %Recipe{})}
+    {:ok,
+     socket
+     |> assign(:recipe, %Recipe{})}
   end
+
+  #  def update(%{uploaded_files: uploads}, socket) do
+  #    socket = assign(socket, :uploaded_files, uploads)
+  #    {:ok, socket}
+  #  end
 
   @impl true
   def handle_params(params, _url, socket) do

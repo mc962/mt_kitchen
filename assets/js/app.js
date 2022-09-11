@@ -24,7 +24,6 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import {closeFlashListener} from "./layout/flash";
-import {setupPrimaryPicture} from "./resource/image";
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
@@ -39,8 +38,6 @@ window.addEventListener("phx:page-loading-stop", info => {
     topbar.hide();
 
     closeFlashListener();
-
-    setupPrimaryPicture();
 })
 
 // connect if there are any LiveViews on the page

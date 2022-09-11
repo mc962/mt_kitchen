@@ -25,8 +25,10 @@ defmodule MTKitchen.Management.Recipe do
 
   @doc false
   def information_changeset(recipe, attrs) do
+    IO.inspect(recipe, label: "changeset recipe")
     recipe
     |> cast(attrs, [:name, :description, :publicly_accessible, :user_id, :delete])
+    # TODO https://www.youtube.com/watch?v=PffpT2eslH8 helped a lot in getting things onto recipe, but still dodesn't quite put it together
     |> cast_attachments(attrs, [:primary_picture])
     |> cast_assoc(:steps)
     |> maybe_update_slug()

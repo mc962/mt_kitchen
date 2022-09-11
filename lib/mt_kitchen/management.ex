@@ -115,8 +115,8 @@ defmodule MTKitchen.Management do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_recipe(attrs \\ %{}) do
-    %Recipe{}
+  def create_recipe(recipe, attrs \\ %{}) do
+    recipe
     |> Recipe.information_changeset(attrs)
     |> Repo.insert()
   end

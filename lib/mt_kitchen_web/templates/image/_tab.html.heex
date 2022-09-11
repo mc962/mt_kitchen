@@ -1,4 +1,4 @@
 <h3 class="tab-form-heading">Images</h3>
 
-<%= render "_primary_picture.html", form: @form, socket: @socket %>
-<%= render "_gallery_pictures.html", form: @form, standard_alt_text: "A picture of #{@form.data.name}" %>
+<%= render "_primary_picture.html", form: @form, uploads: @uploads, form_target: @form_target, socket: @socket %>
+<%= render "_gallery_pictures.html", form: @form,  uploads: @uploads, standard_alt_text: "A picture of #{@form.data.name}", form_target: @form_target %>

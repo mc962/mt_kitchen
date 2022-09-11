@@ -29,7 +29,7 @@
       </section>
 
         <section class="tab-form-section images">
-          <%#= render MTKitchenWeb.ImageView, "_tab.html", form: f, socket: @socket %>
+          <%= render MTKitchenWeb.ImageView, "_tab.html", form: f, uploads: @uploads, form_target: @myself, socket: @socket %>
         </section>
         <section class="tab-form-section notes">
             <!-- Not Yet Implemented -->
