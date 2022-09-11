@@ -35,7 +35,11 @@ config :logger, level: :warn
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :waffle,
-  storage: Waffle.Storage.Local,
-  # or {:system, "ASSET_HOST"}
-  asset_host: "http://lcl.alazykitchen.com"
+config :ex_aws, :s3,
+  scheme: "http://",
+  host: "localhost",
+  region: "local",
+  port: 9000,
+  access_key_id: "mt_kitchen_dev",
+  secret_access_key: "password",
+  json_codec: Jason

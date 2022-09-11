@@ -1,6 +1,5 @@
 defmodule MTKitchen.Management.Recipe do
   use Ecto.Schema
-  use Waffle.Ecto.Schema
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
 
@@ -12,7 +11,7 @@ defmodule MTKitchen.Management.Recipe do
     field :publicly_accessible, :boolean, default: false
     field :slug, :string
 
-    field :primary_picture, MtKitchenWeb.Uploaders.Image.Type
+    field :primary_picture, :string
     # Delete primary_picture
     field :delete, :boolean, virtual: true
 
@@ -25,11 +24,18 @@ defmodule MTKitchen.Management.Recipe do
 
   @doc false
   def information_changeset(recipe, attrs) do
-    IO.inspect(recipe, label: "changeset recipe")
+#    IO.inspect(recipe, label: "info recipe")
+#    IO.inspect(attrs, label: "info attrs")
     recipe
-    |> cast(attrs, [:name, :description, :publicly_accessible, :user_id, :delete])
+    |> cast(attrs, [
+      :name,
+      :description,
+      :primary_picture,
+      :publicly_accessible,
+      :user_id,
+      :delete
+    ])
     # TODO https://www.youtube.com/watch?v=PffpT2eslH8 helped a lot in getting things onto recipe, but still dodesn't quite put it together
-    |> cast_attachments(attrs, [:primary_picture])
     |> cast_assoc(:steps)
     |> maybe_update_slug()
     |> validate_required([:name, :slug, :publicly_accessible])

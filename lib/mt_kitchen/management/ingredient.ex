@@ -1,6 +1,5 @@
 defmodule MTKitchen.Management.Ingredient do
   use Ecto.Schema
-  use Waffle.Ecto.Schema
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
 
@@ -10,7 +9,7 @@ defmodule MTKitchen.Management.Ingredient do
     field :name, :string
     field :slug, :string
 
-    field :primary_picture, MtKitchenWeb.Uploaders.Image.Type
+    field :primary_picture, :string
     # Delete primary_picture
     field :delete, :boolean, virtual: true
 
@@ -25,8 +24,7 @@ defmodule MTKitchen.Management.Ingredient do
   @doc false
   def changeset(ingredient, attrs) do
     ingredient
-    |> cast(attrs, [:name, :slug, :description, :ancestry, :user_id])
-    |> cast_attachments(attrs, [:primary_picture])
+    |> cast(attrs, [:name, :slug, :description, :ancestry, :primary_picture, :user_id])
     |> maybe_update_slug()
     |> validate_required([:name, :slug])
     |> assoc_constraint(:user)

@@ -88,8 +88,10 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :waffle,
-  storage: Waffle.Storage.Local,
-  # or {:system, "ASSET_HOST"}
-  #  asset_host: "http://lcl.alazykitchen.com:4000",
-  storage_dir_prefix: "priv/static"
+config :ex_aws, :s3,
+  scheme: "http://",
+  host: "localhost:9000",
+  region: "local",
+  access_key_id: "mt_kitchen_dev",
+  secret_access_key: "password",
+  json_codec: Jason

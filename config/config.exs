@@ -59,6 +59,8 @@ config :dart_sass,
     cd: Path.expand("../assets", __DIR__)
   ]
 
+config :ex_aws, :s3, bucket: "lazy-kitchen"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
