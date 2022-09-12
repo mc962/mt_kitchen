@@ -199,7 +199,6 @@ defmodule MTKitchen.Management do
         if original_url do
           # Only delete image url if recipe deletion was successful and only if the image url actually exists.
           # As the image has been deleted, we should always delete the image in this case.
-          #          Image.delete({original_url, recipe_result})
           _ = S3.delete(recipe.primary_picture)
         end
 
@@ -481,6 +480,7 @@ defmodule MTKitchen.Management do
         # Only delete image url if ingredient deletion was successful.
         # As the image has been deleted, we should always delete the image in this case.
         _ = S3.delete(ingredient_result.primary_picture)
+
       {:err, changeset} ->
         changeset
     end

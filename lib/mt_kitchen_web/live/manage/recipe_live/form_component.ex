@@ -10,10 +10,7 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
 
   @impl true
   def mount(socket) do
-    {:ok,
-     allow_upload(socket, :primary_picture,
-       accept: ~w(.jpg .jpeg .gif .png)
-     )}
+    {:ok, allow_upload(socket, :primary_picture, accept: ~w(.jpg .jpeg .gif .png))}
   end
 
   @impl true
