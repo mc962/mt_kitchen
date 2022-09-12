@@ -1,15 +1,33 @@
 <section class="resource-primary-img-container">
-  <div class="edit-recipe-profile-img-container">
-    <%= img_tag(MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}), alt: "Main picture of food", class: "recipe-profile-img recipe-picture", data_original_src: MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}, signed: true)) %>
-  </div>
+    <%= if length(@uploads.primary_picture.entries) > 0 do %>
+        <%# If there are any uploads, display those in the preview container %>
+        <%= for entry <- @uploads.primary_picture.entries do %>
+            <div class="edit-recipe-profile-img-container">
+                <%= live_img_preview entry, alt: "Main picture of food", class: "recipe-profile-img recipe-picture" %>
+            </div>
+            <div class="delete-img-container form-ctrl-container">
+                <div class="live-upload-ctrl">
+                    <progress class="upload-progress" value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+                    <button type="button" phx-click="cancel-upload" phx-target={@form_target} class="button cancel-btn cancel-primary-picture-upload-btn" phx-value-ref={entry.ref} aria-label="cancel">Cancel</button>
+                </div>
+            </div>
+        <% end %>
+    <% else %>
+        <%# If there are no current uploads, display what is currently set, or default picture, in the preview container %>
+        <div class="edit-recipe-profile-img-container">
+            <%= img_tag("#{MTKitchen.Service.S3.host()}/#{MTKitchen.Management.Recipe.preview_primary_picture(@form.data)}", alt: "Main picture of food", class: "recipe-profile-img recipe-picture") %>
+        </div>
 
-  <div class="delete-img-container form-ctrl-container">
-    <%= label @form, :delete, class: "form-ctrl-lbl" %>
-    <%= checkbox @form, :delete, class: "form-ctrl-check" %>
-  </div>
+          <%= if @form.data.primary_picture do %>
+              <%# Only allow deleting a primary_picture if there actually is a picture to delete %>
+              <div class="delete-img-container form-ctrl-container">
+                <%= label @form, :delete, class: "form-ctrl-lbl" %>
+                <%= checkbox @form, :delete, class: "form-ctrl-check" %>
+              </div>
+          <% end %>
+    <% end %>
 
     <div class="form-ctrl-container upload-ctrl-container" id="primary_picture_upload_ctrl_container">
-        <%= file_input @form, :primary_picture, class: "synced-single-img recipe-primary-picture" %>
-        <button type="button" class="button cancel-btn cancel-primary-picture-upload-btn">Cancel</button>
+        <%= live_file_input @uploads.primary_picture, class: "synced-single-img recipe-primary-picture" %>
     </div>
 </section>

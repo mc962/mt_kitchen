@@ -8,6 +8,7 @@ defmodule MTKitchen.Management.StepIngredient do
     field :unit, :string
 
     field :delete, :boolean, virtual: true
+    field :temp_id, :string, virtual: true
 
     belongs_to :step, MTKitchen.Management.Step
     belongs_to :ingredient, MTKitchen.Management.Ingredient
@@ -18,6 +19,8 @@ defmodule MTKitchen.Management.StepIngredient do
   @doc false
   def changeset(step_ingredient, attrs) do
     step_ingredient
+    # So its persisted
+    |> Map.put(:temp_id, step_ingredient.temp_id || attrs["temp_id"])
     |> cast(attrs, [:amount, :unit, :condition, :delete])
     |> validate_required([:amount])
     |> assoc_constraint(:step)

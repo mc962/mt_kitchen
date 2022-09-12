@@ -20,7 +20,7 @@ defmodule MTKitchenWeb.Router do
   scope "/", MTKitchenWeb do
     pipe_through :browser
 
-    get "/", PageController, :index, as: :root
+    live "/", PageLive.Index, :index, as: :root
 
     live "/recipes", RecipeLive.Index, :index
     live "/recipes/:id", RecipeLive.Show, :show
@@ -31,18 +31,15 @@ defmodule MTKitchenWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     scope "/manage", as: :manage do
-      get "/", UserController, :show, as: :user
-
-      resources "/recipes", RecipeController
+      live "/", Manage.UserLive.Show, :show, as: :user
+      live "/recipes", Manage.RecipeLive.Index, :index, as: :recipe
+      live "/recipes/new", Manage.RecipeLive.New, :new, as: :recipe
+      live "/recipes/:id", Manage.RecipeLive.Show, :show, as: :recipe
+      live "/recipes/:id/edit", Manage.RecipeLive.Edit, :edit, as: :recipe
       # Edit all recipe steps together
-      get "/recipes/:id/steps/edit", StepController, :edit, as: :recipe_steps
-      put "/recipes/:id/steps", StepController, :update, as: :recipe_steps
-
+      live "/recipes/:id/steps/edit", Manage.StepLive.Edit, :edit, as: :recipe_steps
       # Edit all ingredients in a step together
-      get "/recipes/:recipe_id/steps/:id/edit", StepIngredientController, :edit,
-        as: :step_ingredients
-
-      put "/recipes/:recipe_id/steps/:id", StepIngredientController, :update,
+      live "/recipes/:recipe_id/steps/:id/edit", Manage.StepIngredientLive.Edit, :edit,
         as: :step_ingredients
     end
   end

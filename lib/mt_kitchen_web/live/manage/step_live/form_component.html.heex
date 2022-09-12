@@ -1,0 +1,26 @@
+<div>
+    <h2 class="tab-form-heading">Steps</h2>
+
+    <.form
+        let={f}
+        for={@changeset}
+        id="recipe_steps_form"
+        class="resource-form"
+        phx-target={@myself}
+        phx-change="validate"
+        phx-submit="save">
+      <h3>Recipe: <%= @recipe.name %></h3>
+
+      <ol id="recipe_steps" class="resource-list draggable">
+        <%= inputs_for f, :steps, fn sf -> %>
+            <%= render MTKitchenWeb.StepView, "_step.html", step_form: sf, form_target: @myself, socket: @socket, recipe: @recipe %>
+       <% end %>
+      </ol>
+
+      <button type="button" class="new-resource-btn" phx-click="add-new-step" phx-target={@myself}>Add Step</button>
+
+      <div class="actions">
+        <%= submit "Save", class: "button submit-btn" %>
+      </div>
+    </.form>
+</div>

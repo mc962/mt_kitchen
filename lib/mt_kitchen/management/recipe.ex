@@ -1,10 +1,9 @@
 defmodule MTKitchen.Management.Recipe do
   use Ecto.Schema
-  use Waffle.Ecto.Schema
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
 
-  @max_steps 100
+  #  @max_steps 100
 
   schema "recipes" do
     field :description, :string
@@ -12,7 +11,7 @@ defmodule MTKitchen.Management.Recipe do
     field :publicly_accessible, :boolean, default: false
     field :slug, :string
 
-    field :primary_picture, MtKitchenWeb.Uploaders.Image.Type
+    field :primary_picture, :string
     # Delete primary_picture
     field :delete, :boolean, virtual: true
 
@@ -26,8 +25,14 @@ defmodule MTKitchen.Management.Recipe do
   @doc false
   def information_changeset(recipe, attrs) do
     recipe
-    |> cast(attrs, [:name, :description, :publicly_accessible, :user_id, :delete])
-    |> cast_attachments(attrs, [:primary_picture])
+    |> cast(attrs, [
+      :name,
+      :description,
+      :primary_picture,
+      :publicly_accessible,
+      :user_id,
+      :delete
+    ])
     |> cast_assoc(:steps)
     |> maybe_update_slug()
     |> validate_required([:name, :slug, :publicly_accessible])
@@ -51,16 +56,13 @@ defmodule MTKitchen.Management.Recipe do
   end
 
   @doc """
-  Makes a stub value for Recipe.order for use in forms when adding a new step, ensuring that the number
-  will not intersect with any possible existing step.
-  """
-  def stubbed_order do
-    @max_steps + 1
-  end
+  Provide a String representing a valid key in Object Store bucket pointing to the Recipe primary_picture for use in
+    viewing/previewing and the primary_picture image. If none has been uploaded yet, then fallback to the default.
 
-  def resource_scope do
-    "recipes"
-  end
+  NOTE: Images at provided Object Store keys are expected to exist in the target bucket.
+  """
+  def preview_primary_picture(recipe),
+    do: recipe.primary_picture || MTKitchen.Management.default_preview_image()
 
   defp maybe_consolidate_step_order(
          %Ecto.Changeset{valid?: true, changes: %{steps: _steps}} = recipe

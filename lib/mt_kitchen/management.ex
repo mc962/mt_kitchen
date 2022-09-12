@@ -1,6 +1,8 @@
 defmodule MTKitchen.Management do
   defdelegate authorize(action, user, params), to: MTKitchen.Management.Policy
 
+  alias MTKitchen.Service.S3
+
   @moduledoc """
   The Management context.
   """
@@ -9,7 +11,6 @@ defmodule MTKitchen.Management do
   alias MTKitchen.Repo
 
   alias MTKitchen.Management.Recipe
-  alias MtKitchenWeb.Uploaders.Image
 
   @doc """
   Returns the list of recipes.
@@ -115,10 +116,11 @@ defmodule MTKitchen.Management do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_recipe(attrs \\ %{}) do
-    %Recipe{}
+  def create_recipe(recipe, attrs \\ %{}, after_save \\ &{:ok, &1}) do
+    recipe
     |> Recipe.information_changeset(attrs)
     |> Repo.insert()
+    |> after_save(after_save)
   end
 
   @doc """
@@ -133,23 +135,24 @@ defmodule MTKitchen.Management do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_recipe(%Recipe{} = recipe, attrs) do
+  def update_recipe(%Recipe{} = recipe, attrs, after_save \\ &{:ok, &1}) do
     original_url = recipe.primary_picture
 
     result =
       recipe
       |> Recipe.information_changeset(attrs)
       |> Repo.update()
+      |> after_save(after_save)
 
     case result do
       {:ok, recipe_result} ->
         # Only delete image url if recipe change was successful, and only do so if there was a change from some
         #   image url to something else
         if original_url && recipe_result.primary_picture != original_url do
-          Image.delete({original_url, recipe_result})
+          _ = S3.delete(recipe.primary_picture)
         end
 
-      {:err, changeset} ->
+      {:error, changeset} ->
         changeset
     end
 
@@ -192,11 +195,11 @@ defmodule MTKitchen.Management do
     result = Repo.delete(recipe)
 
     case result do
-      {:ok, recipe_result} ->
+      {:ok, _recipe_result} ->
         if original_url do
           # Only delete image url if recipe deletion was successful and only if the image url actually exists.
           # As the image has been deleted, we should always delete the image in this case.
-          Image.delete({original_url, recipe_result})
+          _ = S3.delete(recipe.primary_picture)
         end
 
       {:err, changeset} ->
@@ -445,7 +448,7 @@ defmodule MTKitchen.Management do
         # Only delete image url if ingredient change was successful, and only do so if there was a change from some
         #   image url to something else
         if original_url && ingredient_result.primary_picture != original_url do
-          Image.delete({original_url, ingredient_result})
+          _ = S3.delete(ingredient_result.primary_picture)
         end
 
       {:err, changeset} ->
@@ -468,7 +471,7 @@ defmodule MTKitchen.Management do
 
   """
   def delete_ingredient(%Ingredient{} = ingredient) do
-    original_url = ingredient.primary_picture
+    _original_url = ingredient.primary_picture
 
     result = Repo.delete(ingredient)
 
@@ -476,7 +479,7 @@ defmodule MTKitchen.Management do
       {:ok, ingredient_result} ->
         # Only delete image url if ingredient deletion was successful.
         # As the image has been deleted, we should always delete the image in this case.
-        Image.delete({original_url, ingredient_result})
+        _ = S3.delete(ingredient_result.primary_picture)
 
       {:err, changeset} ->
         changeset
@@ -497,4 +500,43 @@ defmodule MTKitchen.Management do
   def change_ingredient(%Ingredient{} = ingredient, attrs \\ %{}) do
     Ingredient.changeset(ingredient, attrs)
   end
+
+  alias MTKitchen.Management.StepIngredient
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking step_ingredient changes.
+
+  ## Examples
+
+      iex> change_step_ingredient(step_ingredient)
+      %Ecto.Changeset{data: %StepIngredient{}}
+
+  """
+  def change_step_ingredient(%StepIngredient{} = step_ingredient, attrs \\ %{}) do
+    StepIngredient.changeset(step_ingredient, attrs)
+  end
+
+  @doc """
+  Expose the default preview image for shared use
+  """
+  def default_preview_image, do: "assets/images/site/default_food.jpeg"
+
+  @doc """
+  Calculate a URL-safe random value to use as a temporary ID for managing nested resources with a LiveView.
+
+  ## Examples
+
+      iex> get_temp_id()
+      "zIGRq"
+
+  """
+  def get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
+
+  # Execute some function action after a resource has been successfully saved
+  defp after_save({:ok, resource}, func) do
+    {:ok, _resource} = func.(resource)
+  end
+
+  # Pass-through the error after a resource was not successfully saved
+  defp after_save(error, _func), do: error
 end

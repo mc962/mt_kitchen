@@ -71,7 +71,7 @@ config :mt_kitchen, MTKitchenWeb.Endpoint,
 config :mt_kitchen, MTKitchenWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/(?!uploads).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/mt_kitchen_web/(live|views)/.*(ex)$",
       ~r"lib/mt_kitchen_web/templates/.*(eex)$"
@@ -88,8 +88,12 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :waffle,
-  storage: Waffle.Storage.Local,
-  # or {:system, "ASSET_HOST"}
-  #  asset_host: "http://lcl.alazykitchen.com:4000",
-  storage_dir_prefix: "priv/static"
+config :ex_aws, :s3,
+  scheme: "http://",
+  host: "localhost",
+  port: "9000",
+  region: "local",
+  access_key_id: "dev_user",
+  secret_access_key: "password",
+  json_codec: Jason,
+  storage_env: :dev

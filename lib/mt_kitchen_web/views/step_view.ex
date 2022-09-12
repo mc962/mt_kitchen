@@ -4,9 +4,9 @@ defmodule MTKitchenWeb.StepView do
   alias MTKitchen.Management.Recipe
   alias MTKitchen.Management.Step
 
-  def new_step(conn, recipe) do
+  def new_step(socket, recipe) do
     changeset = Recipe.recipe_steps_changeset(%Recipe{steps: [%Step{}]}, %{})
     form = Phoenix.HTML.FormData.to_form(changeset, [])
-    render(__MODULE__, "_template_steps.html", conn: conn, recipe_form: form, recipe: recipe)
+    render(__MODULE__, "_template_steps.html", socket: socket, recipe_form: form, recipe: recipe)
   end
 end
