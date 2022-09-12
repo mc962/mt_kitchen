@@ -4,7 +4,7 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
   alias MTKitchen.Management
   alias MTKitchen.Management.Recipe
 
-  alias MTKitchen.Service.S3
+  alias MTKitchen.Management.Utility.Uploadable
 
   on_mount MTKitchenWeb.UserLiveAuth
 
@@ -49,16 +49,18 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
 
     with :ok <- Bodyguard.permit!(Management, :update_recipe, current_user, recipe),
          {:ok, recipe} do
-      primary_picture_url = get_primary_picture_url(socket, socket.assigns.recipe)
+      primary_picture_url = Uploadable.extract_entry_url(socket, :primary_picture, "recipes", true)
       recipe_params = Map.put(recipe_params, "primary_picture", primary_picture_url)
       # Attach primary picture path to recipe params to insert into model
       case Management.update_recipe(
              recipe,
              recipe_params,
-             &consume_attachments(
+             &Uploadable.consume_attachments(
                socket,
                # Updated recipe
-               &1
+               &1,
+               :primary_picture,
+               "recipes"
              )
            ) do
         {:ok, _recipe} ->
@@ -77,17 +79,19 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
 
   defp save_recipe(socket, :new, params) do
     current_user = socket.assigns.current_user
-    primary_picture_url = get_primary_picture_url(socket, %Recipe{})
+    primary_picture_url = Uploadable.extract_entry_url(socket, :primary_picture, "recipes", true)
     recipe_params = Map.put(params, "primary_picture", primary_picture_url)
     authenticated_recipe_params = authenticated_params(recipe_params, current_user)
 
     case Management.create_recipe(
            %Recipe{},
            authenticated_recipe_params,
-           &consume_attachments(
+           &Uploadable.consume_attachments(
              socket,
              # New recipe
-             &1
+             &1,
+             :primary_picture,
+             "recipes"
            )
          ) do
       {:ok, recipe} ->
@@ -101,32 +105,7 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
     end
   end
 
-  defp get_primary_picture_url(socket, %Recipe{} = _recipe) do
-    {completed, []} = uploaded_entries(socket, :primary_picture)
-
-    urls =
-      for entry <- completed do
-        S3.key(entry, "recipes")
-      end
-
-    List.first(urls)
-  end
-
   defp authenticated_params(recipe_params, current_user) do
     Map.put(recipe_params, "user_id", current_user.id)
-  end
-
-  defp consume_attachments(socket, %Recipe{} = recipe) do
-    consume_uploaded_entries(socket, :primary_picture, fn %{path: path}, entry ->
-      case S3.upload(path, entry) do
-        {:ok, _result} ->
-          {:ok, "#{S3.host()}/#{S3.key(entry, "recipes")}"}
-
-        {:error, err} ->
-          {:error, err}
-      end
-    end)
-
-    {:ok, recipe}
   end
 end
