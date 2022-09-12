@@ -1,4 +1,4 @@
-defmodule MTKitchenWeb.S3 do
+defmodule MTKitchen.Service.S3 do
   @moduledoc """
   Dependency-free S3 Form Upload using HTTP POST sigv4
   https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-post-example.html
@@ -84,7 +84,7 @@ defmodule MTKitchenWeb.S3 do
       |> Enum.reject(&is_nil/1)
       |> Enum.join(":")
 
-    "//#{Application.get_env(:ex_aws, :s3)[:bucket]}.#{domain}"
+    "//#{domain}/#{Application.get_env(:ex_aws, :s3)[:bucket]}"
   end
 
   def key(entry, resource \\ nil) do
@@ -103,9 +103,6 @@ defmodule MTKitchenWeb.S3 do
       |> Enum.reject(&is_nil/1)
       |> Enum.join("/")
 
-      IO.inspect(entry, label: "prefix entry")
-      IO.inspect(Path.basename(entry.client_name, Path.extname(entry.client_name)), label: "prefix key")
-
     "#{prefix}/#{Path.basename(entry.client_name, Path.extname(entry.client_name))}-#{entry.uuid}#{Path.extname(entry.client_name)}"
   end
 
@@ -113,6 +110,23 @@ defmodule MTKitchenWeb.S3 do
     # Get first valid extension
     [extension | _] = MIME.extensions(entry.client_type)
     extension
+  end
+
+  def upload(path, entry) do
+    bucket = Application.get_env(:ex_aws, :s3)[:bucket]
+    key = key(entry, "recipes")
+
+    path
+    |> ExAws.S3.Upload.stream_file()
+    |> ExAws.S3.upload(bucket, key)
+    |> ExAws.request()
+  end
+
+  def delete(key) do
+    bucket = Application.get_env(:ex_aws, :s3)[:bucket]
+
+    ExAws.S3.delete_object(bucket, key)
+    |> ExAws.request()
   end
 
   defp amz_date(time) do

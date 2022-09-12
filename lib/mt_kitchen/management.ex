@@ -1,6 +1,8 @@
 defmodule MTKitchen.Management do
   defdelegate authorize(action, user, params), to: MTKitchen.Management.Policy
 
+  alias MTKitchen.Service.S3
+
   @moduledoc """
   The Management context.
   """
@@ -147,8 +149,7 @@ defmodule MTKitchen.Management do
         # Only delete image url if recipe change was successful, and only do so if there was a change from some
         #   image url to something else
         if original_url && recipe_result.primary_picture != original_url do
-          IO.puts("DELETE IMAGE")
-          #          Image.delete({original_url, recipe_result})
+          _ = S3.delete(recipe.primary_picture)
         end
 
       {:error, changeset} ->
@@ -199,7 +200,7 @@ defmodule MTKitchen.Management do
           # Only delete image url if recipe deletion was successful and only if the image url actually exists.
           # As the image has been deleted, we should always delete the image in this case.
           #          Image.delete({original_url, recipe_result})
-          IO.puts("DELETE IMAGE")
+          _ = S3.delete(recipe.primary_picture)
         end
 
       {:err, changeset} ->
@@ -448,8 +449,7 @@ defmodule MTKitchen.Management do
         # Only delete image url if ingredient change was successful, and only do so if there was a change from some
         #   image url to something else
         if original_url && ingredient_result.primary_picture != original_url do
-          IO.puts("DELETE IMAGE")
-          #          Image.delete({original_url, ingredient_result})
+          _ = S3.delete(ingredient_result.primary_picture)
         end
 
       {:err, changeset} ->
@@ -477,13 +477,10 @@ defmodule MTKitchen.Management do
     result = Repo.delete(ingredient)
 
     case result do
-      {:ok, _ingredient_result} ->
+      {:ok, ingredient_result} ->
         # Only delete image url if ingredient deletion was successful.
         # As the image has been deleted, we should always delete the image in this case.
-        IO.puts("DELETE IMAGE")
-
-      #        Image.delete({original_url, ingredient_result})
-
+        _ = S3.delete(ingredient_result.primary_picture)
       {:err, changeset} ->
         changeset
     end

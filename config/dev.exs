@@ -93,7 +93,7 @@ config :ex_aws, :s3,
   host: "localhost",
   port: "9000",
   region: "local",
-  access_key_id: "mt_kitchen_dev",
+  access_key_id: "dev_user",
   secret_access_key: "password",
   json_codec: Jason,
   storage_env: :dev

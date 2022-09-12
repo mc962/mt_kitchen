@@ -15,7 +15,7 @@
     <% else %>
         <%# If there are no current uploads, display what is currently set, or default picture, in the preview container %>
         <div class="edit-recipe-profile-img-container">
-            <%#= img_tag(MtKitchenWeb.Uploaders.Image.url({@form.data.primary_picture, @form.data}), alt: "Main picture of food", class: "recipe-profile-img recipe-picture") %>
+            <%= img_tag("#{MTKitchen.Service.S3.host()}/#{MTKitchen.Management.Recipe.preview_primary_picture(@form.data)}", alt: "Main picture of food", class: "recipe-profile-img recipe-picture") %>
         </div>
 
           <%= if @form.data.primary_picture do %>

@@ -67,6 +67,8 @@ defmodule MTKitchen.Management.Recipe do
     "recipes"
   end
 
+  def preview_primary_picture(recipe), do: (recipe.primary_picture || "assets/images/site/default_food.jpeg")
+
   defp maybe_consolidate_step_order(
          %Ecto.Changeset{valid?: true, changes: %{steps: _steps}} = recipe
        ) do
