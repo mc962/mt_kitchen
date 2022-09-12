@@ -3,7 +3,7 @@ defmodule MTKitchen.Management.Recipe do
   import Ecto.Changeset
   import MTKitchen.Management.Utility.Sluggable
 
-  @max_steps 100
+  #  @max_steps 100
 
   schema "recipes" do
     field :description, :string
@@ -56,19 +56,13 @@ defmodule MTKitchen.Management.Recipe do
   end
 
   @doc """
-  Makes a stub value for Recipe.order for use in forms when adding a new step, ensuring that the number
-  will not intersect with any possible existing step.
+  Provide a String representing a valid key in Object Store bucket pointing to the Recipe primary_picture for use in
+    viewing/previewing and the primary_picture image. If none has been uploaded yet, then fallback to the default.
+
+  NOTE: Images at provided Object Store keys are expected to exist in the target bucket.
   """
-  def stubbed_order do
-    @max_steps + 1
-  end
-
-  def resource_scope do
-    "recipes"
-  end
-
   def preview_primary_picture(recipe),
-    do: recipe.primary_picture || "assets/images/site/default_food.jpeg"
+    do: recipe.primary_picture || MTKitchen.Management.default_preview_image()
 
   defp maybe_consolidate_step_order(
          %Ecto.Changeset{valid?: true, changes: %{steps: _steps}} = recipe

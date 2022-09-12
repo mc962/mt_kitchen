@@ -31,7 +31,7 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
       existing_step_ingredients
       |> Enum.concat([
         Management.change_step_ingredient(%StepIngredient{
-          temp_id: get_temp_id(),
+          temp_id: Management.get_temp_id(),
           ingredient: %Ingredient{}
         })
       ])
@@ -102,8 +102,7 @@ defmodule MTKitchenWeb.Manage.StepIngredientLive.FormComponent do
     end
   end
 
-  defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
-
+  # Attach primary picture path to recipe params to insert into model
   defp authenticated_params(step_params, current_user) do
     new_step_ingredients =
       step_params

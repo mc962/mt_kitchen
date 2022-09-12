@@ -516,9 +516,27 @@ defmodule MTKitchen.Management do
     StepIngredient.changeset(step_ingredient, attrs)
   end
 
+  @doc """
+  Expose the default preview image for shared use
+  """
+  def default_preview_image, do: "assets/images/site/default_food.jpeg"
+
+  @doc """
+  Calculate a URL-safe random value to use as a temporary ID for managing nested resources with a LiveView.
+
+  ## Examples
+
+      iex> get_temp_id()
+      "zIGRq"
+
+  """
+  def get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
+
+  # Execute some function action after a resource has been successfully saved
   defp after_save({:ok, resource}, func) do
     {:ok, _resource} = func.(resource)
   end
 
+  # Pass-through the error after a resource was not successfully saved
   defp after_save(error, _func), do: error
 end

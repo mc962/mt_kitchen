@@ -49,9 +49,12 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
 
     with :ok <- Bodyguard.permit!(Management, :update_recipe, current_user, recipe),
          {:ok, recipe} do
-      primary_picture_url = Uploadable.extract_entry_url(socket, :primary_picture, "recipes", true)
-      recipe_params = Map.put(recipe_params, "primary_picture", primary_picture_url)
+      primary_picture_url =
+        Uploadable.extract_entry_key(socket, :primary_picture, "recipes", true)
+
       # Attach primary picture path to recipe params to insert into model
+      recipe_params = Map.put(recipe_params, "primary_picture", primary_picture_url)
+
       case Management.update_recipe(
              recipe,
              recipe_params,
@@ -63,12 +66,12 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
                "recipes"
              )
            ) do
-        {:ok, _recipe} ->
+        {:ok, recipe_result} ->
           {
             :noreply,
             socket
             |> put_flash(:info, "Recipe updated successfully.")
-            |> push_redirect(to: Routes.manage_recipe_path(socket, :show, recipe.slug))
+            |> push_redirect(to: Routes.manage_recipe_path(socket, :show, recipe_result.slug))
           }
 
         {:error, %Ecto.Changeset{} = changeset} ->
@@ -79,7 +82,8 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
 
   defp save_recipe(socket, :new, params) do
     current_user = socket.assigns.current_user
-    primary_picture_url = Uploadable.extract_entry_url(socket, :primary_picture, "recipes", true)
+    primary_picture_url = Uploadable.extract_entry_key(socket, :primary_picture, "recipes", true)
+    # Attach primary picture path to recipe params to insert into model
     recipe_params = Map.put(params, "primary_picture", primary_picture_url)
     authenticated_recipe_params = authenticated_params(recipe_params, current_user)
 
@@ -105,6 +109,7 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
     end
   end
 
+  # Attach a Recipe to the current user
   defp authenticated_params(recipe_params, current_user) do
     Map.put(recipe_params, "user_id", current_user.id)
   end

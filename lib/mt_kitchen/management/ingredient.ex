@@ -35,10 +35,6 @@ defmodule MTKitchen.Management.Ingredient do
     |> maybe_delete_image()
   end
 
-  def resource_scope do
-    "ingredients"
-  end
-
   defp on_conflict_upsert(%Ecto.Changeset{valid?: true} = changeset) do
     changeset
     |> Map.put(:repo_opts,

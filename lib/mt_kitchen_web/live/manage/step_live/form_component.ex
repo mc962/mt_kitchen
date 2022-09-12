@@ -24,7 +24,10 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
     steps =
       existing_steps
       |> Enum.concat([
-        Management.change_step(%Step{temp_id: get_temp_id(), order: length(existing_steps) + 1})
+        Management.change_step(%Step{
+          temp_id: Management.get_temp_id(),
+          order: length(existing_steps) + 1
+        })
       ])
 
     changeset =
@@ -83,6 +86,4 @@ defmodule MTKitchenWeb.Manage.StepLive.FormComponent do
       end
     end
   end
-
-  defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 end
