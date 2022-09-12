@@ -42,4 +42,5 @@ config :ex_aws, :s3,
   port: 9000,
   access_key_id: "mt_kitchen_dev",
   secret_access_key: "password",
-  json_codec: Jason
+  json_codec: Jason,
+  storage_env: :dev

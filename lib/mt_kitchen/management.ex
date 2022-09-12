@@ -135,8 +135,7 @@ defmodule MTKitchen.Management do
   """
   def update_recipe(%Recipe{} = recipe, attrs, after_save \\ &{:ok, &1}) do
     original_url = recipe.primary_picture
-#    IO.inspect(recipe, label: "update recipe")
-#    IO.inspect(attrs, label: "update attrs")
+
     result =
       recipe
       |> Recipe.information_changeset(attrs)

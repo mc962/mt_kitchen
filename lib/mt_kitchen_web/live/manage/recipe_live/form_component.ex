@@ -12,8 +12,8 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
   def mount(socket) do
     {:ok,
      allow_upload(socket, :primary_picture,
-       accept: ~w(.jpg .jpeg .gif .png),
-       external: &presign_entry/2
+       accept: ~w(.jpg .jpeg .gif .png)
+       #       external: &upload_external/3
      )}
 
     #    {:ok,
@@ -62,8 +62,10 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
 
     with :ok <- Bodyguard.permit!(Management, :update_recipe, current_user, recipe),
          {:ok, recipe} do
-      IO.inspect(recipe)
-      recipe = put_primary_picture_urls(socket, socket.assigns.recipe)
+      primary_picture_url = get_primary_picture_url(socket, socket.assigns.recipe)
+      recipe_params = Map.put(recipe_params, "primary_picture", primary_picture_url)
+      IO.inspect(recipe, label: "ATTACHED PICCTURE RECIPE")
+      IO.inspect(recipe_params, label: "ATTACHED PARAMS")
       # Attach primary picture path to recipe params to insert into model
       case Management.update_recipe(
              recipe,
@@ -92,12 +94,12 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
   defp save_recipe(socket, :new, params) do
     IO.puts("NEW")
     current_user = socket.assigns.current_user
-    authenticated_recipe_params = authenticated_params(params, current_user)
-
-    recipe = put_primary_picture_urls(socket, %Recipe{})
+    primary_picture_url = get_primary_picture_url(socket, %Recipe{})
+    recipe_params = Map.put(params, "primary_picture", primary_picture_url)
+    authenticated_recipe_params = authenticated_params(recipe_params, current_user)
 
     case Management.create_recipe(
-           recipe,
+           %Recipe{},
            authenticated_recipe_params,
            &consume_attachments(
              socket,
@@ -116,18 +118,18 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
     end
   end
 
-  defp put_primary_picture_urls(socket, %Recipe{} = recipe) do
+  defp get_primary_picture_url(socket, %Recipe{} = _recipe) do
     {completed, []} = uploaded_entries(socket, :primary_picture)
 
     urls =
       for entry <- completed do
-        #            Routes.static_path(socket, "/images/uploads/#{S3.key(entry)}")
-        Path.join(S3.host(), S3.key(entry))
+        S3.key(entry, "recipes")
       end
 
-      IO.inspect(urls, "ALL URLS")
-      IO.inspect(List.first(urls), "PRIMARY URLS")
-    %Recipe{recipe | primary_picture: List.first(urls)}
+    IO.inspect(urls, label: "ALL URLS")
+    IO.inspect(List.first(urls), label: "PRIMARY URLS")
+    List.first(urls)
+    #    %Recipe{recipe | primary_picture: List.first(urls)}
   end
 
   defp authenticated_params(recipe_params, current_user) do
@@ -135,8 +137,16 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
   end
 
   defp consume_attachments(socket, %Recipe{} = recipe) do
-    consume_uploaded_entries(socket, :primary_picture, fn _meta, _entry ->
-      :ok
+    consume_uploaded_entries(socket, :primary_picture, fn %{path: path}, entry ->
+      case upload_external(path, entry, socket) do
+        {:ok, _result} ->
+          {:ok, "#{S3.host()}/#{S3.key(entry, "recipes")}"}
+
+        {:error, err} ->
+          {:error, err}
+      end
+
+      #      :ok
 
       #      dest = Path.join([:code.priv_dir(:mt_kitchen), "static", "images", "uploads", S3.key(entry)])
 
@@ -149,29 +159,40 @@ defmodule MTKitchenWeb.Manage.RecipeLive.FormComponent do
     {:ok, recipe}
   end
 
-  defp presign_entry(entry, socket) do
-    uploads = socket.assigns.uploads
-    key = S3.key(entry)
+  defp upload_external(path, entry, _socket) do
+    bucket = Application.get_env(:ex_aws, :s3)[:bucket]
+    key = S3.key(entry, "recipes")
 
-    config = %{
-      scheme: Application.get_env(:ex_aws, :s3)[:scheme],
-      host: Application.get_env(:ex_aws, :s3)[:host],
-      region: Application.get_env(:ex_aws, :s3)[:region],
-      access_key_id: Application.get_env(:ex_aws, :s3)[:access_key_id],
-      secret_access_key: Application.get_env(:ex_aws, :s3)[:secret_access_key],
-    }
-
-    {:ok, fields} =
-      S3.sign_form_upload(
-        config,
-        Application.get_env(:ex_aws, :s3)[:bucket],
-        key: key,
-        content_type: entry.client_type,
-        max_file_size: uploads.primary_picture.max_file_size,
-        expires_in: :timer.hours(1)
-      )
-
-    meta = %{uploader: "S3", key: key, url: S3.host(), fields: fields}
-    {:ok, meta, socket}
+    path
+    |> ExAws.S3.Upload.stream_file()
+    |> ExAws.S3.upload(bucket, key)
+    |> IO.inspect(label: "S3 REQUEST")
+    |> ExAws.request()
   end
+
+  #  defp presign_attachment(entry, socket) do
+  #    uploads = socket.assigns.uploads
+  #    key = S3.key(entry)
+  #
+  #    config = %{
+  #      scheme: Application.get_env(:ex_aws, :s3)[:scheme],
+  #      host: Application.get_env(:ex_aws, :s3)[:host],
+  #      region: Application.get_env(:ex_aws, :s3)[:region],
+  #      access_key_id: Application.get_env(:ex_aws, :s3)[:access_key_id],
+  #      secret_access_key: Application.get_env(:ex_aws, :s3)[:secret_access_key],
+  #    }
+  #
+  #    {:ok, fields} =
+  #      S3.sign_form_upload(
+  #        config,
+  #        Application.get_env(:ex_aws, :s3)[:bucket],
+  #        key: key,
+  #        content_type: entry.client_type,
+  #        max_file_size: uploads.primary_picture.max_file_size,
+  #        expires_in: :timer.hours(1)
+  #      )
+  #
+  #    meta = %{uploader: "S3", key: key, url: S3.host(), fields: fields}
+  #    {:ok, meta, socket}
+  #  end
 end

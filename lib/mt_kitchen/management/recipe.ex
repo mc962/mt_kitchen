@@ -24,8 +24,6 @@ defmodule MTKitchen.Management.Recipe do
 
   @doc false
   def information_changeset(recipe, attrs) do
-#    IO.inspect(recipe, label: "info recipe")
-#    IO.inspect(attrs, label: "info attrs")
     recipe
     |> cast(attrs, [
       :name,
@@ -35,7 +33,6 @@ defmodule MTKitchen.Management.Recipe do
       :user_id,
       :delete
     ])
-    # TODO https://www.youtube.com/watch?v=PffpT2eslH8 helped a lot in getting things onto recipe, but still dodesn't quite put it together
     |> cast_assoc(:steps)
     |> maybe_update_slug()
     |> validate_required([:name, :slug, :publicly_accessible])

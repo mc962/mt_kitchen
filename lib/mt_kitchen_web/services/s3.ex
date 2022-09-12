@@ -75,11 +75,38 @@ defmodule MTKitchenWeb.S3 do
     {:ok, fields}
   end
 
-  def host, do: "//#{Application.get_env(:ex_aws, :s3)[:bucket]}.#{Application.get_env(:ex_aws, :s3)[:host]}"
+  def host do
+    domain =
+      [
+        Application.get_env(:ex_aws, :s3)[:host],
+        Application.get_env(:ex_aws, :s3)[:port]
+      ]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.join(":")
 
-  def key(entry) do
-    #    "#{Path.basename(path)}-#{entry.uuid}.#{ext(entry)})}"
-    "#{entry.uuid}.#{ext(entry)})}"
+    "//#{Application.get_env(:ex_aws, :s3)[:bucket]}.#{domain}"
+  end
+
+  def key(entry, resource \\ nil) do
+    storage_dir_parts = %{
+      prefix: "assets/images/resources",
+      env: Application.get_env(:ex_aws, :s3)[:storage_env],
+      resource: resource
+    }
+
+    prefix =
+      [
+        storage_dir_parts[:prefix],
+        storage_dir_parts[:env],
+        storage_dir_parts[:resource]
+      ]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.join("/")
+
+      IO.inspect(entry, label: "prefix entry")
+      IO.inspect(Path.basename(entry.client_name, Path.extname(entry.client_name)), label: "prefix key")
+
+    "#{prefix}/#{Path.basename(entry.client_name, Path.extname(entry.client_name))}-#{entry.uuid}#{Path.extname(entry.client_name)}"
   end
 
   def ext(entry) do

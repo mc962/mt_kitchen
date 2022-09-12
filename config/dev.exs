@@ -90,8 +90,10 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :ex_aws, :s3,
   scheme: "http://",
-  host: "localhost:9000",
+  host: "localhost",
+  port: "9000",
   region: "local",
   access_key_id: "mt_kitchen_dev",
   secret_access_key: "password",
-  json_codec: Jason
+  json_codec: Jason,
+  storage_env: :dev
