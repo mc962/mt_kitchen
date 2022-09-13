@@ -137,7 +137,7 @@ defmodule MTKitchen.Service.S3 do
 
     path
     |> ExAws.S3.Upload.stream_file()
-    |> ExAws.S3.upload(bucket, key)
+    |> ExAws.S3.upload(bucket, key, acl: :public_read)
     |> ExAws.request()
   end
 
