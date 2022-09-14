@@ -1,5 +1,9 @@
 <h1 class="text-center"><%= @recipe.name %></h1>
 
+<%= if !@recipe.publicly_accessible do %>
+    <p class="private-recipe-disclaimer">Private</p>
+<% end %>
+
 <section class="recipe-section">
     <div class="recipe-profile-img-container">
         <%= img_tag("#{MTKitchen.Service.S3.host()}/#{MTKitchen.Management.Recipe.preview_primary_picture(@recipe)}", alt: "Main picture of food", class: "recipe-profile-img recipe-picture") %>

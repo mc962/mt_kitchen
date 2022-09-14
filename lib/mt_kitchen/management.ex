@@ -94,14 +94,28 @@ defmodule MTKitchen.Management do
     )
   end
 
-  def get_full_public_recipe!(id) do
-    Repo.one!(
-      from r in Recipe,
-        where:
-          r.slug == ^id and
-            r.publicly_accessible == true,
-        preload: [steps: [step_ingredients: [:ingredient]]]
-    )
+  def get_full_public_recipe!(id, current_user_id \\ nil) do
+    recipe =
+      Repo.one!(
+        from r in Recipe,
+          where: r.slug == ^id,
+          preload: [steps: [step_ingredients: [:ingredient]]]
+      )
+
+    if recipe.publicly_accessible do
+      # Recipe is always visible if publicly accessible
+      recipe
+    else
+      # If recipe is not publicly accessible, determine if user is still able to see recipe (owned recipe)
+      if is_nil(current_user_id) or recipe.user_id != current_user_id do
+        # * If not logged in, we do not know user, so they should not be able to see recipe
+        # * If user is logged in but recipe is not owned by them (and not publicly accessible),
+        #     they should not be able to see recipe
+        raise MTKitchen.Error.ResourceNotFoundError
+      else
+        recipe
+      end
+    end
   end
 
   @doc """

@@ -11,6 +11,11 @@
             <label class="recipe-information-lbl" for="recipe_slug">Slug: </label>
             <p id="recipe_slug"><%= @recipe.slug %></p>
         </div>
+
+        <div>
+            <label class="recipe-information-lbl" for="recipe_profile_link">Public Link: </label>
+            <%= live_redirect @recipe.name, to: Routes.recipe_show_path(@socket, :show, @recipe.slug) %>
+        </div>
     </section>
 
     <section class="recipe-information-section additional-info">
