@@ -10,7 +10,8 @@ defmodule MTKitchen.MixProject do
       compilers: [] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: releases()
     ]
   end
 
@@ -82,6 +83,16 @@ defmodule MTKitchen.MixProject do
         "phx.digest"
       ],
       sentry_recompile: ["compile", "deps.compile sentry --force"]
+    ]
+  end
+
+  # Specify release configurations
+  defp releases() do
+    [
+      mt_kitchen: [
+        include_executables_for: [:unix],
+        cookie: "2WztQdPLHc7FaNsobDDLz5Sts-P647_9LEn-cTF5Tcq9mrNJP8NAOA=="
+      ]
     ]
   end
 end
