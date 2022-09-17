@@ -1,4 +1,4 @@
-defmodule MTKitchen.Management.Policy do
+defmodule MTKitchen.Accounts.Authorization.Policy do
   @behaviour Bodyguard.Policy
 
   alias MTKitchen.Accounts.User

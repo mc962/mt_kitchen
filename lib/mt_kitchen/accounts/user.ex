@@ -17,15 +17,6 @@ defmodule MTKitchen.Accounts.User do
   end
 
   @doc """
-  A user changeset for assigning a role for resource access authorization.
-  """
-  def role_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:role])
-    |> validate_required([:role])
-  end
-
-  @doc """
   A user changeset for approving a user manually by one such as an admin.
   """
   def approval_changeset(user, attrs) do

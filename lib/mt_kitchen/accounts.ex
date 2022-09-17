@@ -6,7 +6,8 @@ defmodule MTKitchen.Accounts do
   import Ecto.Query, warn: false
   alias MTKitchen.Repo
 
-  alias MTKitchen.Accounts.{User, UserToken, UserNotifier}
+  alias MTKitchen.Accounts.{User, UserNotifier}
+  alias MTKitchen.Accounts.Authentication.UserToken
 
   require Logger
 

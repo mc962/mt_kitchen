@@ -1,5 +1,5 @@
 defmodule MTKitchen.Management do
-  defdelegate authorize(action, user, params), to: MTKitchen.Management.Policy
+  defdelegate authorize(action, user, params), to: MTKitchen.Accounts.Authorization.Policy
 
   alias MTKitchen.Service.S3
 
