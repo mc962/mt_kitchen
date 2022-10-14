@@ -133,6 +133,10 @@ defmodule MTKitchen.Accounts do
     User.email_changeset(user, attrs)
   end
 
+  def admin_change_user(user, attrs \\ %{}) do
+    User.admin_user_changeset(user, attrs)
+  end
+
   @doc """
   Emulates that the email will change without actually changing
   it in the database.
@@ -238,6 +242,12 @@ defmodule MTKitchen.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  def admin_update_user(%User{} = user, attrs) do
+    user
+    |> User.admin_user_changeset(attrs)
+    |> Repo.update()
   end
 
   ## Session
@@ -417,5 +427,9 @@ defmodule MTKitchen.Accounts do
   def approve_user(user) do
     user
     |> User.approval_changeset(%{approved: true, confirmed_at: DateTime.now("Etc/UTC")})
+  end
+
+  def list_users() do
+    Repo.all(User)
   end
 end

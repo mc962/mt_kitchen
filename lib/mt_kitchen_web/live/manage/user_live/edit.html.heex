@@ -1,6 +1,7 @@
-<h1 class="text-center">Show User</h1>
+<div>
+    <h1 class="manage-resource-heading">Edit User</h1>
 
-<div id="user_profile">
+    <div id="user_profile">
     <section id="user_bio" class="profile-section">
         <table id="user_data">
             <thead class="user-data-heading">
@@ -23,13 +24,19 @@
                 </tr>
           </tbody>
         </table>
-
-        <nav id="profile_management">
-            <ul class="profile-manage-links">
-                <li class="profile-manage-link">
-                    <%= link 'Update Profile', to: Routes.manage_user_path(@socket, :edit, @user.id) %>
-                </li>
-            </ul>
-        </nav>
     </section>
+
+    <.live_component
+            module={MTKitchenWeb.Manage.UserLive.FormComponent}
+            id={:edit}
+            title={@page_title}
+            action={@live_action}
+            user={@user}
+            current_user={@current_user},
+        />
+</div>
+
+    <div class="return-link-container">
+        <%= live_redirect "Back", to: Routes.manage_user_path(@socket, :show, @user.id), class: "return-link" %>
+    </div>
 </div>

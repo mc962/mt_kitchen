@@ -5,8 +5,34 @@ defmodule MTKitchen.Accounts.Authorization.Policy do
   alias MTKitchen.Management.Recipe
   alias MTKitchen.Management.Step
 
-  # Admins can do anything
-  def authorize(_action, %User{role: :admin} = _user, _resource), do: :ok
+  # Superusers can do anything
+  def authorize(_action, %User{role: :superuser} = _user, _resource), do: :ok
+
+  # Admins may edit their own user, but may not edit other admin or superuser users
+  def authorize(_action, %User{id: current_user_id, role: :admin}, %User{
+        id: resource_user_id,
+        role: :admin
+      }) do
+    if current_user_id == resource_user_id do
+      :ok
+    else
+      :error
+    end
+  end
+
+  def authorize(_action, %User{id: current_user_id, role: :admin}, %User{
+        id: resource_user_id,
+        role: :superuser
+      }) do
+    if current_user_id == resource_user_id do
+      :ok
+    else
+      :error
+    end
+  end
+
+  # Admins may edit any other resource that are not other admin or superuser users
+  def authorize(_action, %User{role: :admin}, _resource), do: true
 
   # Regular users can create resources
   def authorize(:create_recipe, _, _), do: true

@@ -1,0 +1,30 @@
+<div>
+    <h2 class="tab-form-heading">Information</h2>
+
+    <.form
+        let={f}
+        for={@changeset}
+        id="recipe_form"
+        multipart={true}
+        class="resource-form"
+        phx-target={@myself}
+        phx-change="validate"
+        phx-submit="save">
+
+        <div class="form-ctrl-container">
+            <%= label f, :role, class: "form-ctrl-lbl" %>
+            <%= select f, :role, [{"Choose your role", nil} | MTKitchen.Accounts.Authorization.Role.allowed()], selected: Keyword.get(MTKitchen.Accounts.Authorization.Role.allowed(), f.data.role), class: "form-ctrl-select" %>
+            <%= error_tag f, :role %>
+        </div>
+
+        <div class="form-ctrl-container">
+            <%= label f, :approved, class: "form-ctrl-lbl" %>
+            <%= checkbox f, :approved, class: "form-ctrl-check" %>
+            <%= error_tag f, :approved %>
+        </div>
+
+      <div class="actions">
+        <%= submit "Save", class: "button submit-btn", phx_disable_with: "Saving..." %>
+      </div>
+    </.form>
+</div>

@@ -41,4 +41,5 @@ npm-debug.log
 # IDEs
 .idea/
 .vscode/
+.fleet/
 *.iml
