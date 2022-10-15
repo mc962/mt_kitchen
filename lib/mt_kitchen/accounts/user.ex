@@ -134,7 +134,7 @@ defmodule MTKitchen.Accounts.User do
     end
   end
 
-  def admin_user_changeset(user, attrs, opts \\ []) do
+  def admin_user_changeset(user, attrs, _opts \\ []) do
     user
     |> cast(attrs, [:email, :username, :approved, :role])
     |> validate_email()
