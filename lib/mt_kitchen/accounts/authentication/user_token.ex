@@ -1,7 +1,7 @@
-defmodule MTKitchen.Accounts.UserToken do
+defmodule MTKitchen.Accounts.Authentication.UserToken do
   use Ecto.Schema
   import Ecto.Query
-  alias MTKitchen.Accounts.UserToken
+  alias MTKitchen.Accounts.Authentication.UserToken
 
   @hash_algorithm :sha256
   @rand_size 32

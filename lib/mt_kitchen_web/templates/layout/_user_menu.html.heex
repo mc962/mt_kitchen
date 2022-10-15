@@ -1,6 +1,6 @@
 <%= if @current_user do %>
   <li class="site-nav-link">
-    <%= link "Manage", to: Routes.manage_user_path(assigns[:conn] || assigns[:socket], :show), class: "nav-anchor" %>
+    <%= link "Manage", to: Routes.manage_account_path(assigns[:conn] || assigns[:socket], :show), class: "nav-anchor" %>
   </li>
   <li class="site-nav-link">
     <%= link "Settings", to: Routes.user_settings_path(assigns[:conn] || assigns[:socket], :edit), class: "nav-anchor" %>

@@ -2,6 +2,8 @@ defmodule MTKitchen.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias MTKitchen.Accounts.Authorization
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
@@ -10,19 +12,13 @@ defmodule MTKitchen.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-    field :role, Ecto.Enum, values: [:admin, :moderator, :editor]
+    # TODO drop simple roles when migrated
+    field :role, Ecto.Enum, values: Keyword.values(Authorization.allowed())
     field :approved, :boolean
 
-    timestamps()
-  end
+    has_many :recipes, MTKitchen.Management.Recipe
 
-  @doc """
-  A user changeset for assigning a role for resource access authorization.
-  """
-  def role_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:role])
-    |> validate_required([:role])
+    timestamps()
   end
 
   @doc """
@@ -136,6 +132,13 @@ defmodule MTKitchen.Accounts.User do
       %{changes: %{username: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :username, "did not change")
     end
+  end
+
+  def admin_user_changeset(user, attrs, _opts \\ []) do
+    user
+    |> cast(attrs, [:email, :username, :approved, :role])
+    |> validate_email()
+    |> validate_username()
   end
 
   @doc """

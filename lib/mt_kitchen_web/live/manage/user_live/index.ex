@@ -1,4 +1,4 @@
-defmodule MTKitchenWeb.Manage.UserLive.Show do
+defmodule MTKitchenWeb.Manage.UserLive.Index do
   use MTKitchenWeb, :live_view
 
   on_mount MTKitchenWeb.UserLiveAuth
@@ -11,15 +11,15 @@ defmodule MTKitchenWeb.Manage.UserLive.Show do
   end
 
   @impl true
-  def handle_params(%{"id" => id}, _uri, socket) do
+  def handle_params(_params, _uri, socket) do
     _current_user = socket.assigns.current_user
 
-    user = MTKitchen.Accounts.get_full_user!(id)
+    users = MTKitchen.Accounts.list_users()
 
     {:noreply,
      socket
      |> assign(:page_title, "Show User")
-     |> assign(:user, user)}
+     |> assign(:users, users)}
   end
 
   #  @impl true
