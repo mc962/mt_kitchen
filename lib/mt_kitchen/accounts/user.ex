@@ -2,7 +2,7 @@ defmodule MTKitchen.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias MTKitchen.Accounts.Authorization.Role
+  alias MTKitchen.Accounts.Authorization
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -13,13 +13,10 @@ defmodule MTKitchen.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     # TODO drop simple roles when migrated
-    field :role, Ecto.Enum, values: Keyword.values(Role.allowed())
+    field :role, Ecto.Enum, values: Keyword.values(Authorization.allowed())
     field :approved, :boolean
 
     has_many :recipes, MTKitchen.Management.Recipe
-
-    many_to_many :roles, MTKitchen.Accounts.Authorization.Role,
-      join_through: MTKitchen.Accounts.Authorization.UserRole
 
     timestamps()
   end

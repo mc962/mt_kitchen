@@ -13,7 +13,7 @@
 
         <div class="form-ctrl-container">
             <%= label f, :role, class: "form-ctrl-lbl" %>
-            <%= select f, :role, [{"Choose your role", nil} | MTKitchen.Accounts.Authorization.Role.allowed()], selected: Keyword.get(MTKitchen.Accounts.Authorization.Role.allowed(), f.data.role), class: "form-ctrl-select" %>
+            <%= select f, :role, [{"Choose your role", nil} | MTKitchen.Accounts.Authorization.allowed()], selected: Keyword.get(MTKitchen.Accounts.Authorization.allowed(), f.data.role), class: "form-ctrl-select" %>
             <%= error_tag f, :role %>
         </div>
 

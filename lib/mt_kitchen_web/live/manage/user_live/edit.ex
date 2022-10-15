@@ -8,8 +8,8 @@ defmodule MTKitchenWeb.Manage.UserLive.Edit do
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
-      socket
-      |> assign(:user, %User{})}
+     socket
+     |> assign(:user, %User{})}
   end
 
   @impl true
@@ -19,6 +19,7 @@ defmodule MTKitchenWeb.Manage.UserLive.Edit do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     user = MTKitchen.Accounts.get_full_user!(id)
+
     socket
     |> assign(:page_title, "Edit User")
     |> assign(:user, user)
