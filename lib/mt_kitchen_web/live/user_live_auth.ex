@@ -1,5 +1,6 @@
 defmodule MTKitchenWeb.UserLiveAuth do
   import Phoenix.LiveView
+  import Phoenix.Component
 
   alias MTKitchen.Accounts
 

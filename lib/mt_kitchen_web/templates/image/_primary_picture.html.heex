@@ -3,7 +3,7 @@
         <%# If there are any uploads, display those in the preview container %>
         <%= for entry <- @uploads.primary_picture.entries do %>
             <div class="edit-recipe-profile-img-container">
-                <%= live_img_preview entry, alt: "Main picture of food", class: "recipe-profile-img recipe-picture" %>
+                <.live_img_preview entry={entry} alt="Main picture of food" class="recipe-profile-img recipe-picture" />
             </div>
             <div class="delete-img-container form-ctrl-container">
                 <div class="live-upload-ctrl">
@@ -28,6 +28,6 @@
     <% end %>
 
     <div class="form-ctrl-container upload-ctrl-container" id="primary_picture_upload_ctrl_container">
-        <%= live_file_input @uploads.primary_picture, class: "synced-single-img recipe-primary-picture" %>
+        <.live_file_input upload={@uploads.primary_picture} class="synced-single-img recipe-primary-picture" />
     </div>
 </section>

@@ -39,15 +39,23 @@
     <ul id="directory_recipes" class="directory-items">
         <%= for recipe <- @recipes do %>
             <li class="directory-item">
-                <span><%= live_redirect recipe.name, to: Routes.manage_recipe_path(@socket, :show, recipe.slug) %></span>
+                <span>
+                    <.link navigate={Routes.manage_recipe_path(@socket, :show, recipe.slug)}>
+                        <%= recipe.name %>
+                    </.link>
+                </span>
                 <%= if @current_user do %>
                     <div class="resource-action-links recipe-links">
-                      <span><%= live_redirect "Edit", to: Routes.manage_recipe_path(@socket, :edit, recipe.slug) %></span>
+                      <span>
+                        <.link navigate={Routes.manage_recipe_path(@socket, :edit, recipe.slug)}>Edit</.link>
+                      </span>
                       <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: recipe.slug, data: [confirm: "Are you sure?"] %></span>
                     </div>
                 <% end %>
             </li>
         <% end %>
     </ul>
-    <div class="new-resource-link"><%= live_redirect "New Recipe", to: Routes.manage_recipe_path(@socket, :new) %></div>
+    <div class="new-resource-link">
+        <.link navigate={Routes.manage_recipe_path(@socket, :new)}>New Recipe</.link>
+    </div>
 </div>

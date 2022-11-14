@@ -37,6 +37,6 @@
 </div>
 
     <div class="return-link-container">
-        <%= live_redirect "Back", to: Routes.manage_user_path(@socket, :show, @user.id), class: "return-link" %>
+        <.link navigate={Routes.manage_user_path(@socket, :show, @user.id)} class="return-link">Back</.link>
     </div>
 </div>

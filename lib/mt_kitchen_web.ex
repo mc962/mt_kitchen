@@ -45,7 +45,7 @@ defmodule MTKitchenWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {MTKitchenWeb.LayoutView, "live.html"}
+        layout: {MTKitchenWeb.LayoutView, :live}
 
       # on_mount MTKitchenWeb.UserLiveAuth
 
@@ -92,7 +92,7 @@ defmodule MTKitchenWeb do
       use Phoenix.HTML
 
       # Import LiveView and .heex helpers (live_render, live_patch, <.form>, etc)
-      import Phoenix.LiveView.Helpers
+      import Phoenix.Component
       import MTKitchenWeb.LiveHelpers
 
       # Import basic rendering functionality (render, render_layout, etc)

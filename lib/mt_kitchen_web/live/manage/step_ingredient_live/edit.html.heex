@@ -15,6 +15,8 @@
     </section>
 
     <div class="return-link-container">
-        <%= live_redirect "Back", to: Routes.manage_recipe_steps_path(@socket, :edit, @step.recipe.slug), class: "return-link" %>
+        <.link navigate={Routes.manage_recipe_steps_path(@socket, :edit, @step.recipe.slug)} class="return-link">
+            Back
+        </.link>
     </div>
 </div>

@@ -2,16 +2,16 @@
   <section class="container">
     <nav role="navigation" class="site-navigation">
       <div class="site-nav-link home-nav-link">
-        <%= live_redirect "Home", to: Routes.root_path(assigns[:conn] || assigns[:socket], :index), class: "nav-anchor" %>
+        <.link navigate={Routes.root_path(assigns[:conn] || assigns[:socket], :index)} class="nav-anchor">Home</.link>
       </div>
 
       <ul class="site-nav-links">
         <li class="site-nav-link">
-          <%= live_redirect "Recipes", to: Routes.recipe_index_path(assigns[:conn] || assigns[:socket], :index), class: "nav-anchor" %>
+          <.link navigate={Routes.recipe_index_path(assigns[:conn] || assigns[:socket], :index)} class="nav-anchor">Recipes</.link>
         </li>
         <!--
         <li class="site-nav-link">
-          <%= live_redirect "Posts", to: "#", class: "nav-anchor" %>
+          <.link navigate="#" class="nav-anchor">Posts</.link>
         </li>
         -->
         <%= render "_user_menu.html", assigns %>

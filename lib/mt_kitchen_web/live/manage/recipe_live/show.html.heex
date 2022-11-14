@@ -14,7 +14,9 @@
 
         <div>
             <label class="recipe-information-lbl" for="recipe_profile_link">Public Link: </label>
-            <%= live_redirect @recipe.name, to: Routes.recipe_show_path(@socket, :show, @recipe.slug) %>
+            <.link navigate={Routes.recipe_show_path(@socket, :show, @recipe.slug)}>
+                <%= @recipe.name %>
+            </.link>
         </div>
     </section>
 
@@ -33,10 +35,10 @@
 <nav id="bottom_nav">
     <ul class="bottom-nav-links">
         <li class="bottom-nav-link">
-            <span><%= live_redirect "Edit", to: Routes.manage_recipe_path(@socket, :edit, @recipe.slug) %></span>
+            <span><.link navigate={Routes.manage_recipe_path(@socket, :edit, @recipe.slug)}>Edit</.link></span>
         </li>
         <li class="bottom-nav-link">
-            <span><%= live_redirect "Back", to: Routes.manage_recipe_path(@socket, :index) %></span>
+            <span><.link navigate={Routes.manage_recipe_path(@socket, :index)}>Back</.link></span>
         </li>
     </ul>
 </nav>

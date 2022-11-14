@@ -5,7 +5,11 @@
     <ul id="directory_recipes" class="directory-items">
         <%= for recipe <- @recipes do %>
             <li class="directory-item">
-                <span><%= live_redirect recipe.name, to: Routes.recipe_show_path(@socket, :show, recipe.slug) %></span>
+                <span>
+                    <.link navigate={Routes.recipe_show_path(@socket, :show, recipe.slug)} class="step-ingredients-link">
+                        <%= recipe.name %>
+                    </.link>
+                </span>
             </li>
         <% end %>
     </ul>

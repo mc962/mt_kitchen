@@ -5,7 +5,11 @@
     <ul id="directory_recipes" class="directory-items">
         <%= for user <- @users do %>
             <li class="directory-item">
-                <span><%= live_redirect (user.username || user.email), to: Routes.manage_user_path(@socket, :show, user) %></span>
+                <span>
+                    <.link navigate={Routes.manage_user_path(@socket, :show, user)}>
+                        <%= (user.username || user.email) %>
+                    </.link>
+                </span>
                 <%= if user.id == @current_user.id do %>
                     <p class="self-disclaimer">Self</p>
                 <% else %>

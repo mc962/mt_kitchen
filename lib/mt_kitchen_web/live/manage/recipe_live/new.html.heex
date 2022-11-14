@@ -11,6 +11,6 @@
     />
 
     <div class="return-link-container">
-        <%= live_redirect "Back", to: Routes.manage_recipe_path(@socket, :index), class: "return-link" %>
+        <.link navigate={Routes.manage_recipe_path(@socket, :index)} class="return-link">Back</.link>
     </div>
 </div>
