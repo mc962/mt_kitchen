@@ -21,7 +21,8 @@ defmodule MTKitchen.Application do
       # Start the Endpoint (http/https)
       MTKitchenWeb.Endpoint,
       # setup for clustering
-      {Cluster.Supervisor, [topologies, [name: MTKitchen.ClusterSupervisor]]}
+      {Cluster.Supervisor, [topologies, [name: MTKitchen.ClusterSupervisor]]},
+      {Task, fn -> shutdown_when_inactive(:timer.minutes(10)) end}
       # Start a worker by calling: MTKitchen.Worker.start_link(arg)
       # {MTKitchen.Worker, arg}
     ]
@@ -38,5 +39,14 @@ defmodule MTKitchen.Application do
   def config_change(changed, _new, removed) do
     MTKitchenWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp shutdown_when_inactive(every_ms) do
+    Process.sleep(every_ms)
+    if :ranch.procs(MTKitchenWeb.Endpoint.HTTP, :connections) == [] do
+      System.stop(0)
+    else
+      shutdown_when_inactive(every_ms)
+    end
   end
 end
