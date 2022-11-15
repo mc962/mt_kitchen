@@ -43,6 +43,7 @@ defmodule MTKitchen.Application do
 
   defp shutdown_when_inactive(every_ms) do
     Process.sleep(every_ms)
+
     if :ranch.procs(MTKitchenWeb.Endpoint.HTTP, :connections) == [] do
       System.stop(0)
     else
