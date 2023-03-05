@@ -1,5 +1,5 @@
 <main class="container">
-  <%= render "_flash.html", flashes: get_flash(assigns[:conn]) %>
+  <%= render "_flash.html", flashes: @flash %>
 
   <%= @inner_content %>
 </main>
