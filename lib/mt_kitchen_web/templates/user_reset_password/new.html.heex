@@ -1,6 +1,6 @@
 <h1 class="text-center">Forgot your password?</h1>
 
-<.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}, class="resource-form user-reset-password-form">
+<.form :let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}, class="resource-form user-reset-password-form">
   <div class="form-ctrl-container">
       <%= label f, :email, class: "form-ctrl-lbl" %>
       <%= email_input f, :email, required: true, class: "form-ctrl" %>

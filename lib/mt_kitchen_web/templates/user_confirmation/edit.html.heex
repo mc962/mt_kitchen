@@ -1,6 +1,6 @@
 <h1 class="text-center">Confirm account</h1>
 
-<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)} class="resource-form user-confirmation-form">
+<.form :let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)} class="resource-form user-confirmation-form">
   <div class="actions">
     <%= submit "Confirm my account", class: "button submit-btn" %>
   </div>
