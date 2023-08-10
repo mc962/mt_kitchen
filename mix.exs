@@ -34,18 +34,18 @@ defmodule MTKitchen.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:argon2_elixir, "~> 3.0"},
-      {:phoenix, "~> 1.7.1"},
+      {:argon2_elixir, "~> 3.1"},
+      {:phoenix, "~> 1.7.7"},
       {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.9"},
+      {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
-      {:phoenix_live_view, "~> 0.18"},
-      {:floki, ">= 0.34.2", only: :test},
-      {:phoenix_live_dashboard, "~> 0.7"},
-      {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
-      {:swoosh, "~> 1.9"},
+      {:phoenix_live_view, "~> 0.19"},
+      {:floki, ">= 0.34.3", only: :test},
+      {:phoenix_live_dashboard, "~> 0.8"},
+      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
+      {:swoosh, "~> 1.11"},
       {:gen_smtp, "~> 1.2"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
@@ -53,7 +53,7 @@ defmodule MTKitchen.MixProject do
       {:jason, "~> 1.4"},
       {:plug_cowboy, "~> 2.6"},
       {:ecto_psql_extras, "~> 0.7"},
-      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
+      {:dart_sass, "~> 0.7", runtime: Mix.env() == :dev},
       {:bodyguard, "~> 2.4"},
       {:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false},
       {:libcluster, "~> 3.3"},
@@ -61,7 +61,7 @@ defmodule MTKitchen.MixProject do
       {:ex_aws_s3, "~> 2.4"},
       {:hackney, "~> 1.18"},
       {:sweet_xml, "~> 0.7"},
-      {:sentry, "~> 8.0"},
+      {:sentry, "~> 8.1"},
       {:phoenix_view, "~> 2.0"}
     ]
   end
