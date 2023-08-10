@@ -53,7 +53,7 @@ config :phoenix, :json_library, Jason
 
 # Configures Sass for working with assets
 config :dart_sass,
-  version: "1.54.4",
+  version: "1.58.0",
   default: [
     args: ~w(css/app.scss ../priv/static/assets/app.css),
     cd: Path.expand("../assets", __DIR__)

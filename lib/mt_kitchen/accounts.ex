@@ -402,7 +402,7 @@ defmodule MTKitchen.Accounts do
     send_admin_emails = Enum.take_random(admin_user_emails(), 3)
 
     if length(send_admin_emails) == 0 do
-      Logger.warn(
+      Logger.warning(
         "No admin users present to approve users. Promote a user to Admin in order to approve users for logging in."
       )
     else
