@@ -44,3 +44,6 @@ npm-debug.log
 .fleet/
 *.iml
 .elixir_ls/
+
+# Credentials
+*.env.*

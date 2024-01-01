@@ -20,7 +20,7 @@ if System.get_env("PHX_SERVER") do
   config :mt_kitchen, MTKitchenWeb.Endpoint, server: true
 end
 
-if config_env() == :prod do
+if Enum.member?([:prod, :local], config_env()) do
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
@@ -81,22 +81,26 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 
-  app_name =
-    System.get_env("FLY_APP_NAME") ||
-      raise "FLY_APP_NAME not available"
+  if config_env() == :prod do
+    app_name =
+      System.get_env("FLY_APP_NAME") ||
+        raise "FLY_APP_NAME not available"
 
-  config :libcluster,
-    debug: true,
-    topologies: [
-      fly6pn: [
-        strategy: Cluster.Strategy.DNSPoll,
-        config: [
-          polling_interval: 5_000,
-          query: "#{app_name}.internal",
-          node_basename: app_name
-        ]
-      ]
-    ]
+    config :libcluster,
+           debug: true,
+           topologies: [
+             fly6pn: [
+               strategy: Cluster.Strategy.DNSPoll,
+               config: [
+                 polling_interval: 5_000,
+                 query: "#{app_name}.internal",
+                 node_basename: app_name
+               ]
+             ]
+           ]
+  end
+
+
 
   config :ex_aws, :s3,
     scheme: "https://",
@@ -109,11 +113,11 @@ if config_env() == :prod do
 
   config :sentry,
     dsn: System.get_env("SENTRY_DSN"),
-    environment_name: :prod,
+    environment_name: System.get_env("DEPLOY_ENV") || :local,
     enable_source_code_context: true,
     root_source_code_path: File.cwd!(),
     tags: %{
       env: "production"
     },
-    included_environments: [:prod]
+    included_environments: System.get_env("DEPLOY_ENV") || :local
 end
