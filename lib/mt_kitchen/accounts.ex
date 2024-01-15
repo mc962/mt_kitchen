@@ -417,7 +417,7 @@ defmodule MTKitchen.Accounts do
       from u in MTKitchen.Accounts.User,
         select: u.email,
         where:
-          u.role == :admin and
+          u.role in [:administrator, :superuser] and
             u.approved == true and
             not is_nil(u.confirmed_at) and
             u.confirmed_at <= ^now
