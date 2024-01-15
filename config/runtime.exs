@@ -68,10 +68,17 @@ if Enum.member?([:prod, :local], config_env()) do
   # In production you need to configure the mailer to use a different adapter.
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
-  #
-  config :mt_kitchen, MTKitchen.Mailer,
-    adapter: Swoosh.Adapters.Sendgrid,
-    api_key: System.get_env("SENDGRID_API_KEY")
+
+  if System.get_env("DEPLOY_ENV") == "local" do
+    # Local "production" environment does not need complicated email infrastructure as all emails sent and received
+    # through local services only.
+    config :mt_kitchen, MTKitchen.Mailer, adapter: Swoosh.Adapters.Local
+  else
+    # Remote production environment uses Sendgrid so that users may receive emails to popular email services.
+    config :mt_kitchen, MTKitchen.Mailer,
+           adapter: Swoosh.Adapters.Sendgrid,
+           api_key: System.get_env("SENDGRID_API_KEY")
+  end
 
   config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   # For this example you need include a HTTP client required by Swoosh API client.

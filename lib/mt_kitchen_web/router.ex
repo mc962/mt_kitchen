@@ -77,7 +77,7 @@ defmodule MTKitchenWeb.Router do
   # node running the Phoenix server.
   if Mix.env() == :dev do
     scope "/dev" do
-      pipe_through :browser
+      pipe_through [:browser, :require_authenticated_user]
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
