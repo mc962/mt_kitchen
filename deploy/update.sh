@@ -6,7 +6,7 @@ sudo apt install dhcpcd git build-essential libstdc++6 openssl libncurses5 local
 # Set up elixir package manager
 mix local.hex --force && mix local.rebar --force
 # Install elixir dependencies
-mix deps.get --only "$MIX_ENV"
+mix deps.get --only $MIX_ENV
 # Compile dependencies
 mix deps.compile
 # Compile static assets
