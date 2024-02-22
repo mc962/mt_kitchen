@@ -5,7 +5,7 @@ apt update
 # Install sudo to allow for sudo users
 apt install sudo
 # Create and configure non-root superuser
-createuser mt_kitchen
+adduser mt_kitchen
 usermod -aG sudo mt_kitchen
 apt install git
 # Continue as non-sudo user
