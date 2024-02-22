@@ -12,6 +12,7 @@ apt install git
 login
 # Configure environment
 echo "MIX_ENV=local" >> ~/.bashrc
+echo "MIX_ENV=local" >> ~/.profile
 # Clone and enter into repository
 git clone https://github.com/mc962/mt_kitchen.git && cd mt_kitchen || return
 ./deploy/update.sh
