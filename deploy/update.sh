@@ -1,6 +1,6 @@
-apt update
+sudo apt update
 # Install necessary system dependencies
-apt install dhcpcd git build-essential libstdc++6 openssl libncurses5 locales erlang elixir
+sudo apt install dhcpcd git build-essential libstdc++6 openssl libncurses5 locales erlang elixir
 # Set up elixir package manager
 mix local.hex --force && mix local.rebar --force
 # Install elixir dependencies
