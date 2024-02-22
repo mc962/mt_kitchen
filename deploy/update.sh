@@ -1,3 +1,5 @@
+set -o xtrace
+
 sudo apt update
 # Install necessary system dependencies
 sudo apt install dhcpcd git build-essential libstdc++6 openssl libncurses5 locales erlang elixir
